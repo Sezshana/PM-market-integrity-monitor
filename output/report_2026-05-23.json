@@ -1,6 +1,7 @@
 {
   "date": "2026-05-23",
-  "total_alerts": 15,
+  "total_alerts": 14,
+  "high_priority": 12,
   "alerts": [
     {
       "source": "CoinDesk",
@@ -11,7 +12,8 @@
         "polymarket",
         "kalshi"
       ],
-      "summary": ""
+      "summary": "",
+      "priority": true
     },
     {
       "source": "CoinDesk",
@@ -21,7 +23,8 @@
       "matched_keywords": [
         "polymarket"
       ],
-      "summary": ""
+      "summary": "",
+      "priority": true
     },
     {
       "source": "CoinDesk",
@@ -32,7 +35,8 @@
         "polymarket",
         "prediction market"
       ],
-      "summary": ""
+      "summary": "",
+      "priority": true
     },
     {
       "source": "The Block",
@@ -44,7 +48,8 @@
         "kalshi",
         "prediction market"
       ],
-      "summary": "<p>The Ninth Circuit said federal derivatives oversight does not shield prediction market firms from state gaming enforcement.</p>"
+      "summary": "The Ninth Circuit said federal derivatives oversight does not shield prediction market firms from state gaming enforcement.",
+      "priority": true
     },
     {
       "source": "The Block",
@@ -55,7 +60,8 @@
         "kalshi",
         "prediction market"
       ],
-      "summary": "<p>An advocacy group focused on prediction markets has emerged with support from former White House Deputy Chief of Staff Taylor Budowich.</p>"
+      "summary": "An advocacy group focused on prediction markets has emerged with support from former White House Deputy Chief of Staff Taylor Budowich.",
+      "priority": true
     },
     {
       "source": "The Block",
@@ -66,7 +72,8 @@
         "polymarket",
         "kalshi"
       ],
-      "summary": "<p>House Oversight Chairman Comer probes insider trading on Kalshi and Polymarket, sending letters to both CEOs with a June 5 document deadline.</p>"
+      "summary": "House Oversight Chairman Comer probes insider trading on Kalshi and Polymarket, sending letters to both CEOs with a June 5 document deadline.",
+      "priority": true
     },
     {
       "source": "The Block",
@@ -76,7 +83,8 @@
       "matched_keywords": [
         "polymarket"
       ],
-      "summary": "<p>Polymarket said findings point to a possible private key compromise tied to an internal top-up wallet on Polygon.</p>"
+      "summary": "Polymarket said findings point to a possible private key compromise tied to an internal top-up wallet on Polygon.",
+      "priority": true
     },
     {
       "source": "The Block",
@@ -87,7 +95,8 @@
         "polymarket",
         "prediction market"
       ],
-      "summary": "<p>The prediction markets platform aims to secure regulatory authorization to operate in Japan by 2030, according to Bloomberg.</p>"
+      "summary": "The prediction markets platform aims to secure regulatory authorization to operate in Japan by 2030, according to Bloomberg.",
+      "priority": true
     },
     {
       "source": "Decrypt",
@@ -98,7 +107,8 @@
         "kalshi",
         "prediction market"
       ],
-      "summary": "Kalshi unveiled Americans for Fair Markets, an advocacy group to help shape policymakers\u2019 perception of prediction markets."
+      "summary": "Kalshi unveiled Americans for Fair Markets, an advocacy group to help shape policymakers\u2019 perception of prediction markets.",
+      "priority": true
     },
     {
       "source": "Decrypt",
@@ -109,7 +119,8 @@
         "polymarket",
         "kalshi"
       ],
-      "summary": "The chair of the powerful House Oversight Committee has requested documents from Polymarket and Kalshi regarding insider trading and war-related markets."
+      "summary": "The chair of the powerful House Oversight Committee has requested documents from Polymarket and Kalshi regarding insider trading and war-related markets.",
+      "priority": true
     },
     {
       "source": "Decrypt",
@@ -120,7 +131,8 @@
         "polymarket",
         "prediction market"
       ],
-      "summary": "User funds remain safe after the incident, the prediction market platform said, with contracts and core infrastructure unaffected."
+      "summary": "User funds remain safe after the incident, the prediction market platform said, with contracts and core infrastructure unaffected.",
+      "priority": true
     },
     {
       "source": "Decrypt",
@@ -131,7 +143,8 @@
         "polymarket",
         "prediction market"
       ],
-      "summary": "The prediction market has reportedly appointed a representative in Japan as it aims to secure authorization to operate there by 2030."
+      "summary": "The prediction market has reportedly appointed a representative in Japan as it aims to secure authorization to operate there by 2030.",
+      "priority": true
     },
     {
       "source": "Decrypt",
@@ -141,18 +154,8 @@
       "matched_keywords": [
         "prediction market"
       ],
-      "summary": "The agreement ensures the regulator and the NHL communicate and share data to protect the integrity of hockey-related prediction markets."
-    },
-    {
-      "source": "Bloomberg Crypto",
-      "title": "South Korea Probes Polymarket for Potential Gambling Violations",
-      "link": "https://www.bloomberg.com/news/articles/2026-05-22/south-korea-probes-polymarket-for-potential-gambling-violations",
-      "published": "Fri, 22 May 2026 03:00:35 GMT",
-      "matched_keywords": [
-        "polymarket",
-        "prediction market"
-      ],
-      "summary": "South Korea\u2019s media regulator is reviewing whether Polymarket\u2019s platform hosts illegal gambling content, in the latest sign of mounting regulatory pressure for one of the world\u2019s largest prediction markets."
+      "summary": "The agreement ensures the regulator and the NHL communicate and share data to protect the integrity of hockey-related prediction markets.",
+      "priority": false
     },
     {
       "source": "DLA Piper Market Edge",
@@ -162,9 +165,9 @@
       "matched_keywords": [
         "prediction market"
       ],
-      "summary": "A prediction market is an exchange where participants buy and sell event\u2011linked contracts \u2013 usually binary contracts that pay out if a specific future event occurs. These markets have surged into the financial mainstream, drawing more than three million unique users who have executed 757.6 million t"
+      "summary": "A prediction market is an exchange where participants buy and sell event\u2011linked contracts \u2013 usually binary contracts that pay out if a specific future event occurs. These markets have surged into the ",
+      "priority": false
     }
   ],
-  "bill_updates": [],
-  "dune_stats": {}
+  "bill_updates": []
 }

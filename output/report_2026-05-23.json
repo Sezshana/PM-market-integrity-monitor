@@ -1,0 +1,170 @@
+{
+  "date": "2026-05-23",
+  "total_alerts": 15,
+  "alerts": [
+    {
+      "source": "CoinDesk",
+      "title": "Congress hits Polymarket and Kalshi with a massive insider trading probe",
+      "link": "https://www.coindesk.com/policy/2026/05/22/congress-probes-polymarket-and-kalshi-over-fears-government-employees-are-trading-on-secret-info",
+      "published": "Fri, 22 May 2026 15:27:40 +0000",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi"
+      ],
+      "summary": ""
+    },
+    {
+      "source": "CoinDesk",
+      "title": "ZachXBT flags $520K Polymarket exploit on Polygon, team says funds are safe",
+      "link": "https://www.coindesk.com/markets/2026/05/22/zachxbt-flags-usd520k-polymarket-exploit-on-polygon-team-says-funds-are-safe",
+      "published": "Fri, 22 May 2026 09:39:55 +0000",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": ""
+    },
+    {
+      "source": "CoinDesk",
+      "title": "Polymarket aims for prediction market approval in Japan by 2030",
+      "link": "https://www.coindesk.com/policy/2026/05/22/polymarket-aims-for-prediction-market-approval-in-japan-by-2030",
+      "published": "Fri, 22 May 2026 08:34:13 +0000",
+      "matched_keywords": [
+        "polymarket",
+        "prediction market"
+      ],
+      "summary": ""
+    },
+    {
+      "source": "The Block",
+      "title": "Kalshi, Polymarket lose bids to halt Nevada and Washington gambling cases",
+      "link": "https://www.theblock.co/post/402397/kalshi-polymarket-lose-bids-to-halt-nevada-and-washington-gambling-cases?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 14:33:57 -0400",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "<p>The Ninth Circuit said federal derivatives oversight does not shield prediction market firms from state gaming enforcement.</p>"
+    },
+    {
+      "source": "The Block",
+      "title": "Kalshi-backed prediction market advocacy group debuts with support from former Trump aide",
+      "link": "https://www.theblock.co/post/402374/kalshi-prediction-market-advocacy-group-debuts-support-former-trump-aide?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 12:22:34 -0400",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "<p>An advocacy group focused on prediction markets has emerged with support from former White House Deputy Chief of Staff Taylor Budowich.</p>"
+    },
+    {
+      "source": "The Block",
+      "title": "House Oversight chair launches probe into insider trading on Kalshi and Polymarket",
+      "link": "https://www.theblock.co/post/402348/house-oversight-chair-launches-probe-into-insider-trading-on-kalshi-and-polymarket?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 09:03:35 -0400",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi"
+      ],
+      "summary": "<p>House Oversight Chairman Comer probes insider trading on Kalshi and Polymarket, sending letters to both CEOs with a June 5 document deadline.</p>"
+    },
+    {
+      "source": "The Block",
+      "title": "Polymarket probes suspected private key compromise of internal top-up wallet on Polygon",
+      "link": "https://www.theblock.co/post/402327/zachxbt-flags-suspected-exploit-involving-polymarkets-uma-adapter-contract-on-polygon?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 05:02:16 -0400",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "<p>Polymarket said findings point to a possible private key compromise tied to an internal top-up wallet on Polygon.</p>"
+    },
+    {
+      "source": "The Block",
+      "title": "Polymarket eyes Japan market entry, appoints regional representative: Bloomberg",
+      "link": "https://www.theblock.co/post/402309/polymarket-japan-market-entry?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 02:35:24 -0400",
+      "matched_keywords": [
+        "polymarket",
+        "prediction market"
+      ],
+      "summary": "<p>The prediction markets platform aims to secure regulatory authorization to operate in Japan by 2030, according to Bloomberg.</p>"
+    },
+    {
+      "source": "Decrypt",
+      "title": "Kalshi Debuts 'Fair Markets' Lobby Group as Congress Opens Insider Trading Probe",
+      "link": "https://decrypt.co/368803/kalshi-fair-markets-lobby-group-congress-opens-insider-trading-probe",
+      "published": "Fri, 22 May 2026 20:01:52 +0000",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "Kalshi unveiled Americans for Fair Markets, an advocacy group to help shape policymakers\u2019 perception of prediction markets."
+    },
+    {
+      "source": "Decrypt",
+      "title": "House Republicans Open Investigation Into Kalshi, Polymarket Over Insider Trading",
+      "link": "https://decrypt.co/368748/house-republicans-open-investigation-kalshi-polymarket-insider-trades",
+      "published": "Fri, 22 May 2026 14:37:58 +0000",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi"
+      ],
+      "summary": "The chair of the powerful House Oversight Committee has requested documents from Polymarket and Kalshi regarding insider trading and war-related markets."
+    },
+    {
+      "source": "Decrypt",
+      "title": "Polymarket Hit By \u2018Internal Top-Up\u2019 Wallet Exploit, $700K Drained",
+      "link": "https://decrypt.co/368740/polymarket-hit-by-internal-top-up-wallet-exploit-700k-drained",
+      "published": "Fri, 22 May 2026 12:23:22 +0000",
+      "matched_keywords": [
+        "polymarket",
+        "prediction market"
+      ],
+      "summary": "User funds remain safe after the incident, the prediction market platform said, with contracts and core infrastructure unaffected."
+    },
+    {
+      "source": "Decrypt",
+      "title": "Polymarket Taps Jupiter Exec to Lead Japan Push: Report",
+      "link": "https://decrypt.co/368734/polymarket-taps-jupiter-exec-to-lead-japan-push-report",
+      "published": "Fri, 22 May 2026 10:29:48 +0000",
+      "matched_keywords": [
+        "polymarket",
+        "prediction market"
+      ],
+      "summary": "The prediction market has reportedly appointed a representative in Japan as it aims to secure authorization to operate there by 2030."
+    },
+    {
+      "source": "Decrypt",
+      "title": "NHL Agrees to Share Data With the CFTC for Prediction Market Integrity",
+      "link": "https://decrypt.co/368687/nhl-agrees-share-data-cftc-prediction-market-integrity",
+      "published": "Thu, 21 May 2026 20:21:51 +0000",
+      "matched_keywords": [
+        "prediction market"
+      ],
+      "summary": "The agreement ensures the regulator and the NHL communicate and share data to protect the integrity of hockey-related prediction markets."
+    },
+    {
+      "source": "Bloomberg Crypto",
+      "title": "South Korea Probes Polymarket for Potential Gambling Violations",
+      "link": "https://www.bloomberg.com/news/articles/2026-05-22/south-korea-probes-polymarket-for-potential-gambling-violations",
+      "published": "Fri, 22 May 2026 03:00:35 GMT",
+      "matched_keywords": [
+        "polymarket",
+        "prediction market"
+      ],
+      "summary": "South Korea\u2019s media regulator is reviewing whether Polymarket\u2019s platform hosts illegal gambling content, in the latest sign of mounting regulatory pressure for one of the world\u2019s largest prediction markets."
+    },
+    {
+      "source": "DLA Piper Market Edge",
+      "title": "The rise of prediction markets and the surrounding regulatory environment",
+      "link": "https://marketedge.dlapiper.com/2026/04/the-rise-of-prediction-markets-and-the-surrounding-regulatory-environment/",
+      "published": "Thu, 30 Apr 2026 17:32:35 +0000",
+      "matched_keywords": [
+        "prediction market"
+      ],
+      "summary": "A prediction market is an exchange where participants buy and sell event\u2011linked contracts \u2013 usually binary contracts that pay out if a specific future event occurs. These markets have surged into the financial mainstream, drawing more than three million unique users who have executed 757.6 million t"
+    }
+  ],
+  "bill_updates": [],
+  "dune_stats": {}
+}

@@ -92,9 +92,13 @@ PRIORITY_WEIGHTS = {
     "ban": 2,
 }
 
-UMA_REQUIRED = [
-    "polymarket", "dispute", "resolution", "incorrect", "manipulat",
-    "bad faith", "exploit", "governance attack", "slashing", "bad-faith"
+# UMA: must mention Polymarket directly OR be about resolution/dispute abuse
+# General UMA governance posts (fees, emissions, tokenomics) are filtered out entirely
+UMA_POLYMARKET_TERMS = ["polymarket"]  # Must mention Polymarket specifically
+UMA_DISPUTE_TERMS = [                  # OR must be about active dispute/resolution abuse
+    "bad faith", "bad-faith", "slashing", "governance attack",
+    "p4 abuse", "resolution abuse", "incorrect resolution",
+    "dispute resolution", "coordinated"
 ]
 
 BILLS = [
@@ -465,24 +469,55 @@ def get_win_rate_alerts():
 # ════════════════════════════════════════════════════════════
 
 def fetch_uma_governance():
+    """
+    Only flag UMA posts that are genuinely relevant to Polymarket market integrity.
+    Two valid alert types:
+    1. Post mentions Polymarket by name AND involves a dispute or resolution
+    2. Post is about systematic bad-faith voting or governance abuse (affects all markets)
+    Everything else — emissions, fees, tokenomics, general governance — is ignored.
+    """
     alerts = []
     try:
         feed = feedparser.parse("https://discourse.uma.xyz/latest.rss")
         for entry in feed.entries[:30]:
-            title   = entry.get("title","")
-            summary = entry.get("summary","")
+            title    = entry.get("title","")
+            summary  = entry.get("summary","")
             combined = (title + " " + summary).lower()
-            if any(kw in combined for kw in UMA_REQUIRED):
-                alerts.append({
-                    "title":     title,
-                    "link":      entry.get("link",""),
-                    "published": parse_date(entry.get("published","")),
-                    "summary":   clean_text(summary)[:200],
-                    "note":      "Review: check if dispute participant holds a position in this market.",
-                })
+
+            mentions_polymarket = any(t in combined for t in UMA_POLYMARKET_TERMS)
+            is_dispute_abuse    = any(t in combined for t in UMA_DISPUTE_TERMS)
+
+            # Type 1: Mentions Polymarket + has resolution/dispute context
+            type1 = mentions_polymarket and any(
+                w in combined for w in ["dispute", "resolution", "resolve", "incorrect",
+                                        "market", "outcome", "vote", "slashing"]
+            )
+
+            # Type 2: Systematic governance abuse (bad-faith voting, governance attacks)
+            type2 = is_dispute_abuse
+
+            if not type1 and not type2:
+                continue
+
+            # Determine alert type for the note
+            if type1 and mentions_polymarket:
+                note = "Polymarket market resolution dispute — check if any voter holds a position in this market."
+                alert_type = "POLYMARKET DISPUTE"
+            else:
+                note = "Systematic governance abuse pattern — this affects resolution integrity across all markets."
+                alert_type = "GOVERNANCE ABUSE"
+
+            alerts.append({
+                "title":      title,
+                "link":       entry.get("link",""),
+                "published":  parse_date(entry.get("published","")),
+                "summary":    clean_text(summary)[:200],
+                "note":       note,
+                "alert_type": alert_type,
+            })
     except Exception as e:
         print(f"  UMA error: {e}")
-    print(f"  UMA alerts: {len(alerts)}")
+    print(f"  UMA alerts (filtered): {len(alerts)}")
     return alerts
 
 
@@ -789,9 +824,16 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac,
     # UMA GOVERNANCE
     if uma:
         lines += ["UMA GOVERNANCE / ORACLE DISPUTES", "=" * 60]
+        lines.append("Note: Only Polymarket-specific disputes and governance abuse patterns are shown here.")
         for a in uma:
-            lines += [f"\n{a['title']}", f"  Published: {a['published']}",
-                      f"  {a['summary']}", f"  Link: {a['link']}", f"  NOTE: {a['note']}"]
+            alert_type = a.get("alert_type", "DISPUTE")
+            lines += [
+                f"\n[{alert_type}] {a['title']}",
+                f"  Published: {a['published']}",
+                f"  Summary:   {a['summary']}",
+                f"  Link:      {a['link']}",
+                f"  ACTION:    {a['note']}",
+            ]
         lines.append("")
 
     # OFAC

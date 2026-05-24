@@ -1,33 +1,330 @@
-name: Polymarket OSINT Daily Monitor
+"""
+Polymarket OSINT Monitor v3
+Deduplication + story clustering — one entry per story, best source wins.
+"""
 
-on:
-  schedule:
-    - cron: '0 13 * * *'
-  workflow_dispatch:
+import os
+import json
+import datetime
+import hashlib
+import requests
+from bs4 import BeautifulSoup
+import feedparser
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+ALERT_EMAIL = os.environ.get("ALERT_EMAIL", "shanabautista0819@gmail.com")
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
+TODAY = datetime.date.today().isoformat()
+TODAY_PRETTY = datetime.date.today().strftime("%B %d, %Y")
 
-jobs:
-  monitor:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - name: Run monitor
-        env:
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-          CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
-          DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
-        run: python monitor.py
-      - name: Save report
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add output/
-          git diff --staged --quiet || git commit -m "Daily OSINT report"
-          git push
+# Source priority — higher number = more authoritative
+SOURCE_PRIORITY = {
+    "CFTC Enforcement Actions": 10,
+    "CFTC Press Releases": 9,
+    "DLA Piper Market Edge": 8,
+    "Bloomberg Crypto": 7,
+    "CoinDesk": 6,
+    "The Block": 5,
+    "Decrypt": 4,
+}
+
+RSS_FEEDS = {
+    "CoinDesk": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+    "The Block": "https://www.theblock.co/rss.xml",
+    "Decrypt": "https://decrypt.co/feed",
+    "DLA Piper Market Edge": "https://marketedge.dlapiper.com/feed/",
+    "CFTC Press Releases": "https://www.cftc.gov/rss/pressreleases.xml",
+    "CFTC Enforcement Actions": "https://www.cftc.gov/rss/enforcementactions.xml",
+}
+
+KEYWORDS = [
+    "polymarket", "kalshi", "prediction market", "event contract",
+    "CFTC prediction", "insider trading prediction", "binary option CFTC",
+    "prediction market manipulation", "prediction market insider",
+    "PREDICT act", "STOP corrupt bets", "BETS OFF act",
+    "event contract enforcement", "wash trading crypto",
+    "UMA protocol", "oracle manipulation", "prediction market regulation",
+]
+
+HIGH_PRIORITY_KEYWORDS = [
+    "polymarket", "kalshi", "insider trading prediction",
+    "prediction market manipulation", "CFTC enforcement",
+    "oracle manipulation", "UMA protocol",
+]
+
+BILLS = [
+    {"name": "PREDICT Act", "id": "hr8076", "congress": "119"},
+    {"name": "End Prediction Market Corruption Act", "id": "s4017", "congress": "119"},
+    {"name": "Prediction Markets Security and Integrity Act", "id": "s4060", "congress": "119"},
+    {"name": "Public Integrity in Financial Prediction Markets Act", "id": "s4188", "congress": "119"},
+    {"name": "STOP Corrupt Bets Act", "id": "s4226", "congress": "119"},
+    {"name": "BETS OFF Act", "id": "s4115", "congress": "119"},
+    {"name": "Event Contract Enforcement Act", "id": "hr7840", "congress": "119"},
+]
+
+
+def clean_text(html_text):
+    """Strip HTML tags and normalize whitespace."""
+    text = BeautifulSoup(html_text or "", "html.parser").get_text()
+    return " ".join(text.split())
+
+
+def title_fingerprint(title):
+    """
+    Create a normalized fingerprint from a title for deduplication.
+    Strips punctuation, lowercases, removes stopwords, sorts remaining words.
+    Two titles about the same story will produce similar fingerprints.
+    """
+    stopwords = {
+        "a", "an", "the", "and", "or", "but", "in", "on", "at", "to",
+        "for", "of", "with", "by", "from", "is", "are", "was", "were",
+        "it", "its", "as", "be", "has", "have", "had", "will", "that",
+        "this", "these", "those", "their", "they", "how", "what", "when",
+        "where", "who", "why", "which", "not", "no", "new", "says", "say",
+        "over", "up", "down", "after", "before", "than", "more", "first",
+    }
+    import re
+    words = re.sub(r"[^a-z0-9\s]", "", title.lower()).split()
+    significant = sorted([w for w in words if w not in stopwords and len(w) > 2])
+    return " ".join(significant[:6])  # Use top 6 significant words
+
+
+def stories_are_similar(title_a, title_b):
+    """Return True if two titles are likely about the same story."""
+    fp_a = set(title_fingerprint(title_a).split())
+    fp_b = set(title_fingerprint(title_b).split())
+    if not fp_a or not fp_b:
+        return False
+    # Jaccard similarity — overlap / union
+    intersection = len(fp_a & fp_b)
+    union = len(fp_a | fp_b)
+    similarity = intersection / union if union > 0 else 0
+    return similarity >= 0.5  # 50% word overlap = same story
+
+
+def deduplicate_and_cluster(hits):
+    """
+    Group hits about the same story. For each cluster, keep only
+    the version from the highest-priority source.
+    Returns a clean deduplicated list.
+    """
+    clusters = []  # list of lists
+
+    for hit in hits:
+        placed = False
+        for cluster in clusters:
+            # Compare against the representative title of each cluster
+            rep_title = cluster[0]["title"]
+            if stories_are_similar(hit["title"], rep_title):
+                cluster.append(hit)
+                placed = True
+                break
+        if not placed:
+            clusters.append([hit])
+
+    # From each cluster, pick the best source
+    deduped = []
+    for cluster in clusters:
+        # Sort by source priority (highest first), then take the top
+        best = sorted(
+            cluster,
+            key=lambda x: SOURCE_PRIORITY.get(x["source"], 0),
+            reverse=True
+        )[0]
+
+        # Add a note if multiple sources covered it
+        if len(cluster) > 1:
+            other_sources = [c["source"] for c in cluster if c["source"] != best["source"]]
+            best["also_covered_by"] = list(set(other_sources))
+        else:
+            best["also_covered_by"] = []
+
+        deduped.append(best)
+
+    return deduped
+
+
+def fetch_rss_alerts(feeds, keywords):
+    raw_hits = []
+    for source, url in feeds.items():
+        try:
+            feed = feedparser.parse(url)
+            for entry in feed.entries:
+                title = entry.get("title", "").lower()
+                summary = entry.get("summary", "").lower()
+                combined = title + " " + summary
+                matched = [kw for kw in keywords if kw.lower() in combined]
+                if matched:
+                    priority = any(kw.lower() in combined for kw in HIGH_PRIORITY_KEYWORDS)
+                    clean_summary = clean_text(entry.get("summary", ""))[:220]
+                    raw_hits.append({
+                        "source": source,
+                        "title": entry.get("title", "No title"),
+                        "link": entry.get("link", ""),
+                        "published": entry.get("published", ""),
+                        "matched_keywords": matched,
+                        "summary": clean_summary,
+                        "priority": priority,
+                        "also_covered_by": [],
+                    })
+        except Exception as e:
+            print(f"Error fetching {source}: {e}")
+
+    # Deduplicate before returning
+    deduped = deduplicate_and_cluster(raw_hits)
+    print(f"Raw hits: {len(raw_hits)} → After dedup: {len(deduped)}")
+    return deduped
+
+
+def check_congress_bills(bills):
+    updates = []
+    api_key = os.environ.get("CONGRESS_API_KEY", "")
+    if not api_key:
+        return updates
+    for bill in bills:
+        try:
+            bill_type = "hr" if bill["id"].startswith("hr") else "s"
+            bill_number = bill["id"].replace("hr", "").replace("s", "")
+            url = f"https://api.congress.gov/v3/bill/{bill['congress']}/{bill_type}/{bill_number}"
+            response = requests.get(url, params={"api_key": api_key}, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                bill_data = data.get("bill", {})
+                updates.append({
+                    "bill": bill["name"],
+                    "id": bill["id"].upper(),
+                    "latest_action": bill_data.get("latestAction", {}).get("text", "No action found"),
+                    "action_date": bill_data.get("latestAction", {}).get("actionDate", ""),
+                    "url": f"https://www.congress.gov/bill/{bill['congress']}th-congress/{'house' if bill_type == 'hr' else 'senate'}-bill/{bill_number}",
+                })
+        except Exception as e:
+            print(f"Error checking {bill['name']}: {e}")
+    return updates
+
+
+def build_email(all_hits, bill_updates):
+    high = [h for h in all_hits if h["priority"]]
+    normal = [h for h in all_hits if not h["priority"]]
+
+    lines = []
+    lines.append(f"POLYMARKET OSINT DAILY DIGEST — {TODAY_PRETTY}")
+    lines.append("=" * 60)
+    lines.append("")
+
+    # AT A GLANCE
+    lines.append("AT A GLANCE")
+    lines.append("-" * 40)
+    lines.append(f"Unique stories today:   {len(all_hits)}")
+    lines.append(f"High priority:          {len(high)}")
+    lines.append(f"General news:           {len(normal)}")
+    lines.append(f"Bills tracked:          {len(BILLS)}")
+    lines.append("")
+
+    # HIGH PRIORITY
+    if high:
+        lines.append("HIGH PRIORITY — READ THESE FIRST")
+        lines.append("=" * 60)
+        for i, item in enumerate(high, 1):
+            lines.append(f"\n{i}. {item['title']}")
+            lines.append(f"   Source:  {item['source']}")
+            if item.get("also_covered_by"):
+                lines.append(f"   Also in: {', '.join(item['also_covered_by'])}")
+            lines.append(f"   TL;DR:   {item['summary']}")
+            lines.append(f"   Link:    {item['link']}")
+    else:
+        lines.append("HIGH PRIORITY")
+        lines.append("-" * 40)
+        lines.append("No high priority alerts today.")
+
+    lines.append("")
+
+    # GENERAL NEWS
+    if normal:
+        lines.append("GENERAL NEWS & REGULATORY UPDATES")
+        lines.append("=" * 60)
+        for i, item in enumerate(normal, 1):
+            lines.append(f"\n{i}. {item['title']}")
+            lines.append(f"   Source:  {item['source']}")
+            if item.get("also_covered_by"):
+                lines.append(f"   Also in: {', '.join(item['also_covered_by'])}")
+            lines.append(f"   TL;DR:   {item['summary']}")
+            lines.append(f"   Link:    {item['link']}")
+    else:
+        lines.append("GENERAL NEWS")
+        lines.append("-" * 40)
+        lines.append("No general alerts today.")
+
+    lines.append("")
+
+    # CONGRESSIONAL BILLS
+    lines.append("CONGRESSIONAL BILL TRACKER")
+    lines.append("=" * 60)
+    if bill_updates:
+        for bill in bill_updates:
+            lines.append(f"\n{bill['bill']} ({bill['id']})")
+            lines.append(f"   Latest: {bill['latest_action']}")
+            lines.append(f"   Date:   {bill.get('action_date', 'N/A')}")
+            lines.append(f"   Link:   {bill['url']}")
+    else:
+        lines.append("Add CONGRESS_API_KEY to GitHub Secrets to enable bill tracking.")
+
+    lines.append("")
+    lines.append("=" * 60)
+    lines.append(f"Polymarket OSINT Monitor — runs daily at 8 AM EST")
+
+    return "\n".join(lines)
+
+
+def save_report(all_hits, bill_updates):
+    report = {
+        "date": TODAY,
+        "total_unique_stories": len(all_hits),
+        "high_priority": len([h for h in all_hits if h["priority"]]),
+        "alerts": all_hits,
+        "bill_updates": bill_updates,
+    }
+    os.makedirs("output", exist_ok=True)
+    with open(f"output/report_{TODAY}.json", "w") as f:
+        json.dump(report, f, indent=2)
+    body = build_email(all_hits, bill_updates)
+    with open(f"output/report_{TODAY}.md", "w") as f:
+        f.write(body)
+    return body
+
+
+def send_email(body, num_alerts):
+    if not SMTP_PASSWORD:
+        print("No SMTP password — skipping email")
+        return
+    subject = f"Polymarket Digest {TODAY_PRETTY} — {num_alerts} unique stories"
+    msg = MIMEMultipart()
+    msg["Subject"] = subject
+    msg["From"] = ALERT_EMAIL
+    msg["To"] = ALERT_EMAIL
+    msg.attach(MIMEText(body, "plain"))
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(ALERT_EMAIL, SMTP_PASSWORD)
+            server.sendmail(ALERT_EMAIL, ALERT_EMAIL, msg.as_string())
+        print("Email sent")
+    except Exception as e:
+        print(f"Email error: {e}")
+
+
+def main():
+    print(f"Starting Polymarket OSINT Monitor v3 — {TODAY}")
+    print("Fetching and deduplicating RSS feeds...")
+    all_hits = fetch_rss_alerts(RSS_FEEDS, KEYWORDS)
+    print(f"Final unique stories: {len(all_hits)} ({len([h for h in all_hits if h['priority']])} high priority)")
+    print("Checking congressional bills...")
+    bill_updates = check_congress_bills(BILLS)
+    print("Generating report...")
+    body = save_report(all_hits, bill_updates)
+    send_email(body, len(all_hits))
+    print("Done.")
+
+
+if __name__ == "__main__":
+    main()

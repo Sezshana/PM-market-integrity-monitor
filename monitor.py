@@ -575,6 +575,7 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
                 f"  Probability:   {m['probability_pct']}%",
                 f"  Volume:        ${m['volume_usd']:,.0f}",
                 f"  Closes:        {m.get('end_date','unknown')}",
+                f"  Flagged:       {TODAY} at time of report",
                 f"  Alert:         {m['alert_reason']}",
                 f"  URL:           {m['url']}",
                 f"  ACTION:        High volume on low-probability outcome. Run OSINT on largest traders.",
@@ -590,12 +591,13 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
                 wl_note = f" *** WATCHLIST HIT: {', '.join(t['wl_maker'])}"
             if t.get("wl_taker"):
                 wl_note += f" *** WATCHLIST HIT: {', '.join(t['wl_taker'])}"
+            trade_time = t.get('timestamp','') or TODAY
             lines += [
                 f"\nSize: ${t['size_usd']:,.0f} | Probability: {t['prob_pct']}% | Side: {t['side']}",
+                f"  Time:     {trade_time}",
                 f"  Maker:    {t['maker']}{wl_note}",
                 f"  Taker:    {t['taker']}",
                 f"  Asset:    {t['asset_id']}",
-                f"  Time:     {t['timestamp']}",
                 f"  ACTION:   Run wallet OSINT. Check linked wallets and funding source.",
             ]
         lines.append("")
@@ -604,7 +606,13 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
     if uma:
         lines += ["UMA GOVERNANCE / ORACLE DISPUTES", "=" * 60]
         for a in uma:
-            lines += [f"\n{a['title']}", f"  {a['summary']}", f"  Link: {a['link']}", f"  NOTE: {a['note']}"]
+            uma_date = a.get('published','') or 'Date unknown'
+            try:
+                import email.utils
+                parsed = email.utils.parsedate_to_datetime(uma_date)
+                uma_date = parsed.strftime("%b %d, %Y")
+            except: pass
+            lines += [f"\n{a['title']}", f"  Published: {uma_date}", f"  {a['summary']}", f"  Link: {a['link']}", f"  NOTE: {a['note']}"]
         lines.append("")
 
     # OFAC — only truly new
@@ -627,7 +635,7 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
         lines += ["HIGH PRIORITY NEWS — READ THESE FIRST", "=" * 60]
         for i, item in enumerate(high, 1):
             lines.append(f"\n{i}. {item['title']}")
-            lines.append(f"   Source:  {item['source']}")
+            lines.append(f"   Source:  {item['source']}  |  Published: {item.get('pub_date', 'Date unknown')}")
             if item.get("also_covered_by"):
                 lines.append(f"   Also in: {', '.join(item['also_covered_by'])}")
             if item.get("watchlist_hit"):
@@ -641,7 +649,7 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
         lines += ["GENERAL NEWS & REGULATORY UPDATES", "=" * 60]
         for i, item in enumerate(normal, 1):
             lines.append(f"\n{i}. {item['title']}")
-            lines.append(f"   Source:  {item['source']}")
+            lines.append(f"   Source:  {item['source']}  |  Published: {item.get('pub_date', 'Date unknown')}")
             if item.get("also_covered_by"):
                 lines.append(f"   Also in: {', '.join(item['also_covered_by'])}")
             lines.append(f"   TL;DR:   {item['summary']}")

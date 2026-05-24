@@ -1,7 +1,9 @@
 {
   "date": "2026-05-24",
-  "total_unique_stories": 13,
-  "high_priority": 11,
+  "unique_news_stories": 14,
+  "large_trades_flagged": 0,
+  "uma_alerts": 15,
+  "ofac_new": 86,
   "alerts": [
     {
       "source": "CoinDesk",
@@ -14,6 +16,7 @@
       ],
       "summary": "",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -26,6 +29,7 @@
       ],
       "summary": "",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -39,6 +43,7 @@
       ],
       "summary": "",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -53,6 +58,7 @@
       ],
       "summary": "The Ninth Circuit said federal derivatives oversight does not shield prediction market firms from state gaming enforcement.",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -66,6 +72,7 @@
       ],
       "summary": "An advocacy group focused on prediction markets has emerged with support from former White House Deputy Chief of Staff Taylor Budowich.",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -79,9 +86,8 @@
       ],
       "summary": "House Oversight Chairman Comer probes insider trading on Kalshi and Polymarket, sending letters to both CEOs with a June 5 document deadline.",
       "priority": true,
-      "also_covered_by": [
-        "Decrypt"
-      ]
+      "watchlist_hit": [],
+      "also_covered_by": []
     },
     {
       "source": "The Block",
@@ -93,6 +99,7 @@
       ],
       "summary": "Polymarket said findings point to a possible private key compromise tied to an internal top-up wallet on Polygon.",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -106,6 +113,7 @@
       ],
       "summary": "The prediction markets platform aims to secure regulatory authorization to operate in Japan by 2030, according to Bloomberg.",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -119,6 +127,21 @@
       ],
       "summary": "Kalshi unveiled Americans for Fair Markets, an advocacy group to help shape policymakers\u2019 perception of prediction markets.",
       "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "Decrypt",
+      "title": "House Republicans Open Investigation Into Kalshi, Polymarket Over Insider Trading",
+      "link": "https://decrypt.co/368748/house-republicans-open-investigation-kalshi-polymarket-insider-trades",
+      "published": "Fri, 22 May 2026 14:37:58 +0000",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi"
+      ],
+      "summary": "The chair of the powerful House Oversight Committee has requested documents from Polymarket and Kalshi regarding insider trading and war-related markets.",
+      "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -132,6 +155,7 @@
       ],
       "summary": "User funds remain safe after the incident, the prediction market platform said, with contracts and core infrastructure unaffected.",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -145,6 +169,7 @@
       ],
       "summary": "The prediction market has reportedly appointed a representative in Japan as it aims to secure authorization to operate there by 2030.",
       "priority": true,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -157,6 +182,7 @@
       ],
       "summary": "The agreement ensures the regulator and the NHL communicate and share data to protect the integrity of hockey-related prediction markets.",
       "priority": false,
+      "watchlist_hit": [],
       "also_covered_by": []
     },
     {
@@ -169,8 +195,599 @@
       ],
       "summary": "A prediction market is an exchange where participants buy and sell event\u2011linked contracts \u2013 usually binary contracts that pay out if a specific future event occurs. These markets have surged into the financial mainstream",
       "priority": false,
+      "watchlist_hit": [],
       "also_covered_by": []
     }
   ],
-  "bill_updates": []
+  "large_trades": [],
+  "uma_governance": [
+    {
+      "title": "Partnership Proposal: Majority.Fun",
+      "link": "https://discourse.uma.xyz/t/partnership-proposal-majority-fun/2236",
+      "published": "Thu, 06 Nov 2025 17:14:14 +0000",
+      "summary": "Name of Project: Majority Proposer: Mr. Bahama Proposal Summary The Majority team is seeking a formal partnership with UMA to integrate its oracle with AI-driven mechanisms for crowdsourcing unbiased ",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "UMIP-189: Approve new ManagedOptimisticOracleV2 Deployment",
+      "link": "https://discourse.uma.xyz/t/umip-189-approve-new-managedoptimisticoraclev2-deployment/2229",
+      "published": "Tue, 29 Jul 2025 18:17:02 +0000",
+      "summary": "UMIP-189 UMIP Title Approve new ManagedOptimisticOracleV2 Deployment Authors Lee Poettcker Created July 29, 2025 Summary This proposal introduces the ManagedOptimisticOracleV2, which is a modified ver",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "\u26a0\ufe0f Call for Slashing: Coordinated Bad-Faith P4 Votes After July 1 Deadline (Zelenskyy Suit Dispute)",
+      "link": "https://discourse.uma.xyz/t/call-for-slashing-coordinated-bad-faith-p4-votes-after-july-1-deadline-zelenskyy-suit-dispute/2225",
+      "published": "Fri, 04 Jul 2025 06:07:35 +0000",
+      "summary": "Early P4 Lead \u2013 Potential Bad-Faith Voting in Zelenskyy Suit Dispute A significant number of voters in the ongoing Zelenskyy Suit dispute (Polymarket) have currently voted for P4 (\u201cToo Early\u201d), despit",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "Proposal: Penalize Bad-Faith P4 \u2018Too Early\u2019 Votes to Prevent Resolution Abuse",
+      "link": "https://discourse.uma.xyz/t/proposal-penalize-bad-faith-p4-too-early-votes-to-prevent-resolution-abuse/2208",
+      "published": "Sat, 28 Jun 2025 00:05:51 +0000",
+      "summary": "Proposal to Improve UMA Resolution System: Penalize Misuse of P4 \u2013 \u201cToo Early\u201d TL;DR: The P4 \u2013 \u201cToo Early\u201d option is currently being abused to delay market resolution even when the conditions are clea",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "Reducing Proposal Disputes Through a Dual-Token Proposal Structure",
+      "link": "https://discourse.uma.xyz/t/reducing-proposal-disputes-through-a-dual-token-proposal-structure/2196",
+      "published": "Thu, 05 Jun 2025 04:20:13 +0000",
+      "summary": "Summary This proposal introduces an alternative to raising the finalFee by requiring proposers to pay the finalFee in UMA while keeping the bond currency set by the integrator, typically USDC. For exa",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "UMIP-188: Increase Final Fee",
+      "link": "https://discourse.uma.xyz/t/umip-188-increase-final-fee/2194",
+      "published": "Wed, 04 Jun 2025 22:44:03 +0000",
+      "summary": "Summary This proposal is to increase the finalFee (a component of proposal and disputing bonds) from $250 to $500. The number of dispute resolution votes are currently a strain on gas rebate costs and",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "Clarification on MLB May 6 Market Resolution",
+      "link": "https://discourse.uma.xyz/t/clarification-on-mlb-may-6-market-resolution/2190",
+      "published": "Fri, 09 May 2025 11:48:48 +0000",
+      "summary": "Dear UMA community, I would like to provide additional evidence regarding the MLB market on Polymarket dated May 6, specifically concerning the game between the Cleveland Guardians and Washington Nati",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "UMA Emissions Reduction #2",
+      "link": "https://discourse.uma.xyz/t/uma-emissions-reduction-2/2185",
+      "published": "Fri, 02 May 2025 21:53:26 +0000",
+      "summary": "Data Report This is a data report on the effects of the initial UMA Emission Reduction which lowered staking rates from 26.3% APR to 22.6% APR and went into effect on March 11, 2025. For full context,",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "[Temp Check] Proposal for UMAVision - Bridging the Governance Information Gap",
+      "link": "https://discourse.uma.xyz/t/temp-check-proposal-for-umavision-bridging-the-governance-information-gap/2184",
+      "published": "Wed, 16 Apr 2025 11:30:20 +0000",
+      "summary": "Proposed Initiative UMAVision is a biweekly content series designed to bridge the information gap between UMA governance forum activities and social media platforms where most community members are ac",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "Increase SPAT to 65%",
+      "link": "https://discourse.uma.xyz/t/increase-spat-to-65/2177",
+      "published": "Thu, 10 Apr 2025 21:53:09 +0000",
+      "summary": "Summary This proposal modifies the Settlement Price Approval Threshold (SPAT) parameter within UMA\u2019s VotingV2 contract from 50% to 65%. SPAT is the percentage of staked UMA that needs to agree for a d",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "Gas Rebate Program Refund | Jan 2024 - Dec 2024",
+      "link": "https://discourse.uma.xyz/t/gas-rebate-program-refund-jan-2024-dec-2024/2171",
+      "published": "Fri, 21 Mar 2025 22:36:22 +0000",
+      "summary": "Request for Gas Rebate Program Refund \u2013 2024 Summary This proposal seeks approval from the UMA DAO to refund the Risk Labs Foundation for expenses incurred through the gas rebate program during 2024. ",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "Issue with Failed Proposal and Lost Tokens on UMA",
+      "link": "https://discourse.uma.xyz/t/issue-with-failed-proposal-and-lost-tokens-on-uma/2164",
+      "published": "Sun, 16 Mar 2025 09:34:54 +0000",
+      "summary": "Hello UMA Support Team, I recently submitted a Propose Price transaction on UMA, but my proposal appears to have failed, and I lost my bonded tokens. I would like to understand the reason behind this ",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "UMA Tokenomics",
+      "link": "https://discourse.uma.xyz/t/uma-tokenomics/2143",
+      "published": "Tue, 11 Feb 2025 19:57:44 +0000",
+      "summary": "Dear Hart, I hope you\u2019re doing well. I have been investing in UMA for the past four years and have remained a committed supporter, consistently participating in governance. As one of the Top 10 all-ti",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "UMA Emissions Reduction",
+      "link": "https://discourse.uma.xyz/t/uma-emissions-reduction/2140",
+      "published": "Fri, 07 Feb 2025 22:26:28 +0000",
+      "summary": "Authors: Dylan O\u2019Reilly, Lee Poettcker, Chase Coleman Summary The UMA DAO should initiate a measured reduction in the current emissions rate to help optimize UMA\u2019s token economics whilst maintaining a",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    },
+    {
+      "title": "UMIP 183 - add MULTIPLE_VALUES as an approved price identifier",
+      "link": "https://discourse.uma.xyz/t/umip-183-add-multiple-values-as-an-approved-price-identifier/2138",
+      "published": "Thu, 09 Jan 2025 19:09:43 +0000",
+      "summary": "The DVM should support the below new price identifer for Optimistic Oracle V2 requests. This UMIP is planned to be used by Polymarket to request the score results of sports games. This will allow many",
+      "note": "REVIEW: Check if any dispute participant holds a position in this market."
+    }
+  ],
+  "ofac_additions": [
+    {
+      "name": "BANK MARKAZI JOMHOURI ISLAMI IRAN",
+      "wallet": "TTiDLWE6fZK8okMJv6ijg42yrH6W2pjSr9",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "CHEIL CREDIT BANK",
+      "wallet": "TYxwUhoLPF7AgfG9GaXFEp8CQi8K8KG1m3",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "YAN",
+      "wallet": "1JREJdZupiFhE7ZzQPtASuMCvvpXC7wRsC",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "KHORASHADIZADEH",
+      "wallet": "149w62rY42aZBox8fGcmqNsXUzSStKeq8C",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "GHORBANIYAN",
+      "wallet": "1AjZPMsnmpdK2Rv9KQNfMurTXinscVro9V",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ZHENG",
+      "wallet": "1DH2xDH7TngrDU6LXciprKCBKNcPA1xX8A",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ZHENG",
+      "wallet": "18uKfaUjgG52rVeXEi3wxnveww7zZuECtE",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "LAZARUS GROUP",
+      "wallet": "0x08723392Ed15743cc38513C4925f5e6be5c17243",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "TIAN",
+      "wallet": "1Hn9ErTCPRP6j5UDBeuXPGuq5RtRjFJxJQ",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "LI",
+      "wallet": "3N6WeZ6i34taX8Ditser6LKWBcXmt2XXL4",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "POTEKHIN",
+      "wallet": "0x7F367cC41522cE07553e823bf3be79A889DEbe1B",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "KARASAVIDI",
+      "wallet": "LNwgtMxcKUQ51dw7bQL1yPQjBVZh6QEqsd",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "LIFSHITS",
+      "wallet": "Xs3vzQmNvAxRa3Xo8XzQqUb3BMgb9EogF4",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ANDREYEV",
+      "wallet": "12sjrrhoFEsedNRhtgwvvRqjFTh8fZTDX9",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SECONDEYE SOLUTION",
+      "wallet": "18M8bJWMzWHDBMxoLqjHHAffdRy4SrzkfB",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "RAZA",
+      "wallet": "DFFJhnQNZf8rf67tYnesPu7MuGUpYtzv7Z",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ASSOCIATION FOR FREE RESEARCH AND INTERNATIONAL COOPERATION",
+      "wallet": "XyARKoupuArYtToA2S6yMdnoquDCDaBsaT",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SOUTHFRONT",
+      "wallet": "qq3vlashthktqpeppuv7trmw070e3mydgq63zq348v",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "FAYZIMATOV",
+      "wallet": "17a5bpKvEp1j1Trs4qTbcNZrby53JbaS9C",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "AL-JAMAL",
+      "wallet": "TFFvv7NAWmbcVfA7QN81mMvUC25TWj1WJx",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "HEBEI ATUN TRADING CO., LTD.",
+      "wallet": "1JPfVv5cWRLx1js9NWxg46dG2CGbeRz4th",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SUEX OTC, S.R.O.",
+      "wallet": "0x308ed4b7b49797e1a98d3818bff6fe5385410370",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "CHATEX",
+      "wallet": "0xc455f7fd3e0e12afd51fba5c106909934d8a0e4a",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "POLYANIN",
+      "wallet": "3AjyprBY5yhijiCjUC5NUJutGbwhd3AQdE",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "VASINSKYI",
+      "wallet": "372Wk9NLrMkJzKgqJdatWJy4bYRfxFjgat",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "GARANTEX EUROPE OU",
+      "wallet": "TNDjh6WGLYyWmkh8vfu42bXVHUqFNQ3rDq",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "HYDRA MARKET",
+      "wallet": "35aTjkBh4yeTypJsi9nuTdoMKHTsawKVgX",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "BLENDER.IO",
+      "wallet": "15PggTG7YhJKiE6B16vkKzA1YDTZipXEX4",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "KHATIBI AGHADA",
+      "wallet": "bc1qx3e2axj3wsfn0ndtvlwmkghmmgm4583nqg8ngk",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "NIKAEEN RAVARI",
+      "wallet": "bc1qpaly5nm7pfka9v92d6qvl4fc2l9xzee8a6ys3s",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "TASK FORCE RUSICH",
+      "wallet": "0x3AD9dB589d201A710Ed237c829c7860Ba86510Fc",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "PEIJNENBURG",
+      "wallet": "0xEFE301d259F525cA1ba74A7977b80D5b060B3ccA",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "GRIMM",
+      "wallet": "qz9f2vz3033sg5vc5mf7m7xshmj0jugy4ummf05jk8",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ZIMENKOV",
+      "wallet": "0x39D908dac893CBCB53Cc86e0ECc369aA4DeF1A29",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "WANG",
+      "wallet": "3PKiHs4GY4rFg8dpppNVPXGPqMX6K2cBML",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "WU",
+      "wallet": "16ti2EXaae5izfkUZ1Zc59HMcsdnHpP5QJ",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SIM",
+      "wallet": "0x4f47bc496083c727c5fbe3ce9cdf2b0f6496270c",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "HANAFIN",
+      "wallet": "0x38735f03b30FbC022DdD06ABED01F0Ca823C6a94",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "KIM",
+      "wallet": "0xb6f5ec1a0a9cd1526536d3f0426c429529471f40",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "WANG",
+      "wallet": "TBHTJqAy4DhHhmT3dNceJYNRz4SdLofLre",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "JIMENEZ CASTRO",
+      "wallet": "0x9c2bc757b66f24d60f016b6237f8cdd414a879fa",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SINBAD",
+      "wallet": "1JHdQHkBZiim1cb4hyUh2PbzEbbg6z2TrF",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SHAFIU",
+      "wallet": "TVacWx7F5wgMgn49L5frDf9KLgdYy8nPHL",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SEMENOV",
+      "wallet": "0x6be0ae71e6c41f2f9d0d1a3b8d0f75e6f6a0b46e",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ZHDANOVA",
+      "wallet": "39p8qWp1bkBNhi4vPpFTetKPtH7goqNDZf",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "GAMBASHIDZE",
+      "wallet": "TMGLqRQ4twjW8wJhVH1mQR7nUThpGHUsN3",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SHEN",
+      "wallet": "TEAqwfMhXLaomXhZ8KeMhx3njGmQEDnsUR",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "VALERIAN LABS, INC.",
+      "wallet": "0x983a81ca6FB1e441266D2FbcB7D8E530AC2E05A2",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "WANG",
+      "wallet": "3NNcbBcMZokPB2JC2dxYuZrpgcetvyGeJn",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "XIA",
+      "wallet": "TTKnV2S1295UrPr7N67Tp9ykNL7xX2Z4Uj",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ZHANG",
+      "wallet": "TRBACioxdrdsYEZHvJWiUDZcMdBPpEe5Ub",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "WANG",
+      "wallet": "0xfac583c0cf07ea434052c49115a4682172ab6b4f",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "BUY CASH MONEY AND MONEY TRANSFER COMPANY",
+      "wallet": "19D1iGzDr7FyAdiy3ZZdxMd6ttHj1kj6WW",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "GAZA NOW",
+      "wallet": "0x175d44451403Edf28469dF03A9280c1197ADb92c",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ANSARALLAH",
+      "wallet": "TVn4q7L4fKEPbygi7UHq1CKfZxtbeuMV5q",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SUNGATOV",
+      "wallet": "18gaXypKj9M23S2zT9qZfL9iPbLFM372Q5",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "KONDRATIEV",
+      "wallet": "0xf3701f445b6bdafedbca97d1e477357839e4120d",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "AL-LAW",
+      "wallet": "TWBAPzpPiZarfVsY2BLXeaLhNHurn4wkWG",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "OKO DESIGN BUREAU",
+      "wallet": "TFdTr9C3BqQrzKBXqSxJfAZFTh8UwBAfSg",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "KHOROSHEV",
+      "wallet": "bc1qvhnfknw852ephxyc5hm4q520zmvf9maphetc9z",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "OBSHCHESTVO S OGRANICHENNOI OTVETSTVENNOSTYU KONSTRUKTORSKOE BYURO VOSTOK",
+      "wallet": "TLM3zA3EWycoDX4ZX4gKze7sgfbdkntTum",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "CRYPTEX",
+      "wallet": "M8yFL6SFC6TreATegTyuSYkDfDRbisdpT3",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "HUANG",
+      "wallet": "3NEcQKZ8RwL2eDNhmMPpZ4td9vPsQh9JwM",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "MAGOMEDOV",
+      "wallet": "0x1999ef52700c34de7ec2b68a28aafb37db0c5ade",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "CHIRKINYAN",
+      "wallet": "TDdbRFoBTEmE3qiR69Y6rKRSG1hoF65QaE",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ZSERVERS",
+      "wallet": "bc1q4yzd2rjmshm8ucrwy6dzj5rna20j0zlf8hf8vz",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "MISHIN",
+      "wallet": "3FfRvC3kSo2SxiQe5e7SSuNdegwgq8iusL",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "PARSARAD",
+      "wallet": "86ze8c9oUftDSTxzFBhfSJYpjvw6GYkqjeEaggy3hBVL1ou2tk79DfSj5YiZ3wjDHp541tizcQ8bVCxCtVHQncuc3asa8wz",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "FUNNULL TECHNOLOGY INC",
+      "wallet": "0xd5ED34b52AC4ab84d8FA8A231a3218bbF01Ed510",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "VOLOSOVIK",
+      "wallet": "18dLDAWi8LmrHbEq3QzDJb9SLxCf4uimXB",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "AEZA GROUP LLC",
+      "wallet": "TU4tDFRvcKhAZ1jdihojmBWZqvJhQCnJ4F",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "GRINEX",
+      "wallet": "TGckaiamj5NzaYx6Qp6Zu7kahuHArzUo99",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "OLD VECTOR LLC",
+      "wallet": "0x12de548F79a50D2bd05481C8515C1eF5183666a9",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ANDREYEV",
+      "wallet": "1HmqvgSXUVES1jn4TQPzk9dxo1NE8wim2T",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SAYYED",
+      "wallet": "TDFtJtyLPgN3oWUoHh23oJox3T5V5nR11K",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "DERAKHSHAN",
+      "wallet": "TSxAAo67VTDgKT537EVXxdogkJtk9c6ojz",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ALIVAND",
+      "wallet": "TQ5H49Wz3K57zNHmuXVp6uLzFwitxviABs",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "CHEN",
+      "wallet": "bc1qcx8vxxrld2s7qvz64qp75s3508rkzaxj65l60q",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "WEDDING",
+      "wallet": "TPJ1JNX98MJpHueBJeF5SVSg85z8mYg1P1",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "SOKOLOVSKI",
+      "wallet": "0xe1e4c5e5ed8f03ae61b581e2def126025f2b9401",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ZEDCEX EXCHANGE LTD",
+      "wallet": "TNuA5CQ6LB4jTHoNrjEeQZJmcmhQuHMbQ7",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "YUN",
+      "wallet": "0x95584C303FCd48AF5c6B9873015f2AD0ca84EaE3",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "HOANG",
+      "wallet": "bc1qyy5pt5cx3zth8xlj92lq5y87dh8xv3nwgs4ncq",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "AMNOKGANG TECHNOLOGY DEVELOPMENT COMPANY",
+      "wallet": "0x9Be599d7867f5E1a2D7Ec6dB9710dF2b98A15573",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "OJEDA AVILES",
+      "wallet": "0x4F428c11Dc82388fa5136D636e613ad923Eb700B",
+      "added": "2026-05-24"
+    },
+    {
+      "name": "ALARCON PALOMARES",
+      "wallet": "0xaC4cC4B68ea24BbFAAC8fD127B67Ed445ACcCE22",
+      "added": "2026-05-24"
+    }
+  ],
+  "bill_updates": [
+    {
+      "bill": "PREDICT Act",
+      "id": "HR8076",
+      "latest_action": "Referred to the Committee on Oversight and Government Reform, and in addition to the Committees on House Administration, and the Judiciary, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/8076"
+    },
+    {
+      "bill": "End Prediction Market Corruption Act",
+      "id": "S4017",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-05",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4017"
+    },
+    {
+      "bill": "Prediction Markets Security and Integrity Act",
+      "id": "S4060",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-11",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4060"
+    },
+    {
+      "bill": "Public Integrity in Financial Prediction Markets Act",
+      "id": "S4188",
+      "latest_action": "Read twice and referred to the Committee on Homeland Security and Governmental Affairs.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4188"
+    },
+    {
+      "bill": "STOP Corrupt Bets Act",
+      "id": "S4226",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-26",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4226"
+    },
+    {
+      "bill": "BETS OFF Act",
+      "id": "S4115",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-17",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4115"
+    },
+    {
+      "bill": "Event Contract Enforcement Act",
+      "id": "HR7840",
+      "latest_action": "Sponsor introductory remarks on measure. (CR H2588-2589)",
+      "action_date": "2026-03-18",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/7840"
+    }
+  ]
 }

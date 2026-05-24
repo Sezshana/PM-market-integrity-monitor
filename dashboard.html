@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polymarket OSINT Dashboard</title>
+<style>
+  :root {
+    --bg: #0a1628;
+    --card: #0f2040;
+    --border: #1e3a5f;
+    --teal: #00c2d4;
+    --red: #ff4444;
+    --yellow: #ffcc00;
+    --green: #00cc88;
+    --text: #e0e8f0;
+    --muted: #5a7a9a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; padding: 20px; }
+  h1 { color: var(--teal); font-size: 1.4rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.8rem; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .stat .num { font-size: 2rem; font-weight: bold; color: var(--teal); }
+  .stat .label { font-size: 0.7rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat.alert .num { color: var(--red); }
+  .stat.warn .num { color: var(--yellow); }
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .section h2 { color: var(--teal); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .item { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 0.82rem; }
+  .item:last-child { border-bottom: none; }
+  .item .title { color: var(--text); margin-bottom: 4px; font-weight: bold; }
+  .item .meta { color: var(--muted); font-size: 0.72rem; margin-bottom: 4px; }
+  .item .summary { color: #8ab0cc; font-size: 0.78rem; line-height: 1.4; }
+  .item a { color: var(--teal); text-decoration: none; font-size: 0.72rem; }
+  .item a:hover { text-decoration: underline; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; margin-right: 4px; text-transform: uppercase; }
+  .badge.high { background: #ff440022; color: var(--red); border: 1px solid var(--red); }
+  .badge.warn { background: #ffcc0022; color: var(--yellow); border: 1px solid var(--yellow); }
+  .badge.ok { background: #00cc8822; color: var(--green); border: 1px solid var(--green); }
+  .badge.source { background: #1e3a5f; color: #7ecfda; border: 1px solid var(--border); }
+  .trade { background: #0a1e35; border-left: 3px solid var(--red); padding: 10px; margin-bottom: 8px; border-radius: 0 6px 6px 0; font-size: 0.78rem; }
+  .trade .amount { color: var(--red); font-size: 1.1rem; font-weight: bold; }
+  .trade .prob { color: var(--yellow); }
+  .bill { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.78rem; }
+  .bill:last-child { border-bottom: none; }
+  .bill .name { color: var(--text); flex: 1; }
+  .bill .action { color: var(--muted); font-size: 0.7rem; max-width: 300px; text-align: right; }
+  .loading { text-align: center; color: var(--muted); padding: 40px; }
+  .error { color: var(--red); text-align: center; padding: 20px; }
+  .updated { color: var(--muted); font-size: 0.7rem; text-align: right; margin-bottom: 16px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab { padding: 6px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.78rem; color: var(--muted); }
+  .tab.active { border-color: var(--teal); color: var(--teal); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+</style>
+</head>
+<body>
+
+<h1>POLYMARKET OSINT DASHBOARD</h1>
+<p class="subtitle">Automated daily surveillance intelligence — updates every morning at 8 AM EST</p>
+<div class="updated" id="last-updated">Loading...</div>
+
+<div id="stats" class="grid">
+  <div class="stat"><div class="num" id="stat-stories">—</div><div class="label">News Stories</div></div>
+  <div class="stat alert"><div class="num" id="stat-markets">—</div><div class="label">Suspicious Markets</div></div>
+  <div class="stat alert"><div class="num" id="stat-trades">—</div><div class="label">Large Trades</div></div>
+  <div class="stat warn"><div class="num" id="stat-uma">—</div><div class="label">UMA Alerts</div></div>
+  <div class="stat warn"><div class="num" id="stat-ofac">—</div><div class="label">OFAC New</div></div>
+  <div class="stat ok"><div class="num" id="stat-bills">—</div><div class="label">Bills Tracked</div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('tab-alerts')">Alerts</div>
+  <div class="tab" onclick="showTab('tab-news')">News</div>
+  <div class="tab" onclick="showTab('tab-trades')">Trades</div>
+  <div class="tab" onclick="showTab('tab-bills')">Bills</div>
+  <div class="tab" onclick="showTab('tab-uma')">UMA</div>
+</div>
+
+<div id="tab-alerts" class="tab-content active">
+  <div class="section">
+    <h2>High Priority Alerts</h2>
+    <div id="high-priority-list"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<div id="tab-news" class="tab-content">
+  <div class="section">
+    <h2>All News Stories</h2>
+    <div id="all-news-list"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<div id="tab-trades" class="tab-content">
+  <div class="section">
+    <h2>Suspicious Markets (Polymarket API)</h2>
+    <div id="suspicious-markets-list"><div class="loading">Loading...</div></div>
+  </div>
+  <div class="section">
+    <h2>Large Individual Trades (CLOB)</h2>
+    <div id="large-trades-list"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<div id="tab-bills" class="tab-content">
+  <div class="section">
+    <h2>Congressional Bill Tracker</h2>
+    <div id="bills-list"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<div id="tab-uma" class="tab-content">
+  <div class="section">
+    <h2>UMA Governance Disputes</h2>
+    <div id="uma-list"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function getToday() {
+  const d = new Date();
+  return d.toISOString().split('T')[0];
+}
+
+function renderNews(items, containerId, highOnly) {
+  const el = document.getElementById(containerId);
+  const filtered = highOnly ? items.filter(i => i.priority) : items;
+  if (!filtered.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No items</div>'; return; }
+  el.innerHTML = filtered.map(item => `
+    <div class="item">
+      <div class="title">
+        ${item.priority ? '<span class="badge high">HIGH</span>' : '<span class="badge ok">NEWS</span>'}
+        <span class="badge source">${item.source}</span>
+        ${item.title}
+      </div>
+      ${item.also_covered_by && item.also_covered_by.length ? `<div class="meta">Also covered by: ${item.also_covered_by.join(', ')}</div>` : ''}
+      <div class="summary">${item.summary || '[See source for details]'}</div>
+      <a href="${item.link}" target="_blank">Read full article →</a>
+    </div>
+  `).join('');
+}
+
+function renderSuspiciousMarkets(markets) {
+  const el = document.getElementById('suspicious-markets-list');
+  if (!markets || !markets.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No suspicious markets detected today</div>'; return; }
+  el.innerHTML = markets.map(m => `
+    <div class="trade">
+      <div class="title">${m.question}</div>
+      <div style="margin-top:6px">
+        <span class="amount">$${Number(m.volume_usd).toLocaleString()}</span> volume on
+        <span class="prob">${m.probability_pct}% probability</span> outcome: <strong>${m.outcome}</strong>
+      </div>
+      <div class="meta" style="margin-top:4px">${m.alert_reason}</div>
+      <a href="${m.url}" target="_blank">View on Polymarket →</a>
+    </div>
+  `).join('');
+}
+
+function renderLargeTrades(trades) {
+  const el = document.getElementById('large-trades-list');
+  if (!trades || !trades.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No large individual trades flagged today</div>'; return; }
+  el.innerHTML = trades.map(t => `
+    <div class="trade">
+      <span class="amount">$${Number(t.size_usd).toLocaleString()}</span>
+      <span class="prob"> | ${t.prob_pct}% prob | ${t.side}</span>
+      <div class="meta" style="margin-top:4px">
+        Maker: <code>${t.maker.slice(0,16)}...</code>
+        ${t.wl_maker && t.wl_maker.length ? '<span class="badge high">WATCHLIST</span>' : ''}
+      </div>
+      <div class="meta">Taker: <code>${t.taker.slice(0,16)}...</code></div>
+    </div>
+  `).join('');
+}
+
+function renderBills(bills) {
+  const el = document.getElementById('bills-list');
+  if (!bills || !bills.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">Add CONGRESS_API_KEY to enable</div>'; return; }
+  el.innerHTML = bills.map(b => `
+    <div class="bill">
+      <div class="name"><a href="${b.url}" target="_blank">${b.bill} (${b.id})</a></div>
+      <div class="action">${b.latest_action}<br><span style="color:var(--muted)">${b.action_date || ''}</span></div>
+    </div>
+  `).join('');
+}
+
+function renderUMA(uma) {
+  const el = document.getElementById('uma-list');
+  if (!uma || !uma.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No relevant UMA disputes today</div>'; return; }
+  el.innerHTML = uma.map(a => `
+    <div class="item">
+      <div class="title"><span class="badge warn">DISPUTE</span> ${a.title}</div>
+      <div class="summary">${a.summary}</div>
+      <div class="meta" style="margin-top:4px; color: var(--yellow)">${a.note}</div>
+      <a href="${a.link}" target="_blank">View on UMA forum →</a>
+    </div>
+  `).join('');
+}
+
+async function loadReport() {
+  const today = getToday();
+  const url = `output/report_${today}.json`;
+
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      // Try yesterday
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yd = yesterday.toISOString().split('T')[0];
+      const resp2 = await fetch(`output/report_${yd}.json`);
+      if (!resp2.ok) throw new Error('No report found');
+      const data = await resp2.json();
+      renderAll(data, yd);
+    } else {
+      const data = await resp.json();
+      renderAll(data, today);
+    }
+  } catch (e) {
+    document.getElementById('high-priority-list').innerHTML = `<div class="error">Could not load report. Run the monitor first via GitHub Actions.</div>`;
+    document.getElementById('last-updated').textContent = 'No report loaded';
+  }
+}
+
+function renderAll(data, date) {
+  document.getElementById('last-updated').textContent = `Last report: ${date} | Run daily at 8 AM EST`;
+  document.getElementById('stat-stories').textContent = data.unique_news || data.alerts?.length || 0;
+  document.getElementById('stat-markets').textContent = data.suspicious_markets || 0;
+  document.getElementById('stat-trades').textContent = data.large_trades || 0;
+  document.getElementById('stat-uma').textContent = data.uma_alerts || 0;
+  document.getElementById('stat-ofac').textContent = data.ofac_new || 0;
+  document.getElementById('stat-bills').textContent = data.bill_updates?.length || 0;
+
+  renderNews(data.alerts || [], 'high-priority-list', true);
+  renderNews(data.alerts || [], 'all-news-list', false);
+  renderSuspiciousMarkets(data.suspicious_market_data || []);
+  renderLargeTrades(data.large_trade_data || []);
+  renderBills(data.bill_updates || []);
+  renderUMA(data.uma_governance || []);
+}
+
+loadReport();
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Polymarket OSINT Watchlist
+# Edit this file to add items you want to monitor specifically.
+# Items in this file get elevated to HIGH PRIORITY in your daily digest.
+
+[keywords]
+# Add specific terms, names, or topics you want to track closely
+iran war bets
+maduro
+Lazarus Group
+DPRK prediction
+insider polymarket
+governance attack
+
+[wallets]
+# Add wallet addresses you are already suspicious of (one per line)
+# Example: 0xabc123...
+# Add wallets here after identifying them in investigations
+
+[handles]
+# Twitter/X handles to watch (without @)
+polymarket
+cfтcwatch
+wassielawyer

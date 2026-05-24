@@ -153,6 +153,23 @@ def load_watchlist():
 
 WATCHLIST = load_watchlist()
 
+def load_seen_articles():
+    """Load URLs of articles already sent in previous reports."""
+    if SEEN_ARTICLES.exists():
+        try:
+            return set(json.loads(SEEN_ARTICLES.read_text()))
+        except:
+            return set()
+    return set()
+
+def save_seen_articles(urls):
+    """Save seen article URLs — keep last 500 to avoid unbounded growth."""
+    existing = load_seen_articles()
+    all_urls = list(existing | urls)
+    # Keep most recent 500
+    all_urls = all_urls[-500:]
+    SEEN_ARTICLES.write_text(json.dumps(all_urls, indent=2))
+
 def check_watchlist(text):
     text_lower = text.lower()
     hits = []
@@ -406,8 +423,9 @@ def fetch_uma_governance():
 # 5. OFAC — ONLY SHOW TRULY NEW ENTRIES (LAST 24H)
 # ════════════════════════════════════════════════════════════
 
-OFAC_CACHE = Path("data/ofac_cache.json")
-OFAC_SEEN  = Path("data/ofac_seen_uids.json")
+OFAC_CACHE    = Path("data/ofac_cache.json")
+OFAC_SEEN     = Path("data/ofac_seen_uids.json")
+SEEN_ARTICLES = Path("data/seen_articles.json")
 
 def fetch_ofac_new():
     new_entries = []
@@ -700,6 +718,11 @@ def save_report(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
     body = build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_alerts, weekly)
     with open(f"output/report_{TODAY}.md", "w") as f:
         f.write(body)
+    
+    # Save article URLs so they don't appear in future reports
+    seen_urls = set(h.get("link","") for h in news if h.get("link",""))
+    save_seen_articles(seen_urls)
+    
     return body
 
 def send_email(body, num_alerts):

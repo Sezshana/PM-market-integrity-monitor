@@ -1,7 +1,8 @@
 """
-Polymarket OSINT Monitor v5
-Fixes: OFAC noise, UMA noise, empty TL;DRs
-New: Polymarket API trade scraper, suspicious trade detection
+Polymarket OSINT Monitor v8
+Full suite with: narrative summary, smart subject lines,
+quiet day mode, priority scoring, weekly story threading,
+cross-day deduplication, dates everywhere.
 """
 
 import os
@@ -16,6 +17,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from pathlib import Path
+import email.utils
 
 ALERT_EMAIL   = os.environ.get("ALERT_EMAIL", "shanabautista0819@gmail.com")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
@@ -29,6 +31,14 @@ WEEKDAY      = datetime.date.today().weekday()
 for folder in ["output", "cases", "data"]:
     Path(folder).mkdir(exist_ok=True)
 
+# ── DATA FILES ───────────────────────────────────────────────
+SEEN_ARTICLES = Path("data/seen_articles.json")
+OFAC_CACHE    = Path("data/ofac_cache.json")
+OFAC_SEEN     = Path("data/ofac_seen_uids.json")
+WIN_RATE_FILE = Path("data/win_rate_tracker.json")
+STORY_THREADS = Path("data/story_threads.json")
+
+# ── SOURCE PRIORITY ──────────────────────────────────────────
 SOURCE_PRIORITY = {
     "CFTC Enforcement Actions": 10,
     "CFTC Press Releases": 9,
@@ -57,26 +67,44 @@ KEYWORDS = [
     "UMA protocol","oracle manipulation","prediction market regulation",
 ]
 
-HIGH_PRIORITY_KEYWORDS = [
-    "polymarket","kalshi","insider trading prediction",
-    "prediction market manipulation","CFTC enforcement",
-    "oracle manipulation","UMA protocol",
-]
+# Priority keywords with weights — more matches = higher score
+PRIORITY_WEIGHTS = {
+    "polymarket": 3,
+    "kalshi": 2,
+    "insider trading prediction": 5,
+    "prediction market manipulation": 5,
+    "CFTC enforcement": 4,
+    "oracle manipulation": 4,
+    "UMA protocol": 3,
+    "wash trading": 3,
+    "exploit": 3,
+    "insider trading": 4,
+    "congressional": 2,
+    "probe": 2,
+    "investigation": 2,
+    "sanctions": 2,
+    "OFAC": 3,
+    "arrest": 4,
+    "indictment": 5,
+    "lawsuit": 3,
+    "fine": 3,
+    "penalty": 3,
+    "ban": 2,
+}
 
-# UMA forum posts must match these to be included — much stricter than before
-UMA_REQUIRED_KEYWORDS = [
+UMA_REQUIRED = [
     "polymarket", "dispute", "resolution", "incorrect", "manipulat",
     "bad faith", "exploit", "governance attack", "slashing", "bad-faith"
 ]
 
 BILLS = [
-    {"name": "PREDICT Act",                                  "id": "hr8076", "congress": "119"},
-    {"name": "End Prediction Market Corruption Act",         "id": "s4017",  "congress": "119"},
-    {"name": "Prediction Markets Security and Integrity Act","id": "s4060",  "congress": "119"},
-    {"name": "Public Integrity in Financial Prediction Markets Act","id": "s4188","congress": "119"},
-    {"name": "STOP Corrupt Bets Act",                       "id": "s4226",  "congress": "119"},
-    {"name": "BETS OFF Act",                                 "id": "s4115",  "congress": "119"},
-    {"name": "Event Contract Enforcement Act",               "id": "hr7840", "congress": "119"},
+    {"name": "PREDICT Act",                                   "id": "hr8076", "congress": "119"},
+    {"name": "End Prediction Market Corruption Act",          "id": "s4017",  "congress": "119"},
+    {"name": "Prediction Markets Security and Integrity Act", "id": "s4060",  "congress": "119"},
+    {"name": "Public Integrity in Financial Prediction Markets Act","id":"s4188","congress":"119"},
+    {"name": "STOP Corrupt Bets Act",                        "id": "s4226",  "congress": "119"},
+    {"name": "BETS OFF Act",                                  "id": "s4115",  "congress": "119"},
+    {"name": "Event Contract Enforcement Act",                "id": "hr7840", "congress": "119"},
 ]
 
 LARGE_TRADE_USD  = 10_000
@@ -91,6 +119,23 @@ WIN_RATE_ALERT   = 75
 def clean_text(html):
     text = BeautifulSoup(html or "", "html.parser").get_text()
     return " ".join(text.split())
+
+def parse_date(raw_date):
+    """Parse RSS date string into human-readable format."""
+    try:
+        parsed = email.utils.parsedate_to_datetime(raw_date)
+        return parsed.strftime("%b %d, %Y")
+    except:
+        return raw_date[:10] if raw_date and len(raw_date) >= 10 else "Date unknown"
+
+def score_article(title, summary, matched_keywords):
+    """Score an article by priority — higher = more important."""
+    combined = (title + " " + summary).lower()
+    score = 0
+    for kw, weight in PRIORITY_WEIGHTS.items():
+        if kw.lower() in combined:
+            score += weight
+    return score
 
 def title_fingerprint(title):
     stopwords = {
@@ -131,6 +176,91 @@ def deduplicate(hits):
         result.append(best)
     return result
 
+
+# ════════════════════════════════════════════════════════════
+# SEEN ARTICLES (cross-day deduplication)
+# ════════════════════════════════════════════════════════════
+
+def load_seen_articles():
+    if SEEN_ARTICLES.exists():
+        try:
+            return set(json.loads(SEEN_ARTICLES.read_text()))
+        except:
+            return set()
+    return set()
+
+def save_seen_articles(urls):
+    existing = load_seen_articles()
+    all_urls = list(existing | urls)
+    all_urls = all_urls[-500:]
+    SEEN_ARTICLES.write_text(json.dumps(all_urls, indent=2))
+
+
+# ════════════════════════════════════════════════════════════
+# STORY THREADS (weekly pattern tracking)
+# ════════════════════════════════════════════════════════════
+
+def load_story_threads():
+    if STORY_THREADS.exists():
+        try:
+            return json.loads(STORY_THREADS.read_text())
+        except:
+            return {}
+    return {}
+
+def save_story_threads(threads):
+    STORY_THREADS.write_text(json.dumps(threads, indent=2))
+
+def update_story_threads(news_hits):
+    """
+    Track developing stories across days.
+    Groups articles by topic fingerprint and records which days they appeared.
+    """
+    threads = load_story_threads()
+    cutoff  = (datetime.date.today() - datetime.timedelta(days=14)).isoformat()
+
+    # Remove threads older than 14 days
+    threads = {k: v for k, v in threads.items()
+               if v.get("last_seen", "") >= cutoff}
+
+    for hit in news_hits:
+        fp = title_fingerprint(hit["title"])
+        if not fp:
+            continue
+        # Find matching thread
+        matched_key = None
+        for key, thread in threads.items():
+            if stories_are_similar(hit["title"], thread["representative_title"]):
+                matched_key = key
+                break
+        if matched_key:
+            thread = threads[matched_key]
+            if TODAY not in thread["dates_seen"]:
+                thread["dates_seen"].append(TODAY)
+            thread["last_seen"] = TODAY
+            thread["mention_count"] = len(thread["dates_seen"])
+        else:
+            threads[fp] = {
+                "representative_title": hit["title"],
+                "dates_seen":           [TODAY],
+                "last_seen":            TODAY,
+                "mention_count":        1,
+            }
+
+    save_story_threads(threads)
+
+    # Return threads that have appeared on 2+ days — these are developing stories
+    developing = [
+        v for v in threads.values()
+        if v["mention_count"] >= 2 and v["last_seen"] == TODAY
+    ]
+    return sorted(developing, key=lambda x: x["mention_count"], reverse=True)
+
+
+# ════════════════════════════════════════════════════════════
+# WATCHLIST
+# ════════════════════════════════════════════════════════════
+
 def load_watchlist():
     path = Path("watchlist.txt")
     if not path.exists():
@@ -153,23 +283,6 @@ def load_watchlist():
 
 WATCHLIST = load_watchlist()
 
-def load_seen_articles():
-    """Load URLs of articles already sent in previous reports."""
-    if SEEN_ARTICLES.exists():
-        try:
-            return set(json.loads(SEEN_ARTICLES.read_text()))
-        except:
-            return set()
-    return set()
-
-def save_seen_articles(urls):
-    """Save seen article URLs — keep last 500 to avoid unbounded growth."""
-    existing = load_seen_articles()
-    all_urls = list(existing | urls)
-    # Keep most recent 500
-    all_urls = all_urls[-500:]
-    SEEN_ARTICLES.write_text(json.dumps(all_urls, indent=2))
-
 def check_watchlist(text):
     text_lower = text.lower()
     hits = []
@@ -183,7 +296,7 @@ def check_watchlist(text):
 
 
 # ════════════════════════════════════════════════════════════
-# 1. RSS FEED MONITORING
+# RSS FEEDS
 # ════════════════════════════════════════════════════════════
 
 def fetch_rss(feeds, keywords):
@@ -198,163 +311,128 @@ def fetch_rss(feeds, keywords):
                 matched = [kw for kw in keywords if kw.lower() in combined]
                 if not matched:
                     continue
-                priority = any(kw.lower() in combined for kw in HIGH_PRIORITY_KEYWORDS)
-                wl = check_watchlist(title + " " + summary)
 
-                # Better summary extraction — try multiple fields
-                raw_summary = (
-                    entry.get("summary") or
-                    entry.get("content", [{}])[0].get("value", "") if entry.get("content") else "" or
-                    entry.get("description", "") or ""
-                )
-                clean = clean_text(raw_summary)[:250]
+                wl      = check_watchlist(title + " " + summary)
+                score   = score_article(title, summary, matched)
+                pub_date = parse_date(entry.get("published", ""))
+
+                clean = clean_text(entry.get("summary",""))[:250]
                 if len(clean) < 20:
-                    clean = f"[Full article at source — {source}]"
+                    clean = f"[See full article at {source}]"
 
                 raw.append({
                     "source":           source,
                     "title":            title,
                     "link":             entry.get("link", ""),
                     "published":        entry.get("published", ""),
+                    "pub_date":         pub_date,
                     "matched_keywords": matched,
                     "summary":          clean,
-                    "priority":         priority or bool(wl),
+                    "score":            score,
+                    "priority":         score >= 3 or bool(wl),
                     "watchlist_hit":    wl,
                     "also_covered_by":  [],
                 })
         except Exception as e:
             print(f"  RSS error [{source}]: {e}")
+
     deduped = deduplicate(raw)
-    print(f"  RSS: {len(raw)} raw → {len(deduped)} unique")
-    return deduped
+
+    # Cross-day deduplication — skip articles already sent
+    seen = load_seen_articles()
+    fresh = [h for h in deduped if h.get("link","") not in seen]
+
+    # Sort by score descending so most important comes first
+    fresh = sorted(fresh, key=lambda x: x["score"], reverse=True)
+
+    print(f"  RSS: {len(raw)} raw -> {len(deduped)} unique -> {len(fresh)} new today")
+    return fresh
 
 
 # ════════════════════════════════════════════════════════════
-# 2. POLYMARKET API — DIRECT TRADE SCRAPING
+# POLYMARKET API — TRADE SCRAPING
 # ════════════════════════════════════════════════════════════
 
 def fetch_polymarket_suspicious_trades():
-    """
-    Scrape Polymarket's public Gamma API for large trades on low-probability markets.
-    No API key required. This is the core insider trading detection function.
-    """
     flagged = []
-    print("  Fetching Polymarket markets via Gamma API...")
-
     try:
-        # Get active markets
         url = "https://gamma-api.polymarket.com/markets"
-        params = {
-            "active": "true",
-            "closed": "false",
-            "limit": 100,
-            "order": "volume",
-            "ascending": "false",
-        }
-        headers = {"User-Agent": "Mozilla/5.0"}
-        resp = requests.get(url, params=params, headers=headers, timeout=15)
-
+        params = {"active":"true","closed":"false","limit":100,"order":"volume","ascending":"false"}
+        resp = requests.get(url, params=params, headers={"User-Agent":"Mozilla/5.0"}, timeout=15)
         if resp.status_code != 200:
-            print(f"  Polymarket API error: {resp.status_code}")
             return []
-
         markets = resp.json()
-        print(f"  Got {len(markets)} active markets")
-
-        for market in markets[:50]:  # Check top 50 by volume
-            try:
-                question   = market.get("question", "")
-                market_id  = market.get("id", "")
-                outcomes   = market.get("outcomes", "[]")
-                prices     = market.get("outcomePrices", "[]")
-                volume     = float(market.get("volume", 0) or 0)
-
-                # Parse outcomes and prices
-                if isinstance(outcomes, str):
-                    outcomes = json.loads(outcomes)
-                if isinstance(prices, str):
-                    prices = json.loads(prices)
-
-                # Check for low probability outcomes with high volume
-                for i, (outcome, price) in enumerate(zip(outcomes, prices)):
-                    try:
-                        prob = float(price) * 100
-                        if prob <= LOW_PROB_MAX_PCT and volume >= LARGE_TRADE_USD:
-                            flagged.append({
-                                "market_id":       market_id,
-                                "question":        question,
-                                "outcome":         outcome,
-                                "probability_pct": round(prob, 1),
-                                "volume_usd":      round(volume, 0),
-                                "url":             f"https://polymarket.com/event/{market.get('slug', market_id)}",
-                                "end_date":        market.get("endDate", ""),
-                                "alert_reason":    f"High volume (${volume:,.0f}) on {prob:.1f}% probability outcome",
-                            })
-                    except (ValueError, TypeError):
-                        continue
-
-            except Exception as e:
-                continue
-
+        for market in markets[:50]:
+            question  = market.get("question","")
+            market_id = market.get("id","")
+            outcomes  = market.get("outcomes","[]")
+            prices    = market.get("outcomePrices","[]")
+            volume    = float(market.get("volume",0) or 0)
+            if isinstance(outcomes, str): outcomes = json.loads(outcomes)
+            if isinstance(prices, str):   prices   = json.loads(prices)
+            for outcome, price in zip(outcomes, prices):
+                try:
+                    prob = float(price) * 100
+                    if prob <= LOW_PROB_MAX_PCT and volume >= LARGE_TRADE_USD:
+                        flagged.append({
+                            "market_id":       market_id,
+                            "question":        question,
+                            "outcome":         outcome,
+                            "probability_pct": round(prob, 1),
+                            "volume_usd":      round(volume, 0),
+                            "url":             f"https://polymarket.com/event/{market.get('slug', market_id)}",
+                            "end_date":        market.get("endDate","")[:10] if market.get("endDate") else "unknown",
+                            "flagged_date":    TODAY,
+                            "alert_reason":    f"${volume:,.0f} volume on {prob:.1f}% probability outcome",
+                        })
+                except: continue
     except Exception as e:
         print(f"  Polymarket API error: {e}")
-
-    # Sort by volume descending, take top 10
     flagged = sorted(flagged, key=lambda x: x["volume_usd"], reverse=True)[:10]
-    print(f"  Suspicious markets flagged: {len(flagged)}")
+    print(f"  Suspicious markets: {len(flagged)}")
     return flagged
 
 
 def fetch_polymarket_recent_large_trades():
-    """
-    Fetch recent large trades from Polymarket's CLOB data API.
-    Flags individual trades over the threshold on low-probability markets.
-    """
     flagged = []
     try:
-        # CLOB trades endpoint
-        url = "https://clob.polymarket.com/trades"
-        params = {"limit": 500}
-        headers = {"User-Agent": "Mozilla/5.0"}
-        resp = requests.get(url, params=params, headers=headers, timeout=15)
-
+        resp = requests.get("https://clob.polymarket.com/trades",
+                           params={"limit":500},
+                           headers={"User-Agent":"Mozilla/5.0"},
+                           timeout=15)
         if resp.status_code == 200:
-            data = resp.json()
+            data   = resp.json()
             trades = data if isinstance(data, list) else data.get("data", [])
             for trade in trades:
-                size  = float(trade.get("size", 0) or 0)
-                price = float(trade.get("price", 1) or 1)
-                side  = trade.get("side", "")
+                size  = float(trade.get("size",0) or 0)
+                price = float(trade.get("price",1) or 1)
+                side  = trade.get("side","")
                 prob  = price * 100 if side == "BUY" else (1 - price) * 100
-
                 if size >= LARGE_TRADE_USD and prob <= LOW_PROB_MAX_PCT:
-                    maker = trade.get("maker_address", "unknown")
-                    taker = trade.get("taker_address", "unknown")
+                    maker = trade.get("maker_address","unknown")
+                    taker = trade.get("taker_address","unknown")
+                    ts    = trade.get("match_time","") or TODAY
                     flagged.append({
-                        "maker":      maker,
-                        "taker":      taker,
-                        "size_usd":   round(size, 0),
-                        "prob_pct":   round(prob, 1),
-                        "side":       side,
-                        "asset_id":   trade.get("asset_id", ""),
-                        "timestamp":  trade.get("match_time", ""),
-                        "wl_maker":   check_watchlist(maker),
-                        "wl_taker":   check_watchlist(taker),
+                        "maker":     maker,
+                        "taker":     taker,
+                        "size_usd":  round(size, 0),
+                        "prob_pct":  round(prob, 1),
+                        "side":      side,
+                        "asset_id":  trade.get("asset_id",""),
+                        "timestamp": ts[:10] if len(str(ts)) >= 10 else ts,
+                        "wl_maker":  check_watchlist(maker),
+                        "wl_taker":  check_watchlist(taker),
                     })
-
         flagged = sorted(flagged, key=lambda x: x["size_usd"], reverse=True)[:10]
     except Exception as e:
-        print(f"  CLOB trades error: {e}")
-
-    print(f"  Large individual trades flagged: {len(flagged)}")
+        print(f"  CLOB error: {e}")
+    print(f"  Large trades: {len(flagged)}")
     return flagged
 
 
 # ════════════════════════════════════════════════════════════
-# 3. WIN RATE TRACKER
+# WIN RATE TRACKER
 # ════════════════════════════════════════════════════════════
-
-WIN_RATE_FILE = Path("data/win_rate_tracker.json")
 
 def load_win_rate():
     if WIN_RATE_FILE.exists():
@@ -363,18 +441,6 @@ def load_win_rate():
 
 def save_win_rate(data):
     WIN_RATE_FILE.write_text(json.dumps(data, indent=2))
-
-def log_suspicious_trade(wallet, market, prob_pct, amount_usd):
-    data = load_win_rate()
-    if wallet not in data:
-        data[wallet] = {"trades": [], "wins": 0, "total": 0}
-    data[wallet]["trades"].append({
-        "date": TODAY, "market": market,
-        "probability_pct": prob_pct, "amount_usd": amount_usd,
-        "resolved": None, "won": None,
-    })
-    data[wallet]["total"] += 1
-    save_win_rate(data)
 
 def get_win_rate_alerts():
     data = load_win_rate()
@@ -386,14 +452,16 @@ def get_win_rate_alerts():
             rate = wins / len(resolved) * 100
             if rate >= WIN_RATE_ALERT:
                 alerts.append({
-                    "wallet": wallet, "win_rate_pct": round(rate, 1),
-                    "total_trades": len(resolved), "wins": wins,
+                    "wallet":       wallet,
+                    "win_rate_pct": round(rate, 1),
+                    "total_trades": len(resolved),
+                    "wins":         wins,
                 })
     return alerts
 
 
 # ════════════════════════════════════════════════════════════
-# 4. UMA GOVERNANCE — STRICTER FILTERING
+# UMA GOVERNANCE
 # ════════════════════════════════════════════════════════════
 
 def fetch_uma_governance():
@@ -401,40 +469,34 @@ def fetch_uma_governance():
     try:
         feed = feedparser.parse("https://discourse.uma.xyz/latest.rss")
         for entry in feed.entries[:30]:
-            title   = entry.get("title", "")
-            summary = entry.get("summary", "")
+            title   = entry.get("title","")
+            summary = entry.get("summary","")
             combined = (title + " " + summary).lower()
-            # MUCH stricter — must match one of the required keywords
-            if any(kw in combined for kw in UMA_REQUIRED_KEYWORDS):
+            if any(kw in combined for kw in UMA_REQUIRED):
                 alerts.append({
                     "title":     title,
-                    "link":      entry.get("link", ""),
-                    "published": entry.get("published", ""),
+                    "link":      entry.get("link",""),
+                    "published": parse_date(entry.get("published","")),
                     "summary":   clean_text(summary)[:200],
                     "note":      "Review: check if dispute participant holds a position in this market.",
                 })
     except Exception as e:
         print(f"  UMA error: {e}")
-    print(f"  UMA alerts (filtered): {len(alerts)}")
+    print(f"  UMA alerts: {len(alerts)}")
     return alerts
 
 
 # ════════════════════════════════════════════════════════════
-# 5. OFAC — ONLY SHOW TRULY NEW ENTRIES (LAST 24H)
+# OFAC
 # ════════════════════════════════════════════════════════════
-
-OFAC_CACHE    = Path("data/ofac_cache.json")
-OFAC_SEEN     = Path("data/ofac_seen_uids.json")
-SEEN_ARTICLES = Path("data/seen_articles.json")
 
 def fetch_ofac_new():
     new_entries = []
     try:
-        url  = "https://www.treasury.gov/ofac/downloads/sdn.xml"
-        resp = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=20)
+        resp = requests.get("https://www.treasury.gov/ofac/downloads/sdn.xml",
+                           headers={"User-Agent":"Mozilla/5.0"}, timeout=20)
         if resp.status_code != 200:
             return []
-
         soup    = BeautifulSoup(resp.text, "xml")
         current = {}
         for entry in soup.find_all("sdnEntry"):
@@ -447,39 +509,26 @@ def fetch_ofac_new():
                 id_num  = id_tag.find("idNumber")
                 if id_type and id_num and "Digital" in (id_type.text or ""):
                     current[uid.text] = {"name": name.text, "wallet": id_num.text}
-
-        # Load previously seen UIDs
         seen = set()
         if OFAC_SEEN.exists():
             seen = set(json.loads(OFAC_SEEN.read_text()))
-
-        # Only report UIDs we haven't seen before
         for uid, entry in current.items():
             if uid not in seen:
                 new_entries.append(entry)
-
-        # Save updated seen set and cache
         OFAC_SEEN.write_text(json.dumps(list(current.keys()), indent=2))
         OFAC_CACHE.write_text(json.dumps(current, indent=2))
-
     except Exception as e:
         print(f"  OFAC error: {e}")
-
-    # Cap at 10 — if there are more than 10 truly new ones summarize
     if len(new_entries) > 10:
         overflow = len(new_entries) - 10
         new_entries = new_entries[:10]
-        new_entries.append({
-            "name": f"+ {overflow} more new OFAC crypto additions",
-            "wallet": "See data/ofac_cache.json for full list",
-        })
-
-    print(f"  New OFAC crypto additions: {len(new_entries)}")
+        new_entries.append({"name": f"+ {overflow} more", "wallet": "See data/ofac_cache.json"})
+    print(f"  New OFAC additions: {len(new_entries)}")
     return new_entries
 
 
 # ════════════════════════════════════════════════════════════
-# 6. CONGRESSIONAL BILLS
+# CONGRESSIONAL BILLS
 # ════════════════════════════════════════════════════════════
 
 def check_congress_bills(bills):
@@ -493,7 +542,7 @@ def check_congress_bills(bills):
             url = f"https://api.congress.gov/v3/bill/{bill['congress']}/{bt}/{bn}"
             resp = requests.get(url, params={"api_key": CONGRESS_KEY}, timeout=10)
             if resp.status_code == 200:
-                bd = resp.json().get("bill", {})
+                bd = resp.json().get("bill",{})
                 updates.append({
                     "bill":          bill["name"],
                     "id":            bill["id"].upper(),
@@ -507,12 +556,86 @@ def check_congress_bills(bills):
 
 
 # ════════════════════════════════════════════════════════════
-# 7. CASE INDEX
+# NARRATIVE SUMMARY
+# ════════════════════════════════════════════════════════════
+
+def build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, developing_stories):
+    """
+    Build a 3-5 sentence human-readable summary of the day's intelligence.
+    This goes at the very top of the email so you know in 10 seconds what happened today.
+    """
+    parts = []
+    high  = [h for h in news if h["priority"]]
+
+    # Top story
+    if high:
+        top = high[0]
+        parts.append(f"Today's top story: {top['title']} (via {top['source']}, {top['pub_date']}).")
+        if len(high) > 1:
+            parts.append(f"There are {len(high)} high priority alerts total today.")
+    elif news:
+        parts.append(f"No high priority alerts today. {len(news)} general news stories were collected.")
+    else:
+        parts.append("No new news articles today — all recent stories have already been sent.")
+
+    # Trade activity
+    if suspicious_markets or large_trades:
+        trade_msg = []
+        if suspicious_markets:
+            top_market = suspicious_markets[0]
+            trade_msg.append(f"One suspicious market flagged: '{top_market['question']}' with ${top_market['volume_usd']:,.0f} in volume at {top_market['probability_pct']}% probability")
+        if large_trades:
+            trade_msg.append(f"{len(large_trades)} large individual trade(s) detected on low-probability markets")
+        parts.append(". ".join(trade_msg) + ".")
+    else:
+        parts.append("No suspicious trading activity detected today.")
+
+    # Developing stories
+    if developing_stories:
+        top_dev = developing_stories[0]
+        days = len(top_dev["dates_seen"])
+        parts.append(f"Developing story to watch: '{top_dev['representative_title'][:80]}...' has appeared for {days} consecutive days.")
+
+    # UMA / regulatory
+    if uma:
+        parts.append(f"{len(uma)} UMA governance dispute(s) flagged — check the UMA tab for details.")
+    if ofac:
+        parts.append(f"{len(ofac)} new OFAC crypto sanctions added — cross-reference with Polymarket trading history.")
+
+    return " ".join(parts)
+
+
+# ════════════════════════════════════════════════════════════
+# SMART SUBJECT LINE
+# ════════════════════════════════════════════════════════════
+
+def build_subject(news, suspicious_markets, large_trades, is_quiet):
+    if is_quiet:
+        return f"Polymarket Digest {TODAY_PRETTY} — Quiet day, no major alerts"
+
+    high = [h for h in news if h["priority"]]
+
+    if suspicious_markets and high:
+        top_market  = suspicious_markets[0]
+        top_article = high[0]["title"][:50]
+        return f"Polymarket Digest {TODAY_PRETTY} — {top_article}... + suspicious trade flagged"
+    elif suspicious_markets:
+        top = suspicious_markets[0]
+        return f"Polymarket Digest {TODAY_PRETTY} — Suspicious trade: ${top['volume_usd']:,.0f} on {top['probability_pct']}% market"
+    elif high:
+        top = high[0]["title"][:60]
+        count = len(high)
+        return f"Polymarket Digest {TODAY_PRETTY} — {top}{'...' if len(top)==60 else ''} [{count} alerts]"
+    else:
+        return f"Polymarket Digest {TODAY_PRETTY} — {len(news)} stories"
+
+
+# ════════════════════════════════════════════════════════════
+# CASE INDEX
 # ════════════════════════════════════════════════════════════
 
 def update_case_index():
-    case_files = sorted(Path("cases").glob("*.md"), reverse=True)
-    case_files = [f for f in case_files if f.name != "INDEX.md"]
+    case_files = sorted([f for f in Path("cases").glob("*.md") if f.name != "INDEX.md"], reverse=True)
     lines = [f"# Investigation Case Index", f"_Updated: {TODAY}_ | **{len(case_files)} total cases**", "",
              "| Date | Case | File |", "|------|------|------|"]
     for f in case_files:
@@ -520,17 +643,15 @@ def update_case_index():
             first = f.read_text().split("\n")[0].lstrip("# ").strip()
         except:
             first = f.stem
-        date_part = f.stem[:10] if len(f.stem) >= 10 else f.stem
-        lines.append(f"| {date_part} | {first} | [{f.name}](cases/{f.name}) |")
+        lines.append(f"| {f.stem[:10]} | {first} | [{f.name}](cases/{f.name}) |")
     Path("cases/INDEX.md").write_text("\n".join(lines))
-    print(f"  Case index: {len(case_files)} cases")
 
 
 # ════════════════════════════════════════════════════════════
-# 8. WEEKLY SUMMARY (Sundays)
+# WEEKLY SUMMARY (Sundays)
 # ════════════════════════════════════════════════════════════
 
-def generate_weekly_summary():
+def generate_weekly_summary(developing_stories):
     if WEEKDAY != 6:
         return None
     print("  Generating weekly summary...")
@@ -539,51 +660,99 @@ def generate_weekly_summary():
         date = (datetime.date.today() - datetime.timedelta(days=i)).isoformat()
         p = Path(f"output/report_{date}.json")
         if p.exists():
-            data = json.loads(p.read_text())
-            for hit in data.get("alerts", []):
-                week_hits.append(hit)
-                for kw in hit.get("matched_keywords", []):
-                    topic_freq[kw] = topic_freq.get(kw, 0) + 1
-                source_freq[hit["source"]] = source_freq.get(hit["source"], 0) + 1
+            try:
+                data = json.loads(p.read_text())
+                for hit in data.get("alerts",[]):
+                    week_hits.append(hit)
+                    for kw in hit.get("matched_keywords",[]):
+                        topic_freq[kw] = topic_freq.get(kw,0) + 1
+                    source_freq[hit["source"]] = source_freq.get(hit["source"],0) + 1
+            except: pass
+
     top_topics  = sorted(topic_freq.items(),  key=lambda x: x[1], reverse=True)[:5]
     top_sources = sorted(source_freq.items(), key=lambda x: x[1], reverse=True)[:5]
-    win_alerts  = get_win_rate_alerts()
-    lines = [f"# Weekly Summary — {TODAY_PRETTY}", f"**{len(week_hits)} unique stories this week**", "",
-             "## Top Topics", *[f"- {t}: {c} stories" for t, c in top_topics], "",
-             "## Most Active Sources", *[f"- {s}: {c} stories" for s, c in top_sources]]
+
+    lines = [
+        f"WEEKLY INTELLIGENCE SUMMARY — Week ending {TODAY_PRETTY}",
+        f"Total unique stories this week: {len(week_hits)}",
+        "",
+        "TOP TOPICS THIS WEEK:",
+        *[f"  {t}: {c} stories" for t,c in top_topics],
+        "",
+        "MOST ACTIVE SOURCES:",
+        *[f"  {s}: {c} stories" for s,c in top_sources],
+    ]
+
+    if developing_stories:
+        lines += ["", "DEVELOPING STORIES (appeared on multiple days this week):"]
+        for story in developing_stories[:5]:
+            lines.append(f"  [{story['mention_count']} days] {story['representative_title'][:80]}")
+
+    win_alerts = get_win_rate_alerts()
     if win_alerts:
-        lines += ["", "## Win Rate Alerts"]
+        lines += ["", "WIN RATE TRACKER ALERTS:"]
         for a in win_alerts:
-            lines.append(f"- {a['wallet'][:16]}...: {a['win_rate_pct']}% win rate on {a['total_trades']} trades")
+            lines.append(f"  {a['wallet'][:20]}...: {a['win_rate_pct']}% win rate on {a['total_trades']} trades")
+
     path = Path(f"output/weekly_{TODAY}.md")
     path.write_text("\n".join(lines))
     return "\n".join(lines)
 
 
 # ════════════════════════════════════════════════════════════
-# 9. EMAIL BUILDER
+# EMAIL BUILDER
 # ════════════════════════════════════════════════════════════
 
-def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_alerts, weekly):
+def build_email(news, suspicious_markets, large_trades, uma, ofac,
+                bills, win_alerts, weekly, narrative, developing_stories):
     high   = [h for h in news if h["priority"]]
     normal = [h for h in news if not h["priority"]]
-    lines  = []
 
+    is_quiet = (len(high) == 0 and len(suspicious_markets) == 0
+                and len(large_trades) == 0 and len(uma) == 0)
+
+    lines = []
     lines += [f"POLYMARKET OSINT DAILY DIGEST — {TODAY_PRETTY}", "=" * 60, ""]
+
+    # NARRATIVE SUMMARY — top of email
+    lines += ["TODAY'S INTELLIGENCE SUMMARY", "-" * 40, narrative, ""]
 
     # AT A GLANCE
     lines += ["AT A GLANCE", "-" * 40,
-              f"Unique news stories:      {len(news)}",
-              f"High priority:            {len(high)}",
+              f"High priority alerts:     {len(high)}",
+              f"Total news stories:       {len(news)}",
               f"Suspicious markets:       {len(suspicious_markets)}",
               f"Large individual trades:  {len(large_trades)}",
               f"UMA governance alerts:    {len(uma)}",
-              f"New OFAC crypto adds:     {len(ofac)}",
+              f"New OFAC additions:       {len(ofac)}",
               f"Win rate alerts:          {len(win_alerts)}",
-              f"Bills tracked:            {len(BILLS)}",
+              f"Bills tracked:            {len(bills)}",
+              f"Report generated:         {TODAY} | Cleveland EDT = UTC-4",
               ""]
 
-    # SUSPICIOUS MARKETS (Polymarket API)
+    # QUIET DAY — short version
+    if is_quiet:
+        lines += [
+            "QUIET DAY",
+            "-" * 40,
+            "No high priority news, suspicious trades, or governance disputes today.",
+            "Congressional bill status and general news below.",
+            "",
+        ]
+
+    # DEVELOPING STORIES
+    if developing_stories:
+        lines += ["DEVELOPING STORIES — WATCH THESE", "=" * 60]
+        for story in developing_stories[:3]:
+            days = len(story["dates_seen"])
+            lines += [
+                f"\n[DAY {days}] {story['representative_title'][:80]}",
+                f"  Active since: {story['dates_seen'][0]}  |  Last seen: {story['last_seen']}",
+                f"  This story has appeared in {days} daily reports — likely an ongoing development.",
+            ]
+        lines.append("")
+
+    # SUSPICIOUS MARKETS
     if suspicious_markets:
         lines += ["SUSPICIOUS MARKET ACTIVITY — INVESTIGATE", "=" * 60]
         for m in suspicious_markets:
@@ -592,31 +761,28 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
                 f"  Outcome:       {m['outcome']}",
                 f"  Probability:   {m['probability_pct']}%",
                 f"  Volume:        ${m['volume_usd']:,.0f}",
-                f"  Closes:        {m.get('end_date','unknown')}",
-                f"  Flagged:       {TODAY} at time of report",
+                f"  Market closes: {m.get('end_date','unknown')}",
+                f"  Flagged:       {m['flagged_date']}",
                 f"  Alert:         {m['alert_reason']}",
                 f"  URL:           {m['url']}",
                 f"  ACTION:        High volume on low-probability outcome. Run OSINT on largest traders.",
             ]
         lines.append("")
 
-    # LARGE INDIVIDUAL TRADES (CLOB API)
+    # LARGE TRADES
     if large_trades:
         lines += ["LARGE INDIVIDUAL TRADES — CLOB DATA", "=" * 60]
         for t in large_trades:
             wl_note = ""
-            if t.get("wl_maker"):
-                wl_note = f" *** WATCHLIST HIT: {', '.join(t['wl_maker'])}"
-            if t.get("wl_taker"):
-                wl_note += f" *** WATCHLIST HIT: {', '.join(t['wl_taker'])}"
-            trade_time = t.get('timestamp','') or TODAY
+            if t.get("wl_maker"): wl_note += f" *** WATCHLIST: {', '.join(t['wl_maker'])}"
+            if t.get("wl_taker"): wl_note += f" *** WATCHLIST: {', '.join(t['wl_taker'])}"
             lines += [
-                f"\nSize: ${t['size_usd']:,.0f} | Probability: {t['prob_pct']}% | Side: {t['side']}",
-                f"  Time:     {trade_time}",
-                f"  Maker:    {t['maker']}{wl_note}",
-                f"  Taker:    {t['taker']}",
-                f"  Asset:    {t['asset_id']}",
-                f"  ACTION:   Run wallet OSINT. Check linked wallets and funding source.",
+                f"\n${t['size_usd']:,.0f} | {t['prob_pct']}% probability | Side: {t['side']}",
+                f"  Date:   {t['timestamp']}",
+                f"  Maker:  {t['maker']}{wl_note}",
+                f"  Taker:  {t['taker']}",
+                f"  Asset:  {t['asset_id']}",
+                f"  ACTION: Run wallet OSINT. Trace funding source. Check win rate tracker.",
             ]
         lines.append("")
 
@@ -624,28 +790,25 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
     if uma:
         lines += ["UMA GOVERNANCE / ORACLE DISPUTES", "=" * 60]
         for a in uma:
-            uma_date = a.get('published','') or 'Date unknown'
-            try:
-                import email.utils
-                parsed = email.utils.parsedate_to_datetime(uma_date)
-                uma_date = parsed.strftime("%b %d, %Y")
-            except: pass
-            lines += [f"\n{a['title']}", f"  Published: {uma_date}", f"  {a['summary']}", f"  Link: {a['link']}", f"  NOTE: {a['note']}"]
+            lines += [f"\n{a['title']}", f"  Published: {a['published']}",
+                      f"  {a['summary']}", f"  Link: {a['link']}", f"  NOTE: {a['note']}"]
         lines.append("")
 
-    # OFAC — only truly new
+    # OFAC
     if ofac:
-        lines += ["NEW OFAC CRYPTO SANCTIONS (LAST 24H) — CROSS-REFERENCE WITH POLYMARKET", "=" * 60]
+        lines += ["NEW OFAC CRYPTO SANCTIONS — CROSS-REFERENCE WITH POLYMARKET", "=" * 60]
         for o in ofac:
-            lines += [f"\n{o['name']}", f"  Wallet: {o['wallet']}", f"  ACTION: Check against Polymarket trading history."]
+            lines += [f"\n{o['name']}", f"  Wallet: {o['wallet']}",
+                      f"  ACTION: Check this wallet against Polymarket trading history."]
         lines.append("")
 
     # WIN RATE ALERTS
     if win_alerts:
         lines += ["WIN RATE TRACKER ALERTS", "=" * 60]
         for a in win_alerts:
-            lines += [f"\nWallet: {a['wallet']}", f"  Win rate: {a['win_rate_pct']}% on {a['total_trades']} tracked long-shot trades",
-                      "  ACTION: Full OSINT investigation recommended."]
+            lines += [f"\nWallet: {a['wallet']}",
+                      f"  Win rate: {a['win_rate_pct']}% on {a['total_trades']} tracked long-shot trades",
+                      f"  ACTION: Full OSINT investigation recommended."]
         lines.append("")
 
     # HIGH PRIORITY NEWS
@@ -653,13 +816,14 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
         lines += ["HIGH PRIORITY NEWS — READ THESE FIRST", "=" * 60]
         for i, item in enumerate(high, 1):
             lines.append(f"\n{i}. {item['title']}")
-            lines.append(f"   Source:  {item['source']}  |  Published: {item.get('pub_date', 'Date unknown')}")
+            lines.append(f"   Source:    {item['source']}  |  Published: {item['pub_date']}")
+            lines.append(f"   Priority:  Score {item['score']} — {', '.join(item['matched_keywords'][:3])}")
             if item.get("also_covered_by"):
-                lines.append(f"   Also in: {', '.join(item['also_covered_by'])}")
+                lines.append(f"   Also in:   {', '.join(item['also_covered_by'])}")
             if item.get("watchlist_hit"):
                 lines.append(f"   WATCHLIST: {', '.join(item['watchlist_hit'])}")
-            lines.append(f"   TL;DR:   {item['summary']}")
-            lines.append(f"   Link:    {item['link']}")
+            lines.append(f"   TL;DR:     {item['summary']}")
+            lines.append(f"   Link:      {item['link']}")
         lines.append("")
 
     # GENERAL NEWS
@@ -667,7 +831,7 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
         lines += ["GENERAL NEWS & REGULATORY UPDATES", "=" * 60]
         for i, item in enumerate(normal, 1):
             lines.append(f"\n{i}. {item['title']}")
-            lines.append(f"   Source:  {item['source']}  |  Published: {item.get('pub_date', 'Date unknown')}")
+            lines.append(f"   Source:  {item['source']}  |  Published: {item['pub_date']}")
             if item.get("also_covered_by"):
                 lines.append(f"   Also in: {', '.join(item['also_covered_by'])}")
             lines.append(f"   TL;DR:   {item['summary']}")
@@ -688,49 +852,62 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_al
 
     # WEEKLY
     if weekly:
-        lines += ["WEEKLY SUMMARY", "=" * 60, weekly, ""]
+        lines += ["", "WEEKLY SUMMARY", "=" * 60, weekly, ""]
 
-    lines += ["=" * 60, f"Polymarket OSINT Monitor v5 — runs daily at 8 AM EST"]
+    lines += ["=" * 60, f"Polymarket OSINT Monitor v8 — runs daily at 7 AM EDT"]
     return "\n".join(lines)
 
 
 # ════════════════════════════════════════════════════════════
-# 10. SAVE + SEND
+# SAVE + SEND
 # ════════════════════════════════════════════════════════════
 
-def save_report(news, suspicious_markets, large_trades, uma, ofac, bills, win_alerts, weekly):
+def save_report(news, suspicious_markets, large_trades, uma, ofac,
+                bills, win_alerts, weekly, narrative, developing_stories):
     report = {
-        "date": TODAY,
-        "unique_news": len(news),
-        "suspicious_markets": len(suspicious_markets),
-        "large_trades": len(large_trades),
-        "uma_alerts": len(uma),
-        "ofac_new": len(ofac),
-        "alerts": news,
+        "date":                TODAY,
+        "unique_news":         len(news),
+        "suspicious_markets":  len(suspicious_markets),
+        "large_trades":        len(large_trades),
+        "uma_alerts":          len(uma),
+        "ofac_new":            len(ofac),
+        "alerts":              news,
         "suspicious_market_data": suspicious_markets,
-        "large_trade_data": large_trades,
-        "uma_governance": uma,
-        "ofac_additions": ofac,
-        "bill_updates": bills,
+        "large_trade_data":    large_trades,
+        "uma_governance":      uma,
+        "ofac_additions":      ofac,
+        "bill_updates":        bills,
+        "developing_stories":  developing_stories,
+        "narrative":           narrative,
     }
-    with open(f"output/report_{TODAY}.json", "w") as f:
+    with open(f"output/report_{TODAY}.json","w") as f:
         json.dump(report, f, indent=2)
-    body = build_email(news, suspicious_markets, large_trades, uma, ofac, bills, win_alerts, weekly)
-    with open(f"output/report_{TODAY}.md", "w") as f:
+
+    is_quiet = (len([h for h in news if h["priority"]]) == 0
+                and len(suspicious_markets) == 0
+                and len(large_trades) == 0
+                and len(uma) == 0)
+
+    body    = build_email(news, suspicious_markets, large_trades, uma, ofac,
+                         bills, win_alerts, weekly, narrative, developing_stories)
+    subject = build_subject(news, suspicious_markets, large_trades, is_quiet)
+
+    with open(f"output/report_{TODAY}.md","w") as f:
         f.write(body)
-    
-    # Save article URLs so they don't appear in future reports
+
+    # Save seen articles
     seen_urls = set(h.get("link","") for h in news if h.get("link",""))
     save_seen_articles(seen_urls)
-    
-    return body
 
-def send_email(body, num_alerts):
+    return body, subject
+
+
+def send_email(body, subject):
     if not SMTP_PASSWORD:
-        print("No SMTP password — skipping")
+        print("No SMTP password — skipping email")
         return
     msg = MIMEMultipart()
-    msg["Subject"] = f"Polymarket Digest {TODAY_PRETTY} — {num_alerts} stories"
+    msg["Subject"] = subject
     msg["From"]    = ALERT_EMAIL
     msg["To"]      = ALERT_EMAIL
     msg.attach(MIMEText(body, "plain"))
@@ -738,7 +915,7 @@ def send_email(body, num_alerts):
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(ALERT_EMAIL, SMTP_PASSWORD)
             server.sendmail(ALERT_EMAIL, ALERT_EMAIL, msg.as_string())
-        print("Email sent")
+        print(f"Email sent: {subject}")
     except Exception as e:
         print(f"Email error: {e}")
 
@@ -748,29 +925,50 @@ def send_email(body, num_alerts):
 # ════════════════════════════════════════════════════════════
 
 def main():
-    print(f"Polymarket OSINT Monitor v5 — {TODAY}")
-    print("1. RSS feeds...")
+    print(f"Polymarket OSINT Monitor v8 — {TODAY}")
+
+    print("1. RSS feeds (with cross-day deduplication and priority scoring)...")
     news = fetch_rss(RSS_FEEDS, KEYWORDS)
-    print("2. Polymarket suspicious markets (Gamma API)...")
+
+    print("2. Story thread tracking...")
+    developing_stories = update_story_threads(news)
+    print(f"   Developing stories: {len(developing_stories)}")
+
+    print("3. Polymarket suspicious markets...")
     suspicious_markets = fetch_polymarket_suspicious_trades()
-    print("3. Large individual trades (CLOB API)...")
+
+    print("4. Large individual trades...")
     large_trades = fetch_polymarket_recent_large_trades()
-    print("4. UMA governance (filtered)...")
+
+    print("5. UMA governance...")
     uma = fetch_uma_governance()
-    print("5. OFAC new additions only...")
+
+    print("6. OFAC new additions...")
     ofac = fetch_ofac_new()
-    print("6. Congressional bills...")
+
+    print("7. Congressional bills...")
     bills = check_congress_bills(BILLS)
-    print("7. Win rate alerts...")
+
+    print("8. Win rate alerts...")
     win_alerts = get_win_rate_alerts()
-    print("8. Case index...")
+
+    print("9. Case index...")
     update_case_index()
-    print("9. Weekly summary check...")
-    weekly = generate_weekly_summary()
-    print("10. Saving and sending...")
-    body = save_report(news, suspicious_markets, large_trades, uma, ofac, bills, win_alerts, weekly)
-    send_email(body, len(news))
-    print(f"Done. {len(news)} stories | {len(suspicious_markets)} suspicious markets | {len(large_trades)} large trades")
+
+    print("10. Weekly summary check...")
+    weekly = generate_weekly_summary(developing_stories)
+
+    print("11. Building narrative summary...")
+    narrative = build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, developing_stories)
+
+    print("12. Saving report and sending email...")
+    body, subject = save_report(news, suspicious_markets, large_trades, uma, ofac,
+                                bills, win_alerts, weekly, narrative, developing_stories)
+    send_email(body, subject)
+
+    high = len([h for h in news if h["priority"]])
+    print(f"Done. {len(news)} new stories ({high} high priority) | {len(suspicious_markets)} suspicious markets | subject: {subject}")
+
 
 if __name__ == "__main__":
     main()

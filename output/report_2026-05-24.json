@@ -1,7 +1,7 @@
 {
   "date": "2026-05-24",
   "unique_news": 13,
-  "suspicious_markets": 6,
+  "suspicious_markets": 4,
   "large_trades": 0,
   "uma_alerts": 15,
   "ofac_new": 11,
@@ -11,53 +11,13 @@
       "title": "Congress hits Polymarket and Kalshi with a massive insider trading probe",
       "link": "https://www.coindesk.com/policy/2026/05/22/congress-probes-polymarket-and-kalshi-over-fears-government-employees-are-trading-on-secret-info",
       "published": "Fri, 22 May 2026 15:27:40 +0000",
+      "pub_date": "May 22, 2026",
       "matched_keywords": [
         "polymarket",
         "kalshi"
       ],
-      "summary": "[Full article at source \u2014 CoinDesk]",
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "CoinDesk",
-      "title": "ZachXBT flags $520K Polymarket exploit on Polygon, team says funds are safe",
-      "link": "https://www.coindesk.com/markets/2026/05/22/zachxbt-flags-usd520k-polymarket-exploit-on-polygon-team-says-funds-are-safe",
-      "published": "Fri, 22 May 2026 09:39:55 +0000",
-      "matched_keywords": [
-        "polymarket"
-      ],
-      "summary": "[Full article at source \u2014 CoinDesk]",
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Kalshi, Polymarket lose bids to halt Nevada and Washington gambling cases",
-      "link": "https://www.theblock.co/post/402397/kalshi-polymarket-lose-bids-to-halt-nevada-and-washington-gambling-cases?utm_source=rss&utm_medium=rss",
-      "published": "Fri, 22 May 2026 14:33:57 -0400",
-      "matched_keywords": [
-        "polymarket",
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "The Ninth Circuit said federal derivatives oversight does not shield prediction market firms from state gaming enforcement.",
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Kalshi-backed prediction market advocacy group debuts with support from former Trump aide",
-      "link": "https://www.theblock.co/post/402374/kalshi-prediction-market-advocacy-group-debuts-support-former-trump-aide?utm_source=rss&utm_medium=rss",
-      "published": "Fri, 22 May 2026 12:22:34 -0400",
-      "matched_keywords": [
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "An advocacy group focused on prediction markets has emerged with support from former White House Deputy Chief of Staff Taylor Budowich.",
+      "summary": "[See full article at CoinDesk]",
+      "score": 11,
       "priority": true,
       "watchlist_hit": [],
       "also_covered_by": []
@@ -67,52 +27,13 @@
       "title": "House Oversight chair launches probe into insider trading on Kalshi and Polymarket",
       "link": "https://www.theblock.co/post/402348/house-oversight-chair-launches-probe-into-insider-trading-on-kalshi-and-polymarket?utm_source=rss&utm_medium=rss",
       "published": "Fri, 22 May 2026 09:03:35 -0400",
+      "pub_date": "May 22, 2026",
       "matched_keywords": [
         "polymarket",
         "kalshi"
       ],
       "summary": "House Oversight Chairman Comer probes insider trading on Kalshi and Polymarket, sending letters to both CEOs with a June 5 document deadline.",
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Polymarket probes suspected private key compromise of internal top-up wallet on Polygon",
-      "link": "https://www.theblock.co/post/402327/zachxbt-flags-suspected-exploit-involving-polymarkets-uma-adapter-contract-on-polygon?utm_source=rss&utm_medium=rss",
-      "published": "Fri, 22 May 2026 05:02:16 -0400",
-      "matched_keywords": [
-        "polymarket"
-      ],
-      "summary": "Polymarket said findings point to a possible private key compromise tied to an internal top-up wallet on Polygon.",
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Polymarket eyes Japan market entry, appoints regional representative: Bloomberg",
-      "link": "https://www.theblock.co/post/402309/polymarket-japan-market-entry?utm_source=rss&utm_medium=rss",
-      "published": "Fri, 22 May 2026 02:35:24 -0400",
-      "matched_keywords": [
-        "polymarket",
-        "prediction market"
-      ],
-      "summary": "The prediction markets platform aims to secure regulatory authorization to operate in Japan by 2030, according to Bloomberg.",
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Kalshi Debuts 'Fair Markets' Lobby Group as Congress Opens Insider Trading Probe",
-      "link": "https://decrypt.co/368803/kalshi-fair-markets-lobby-group-congress-opens-insider-trading-probe",
-      "published": "Fri, 22 May 2026 20:01:52 +0000",
-      "matched_keywords": [
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Kalshi unveiled Americans for Fair Markets, an advocacy group to help shape policymakers\u2019 perception of prediction markets.",
+      "score": 11,
       "priority": true,
       "watchlist_hit": [],
       "also_covered_by": []
@@ -122,11 +43,44 @@
       "title": "House Republicans Open Investigation Into Kalshi, Polymarket Over Insider Trading",
       "link": "https://decrypt.co/368748/house-republicans-open-investigation-kalshi-polymarket-insider-trades",
       "published": "Fri, 22 May 2026 14:37:58 +0000",
+      "pub_date": "May 22, 2026",
       "matched_keywords": [
         "polymarket",
         "kalshi"
       ],
       "summary": "The chair of the powerful House Oversight Committee has requested documents from Polymarket and Kalshi regarding insider trading and war-related markets.",
+      "score": 11,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "Decrypt",
+      "title": "Kalshi Debuts 'Fair Markets' Lobby Group as Congress Opens Insider Trading Probe",
+      "link": "https://decrypt.co/368803/kalshi-fair-markets-lobby-group-congress-opens-insider-trading-probe",
+      "published": "Fri, 22 May 2026 20:01:52 +0000",
+      "pub_date": "May 22, 2026",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "Kalshi unveiled Americans for Fair Markets, an advocacy group to help shape policymakers\u2019 perception of prediction markets.",
+      "score": 8,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "CoinDesk",
+      "title": "ZachXBT flags $520K Polymarket exploit on Polygon, team says funds are safe",
+      "link": "https://www.coindesk.com/markets/2026/05/22/zachxbt-flags-usd520k-polymarket-exploit-on-polygon-team-says-funds-are-safe",
+      "published": "Fri, 22 May 2026 09:39:55 +0000",
+      "pub_date": "May 22, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 6,
       "priority": true,
       "watchlist_hit": [],
       "also_covered_by": []
@@ -136,11 +90,61 @@
       "title": "Polymarket Hit By \u2018Internal Top-Up\u2019 Wallet Exploit, $700K Drained",
       "link": "https://decrypt.co/368740/polymarket-hit-by-internal-top-up-wallet-exploit-700k-drained",
       "published": "Fri, 22 May 2026 12:23:22 +0000",
+      "pub_date": "May 22, 2026",
       "matched_keywords": [
         "polymarket",
         "prediction market"
       ],
       "summary": "User funds remain safe after the incident, the prediction market platform said, with contracts and core infrastructure unaffected.",
+      "score": 6,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "The Block",
+      "title": "Kalshi, Polymarket lose bids to halt Nevada and Washington gambling cases",
+      "link": "https://www.theblock.co/post/402397/kalshi-polymarket-lose-bids-to-halt-nevada-and-washington-gambling-cases?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 14:33:57 -0400",
+      "pub_date": "May 22, 2026",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "The Ninth Circuit said federal derivatives oversight does not shield prediction market firms from state gaming enforcement.",
+      "score": 5,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "The Block",
+      "title": "Polymarket probes suspected private key compromise of internal top-up wallet on Polygon",
+      "link": "https://www.theblock.co/post/402327/zachxbt-flags-suspected-exploit-involving-polymarkets-uma-adapter-contract-on-polygon?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 05:02:16 -0400",
+      "pub_date": "May 22, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "Polymarket said findings point to a possible private key compromise tied to an internal top-up wallet on Polygon.",
+      "score": 5,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "The Block",
+      "title": "Polymarket eyes Japan market entry, appoints regional representative: Bloomberg",
+      "link": "https://www.theblock.co/post/402309/polymarket-japan-market-entry?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 02:35:24 -0400",
+      "pub_date": "May 22, 2026",
+      "matched_keywords": [
+        "polymarket",
+        "prediction market"
+      ],
+      "summary": "The prediction markets platform aims to secure regulatory authorization to operate in Japan by 2030, according to Bloomberg.",
+      "score": 3,
       "priority": true,
       "watchlist_hit": [],
       "also_covered_by": []
@@ -150,12 +154,30 @@
       "title": "Polymarket Taps Jupiter Exec to Lead Japan Push: Report",
       "link": "https://decrypt.co/368734/polymarket-taps-jupiter-exec-to-lead-japan-push-report",
       "published": "Fri, 22 May 2026 10:29:48 +0000",
+      "pub_date": "May 22, 2026",
       "matched_keywords": [
         "polymarket",
         "prediction market"
       ],
       "summary": "The prediction market has reportedly appointed a representative in Japan as it aims to secure authorization to operate there by 2030.",
+      "score": 3,
       "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "The Block",
+      "title": "Kalshi-backed prediction market advocacy group debuts with support from former Trump aide",
+      "link": "https://www.theblock.co/post/402374/kalshi-prediction-market-advocacy-group-debuts-support-former-trump-aide?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 22 May 2026 12:22:34 -0400",
+      "pub_date": "May 22, 2026",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "An advocacy group focused on prediction markets has emerged with support from former White House Deputy Chief of Staff Taylor Budowich.",
+      "score": 2,
+      "priority": false,
       "watchlist_hit": [],
       "also_covered_by": []
     },
@@ -164,10 +186,12 @@
       "title": "NHL Agrees to Share Data With the CFTC for Prediction Market Integrity",
       "link": "https://decrypt.co/368687/nhl-agrees-share-data-cftc-prediction-market-integrity",
       "published": "Thu, 21 May 2026 20:21:51 +0000",
+      "pub_date": "May 21, 2026",
       "matched_keywords": [
         "prediction market"
       ],
       "summary": "The agreement ensures the regulator and the NHL communicate and share data to protect the integrity of hockey-related prediction markets.",
+      "score": 0,
       "priority": false,
       "watchlist_hit": [],
       "also_covered_by": []
@@ -177,10 +201,12 @@
       "title": "The rise of prediction markets and the surrounding regulatory environment",
       "link": "https://marketedge.dlapiper.com/2026/04/the-rise-of-prediction-markets-and-the-surrounding-regulatory-environment/",
       "published": "Thu, 30 Apr 2026 17:32:35 +0000",
+      "pub_date": "Apr 30, 2026",
       "matched_keywords": [
         "prediction market"
       ],
       "summary": "A prediction market is an exchange where participants buy and sell event\u2011linked contracts \u2013 usually binary contracts that pay out if a specific future event occurs. These markets have surged into the financial mainstream, drawing more than three mill",
+      "score": 0,
       "priority": false,
       "watchlist_hit": [],
       "also_covered_by": []
@@ -192,10 +218,33 @@
       "question": "Will Marco Rubio win the 2028 US Presidential Election?",
       "outcome": "Yes",
       "probability_pct": 12.6,
-      "volume_usd": 9979700.0,
+      "volume_usd": 9980941.0,
       "url": "https://polymarket.com/event/will-marco-rubio-win-the-2028-us-presidential-election",
-      "end_date": "2028-11-07T00:00:00Z",
-      "alert_reason": "High volume ($9,979,700) on 12.6% probability outcome"
+      "end_date": "2028-11-07",
+      "flagged_date": "2026-05-24",
+      "alert_reason": "$9,980,941 volume on 12.6% probability outcome"
+    },
+    {
+      "market_id": "2346687",
+      "question": "Dota 2: PARIVISION vs Aurora - Game 2 Winner",
+      "outcome": "PARIVISION",
+      "probability_pct": 0.1,
+      "volume_usd": 998897.0,
+      "url": "https://polymarket.com/event/dota2-pari-aur1-2026-05-24-game2",
+      "end_date": "2026-05-24",
+      "flagged_date": "2026-05-24",
+      "alert_reason": "$998,897 volume on 0.1% probability outcome"
+    },
+    {
+      "market_id": "2292406",
+      "question": "Pittsburgh Pirates vs. Toronto Blue Jays",
+      "outcome": "Toronto Blue Jays",
+      "probability_pct": 12.5,
+      "volume_usd": 998213.0,
+      "url": "https://polymarket.com/event/mlb-pit-tor-2026-05-24",
+      "end_date": "2026-05-31",
+      "flagged_date": "2026-05-24",
+      "alert_reason": "$998,213 volume on 12.5% probability outcome"
     },
     {
       "market_id": "1193230",
@@ -204,48 +253,9 @@
       "probability_pct": 0.9,
       "volume_usd": 996963.0,
       "url": "https://polymarket.com/event/will-ane-logar-be-the-next-prime-minister-of-slovenia",
-      "end_date": "2026-03-22T00:00:00Z",
-      "alert_reason": "High volume ($996,963) on 0.9% probability outcome"
-    },
-    {
-      "market_id": "2227127",
-      "question": "Will Brighton & Hove Albion FC vs. Manchester United FC end in a draw?",
-      "outcome": "Yes",
-      "probability_pct": 0.7,
-      "volume_usd": 99424.0,
-      "url": "https://polymarket.com/event/epl-bri-mun-2026-05-24-draw",
-      "end_date": "2026-05-24T15:00:00Z",
-      "alert_reason": "High volume ($99,424) on 0.7% probability outcome"
-    },
-    {
-      "market_id": "2284987",
-      "question": "Will the price of Ethereum be above $2,100 on May 24?",
-      "outcome": "Yes",
-      "probability_pct": 0.1,
-      "volume_usd": 99345.0,
-      "url": "https://polymarket.com/event/ethereum-above-2100-on-may-24-2026",
-      "end_date": "2026-05-24T16:00:00Z",
-      "alert_reason": "High volume ($99,345) on 0.1% probability outcome"
-    },
-    {
-      "market_id": "915769",
-      "question": "SpaceX IPO closing market cap above $1.6T?",
-      "outcome": "No",
-      "probability_pct": 9.0,
-      "volume_usd": 99246.0,
-      "url": "https://polymarket.com/event/spacex-ipo-closing-market-cap-above-1pt6t-514-594-116",
-      "end_date": "2027-12-31T00:00:00Z",
-      "alert_reason": "High volume ($99,246) on 9.0% probability outcome"
-    },
-    {
-      "market_id": "1067187",
-      "question": "Xi Jinping divorce before 2027?",
-      "outcome": "Yes",
-      "probability_pct": 1.4,
-      "volume_usd": 99232.0,
-      "url": "https://polymarket.com/event/xi-jinping-divorce-before-2027",
-      "end_date": "2026-12-31T00:00:00Z",
-      "alert_reason": "High volume ($99,232) on 1.4% probability outcome"
+      "end_date": "2026-03-22",
+      "flagged_date": "2026-05-24",
+      "alert_reason": "$996,963 volume on 0.9% probability outcome"
     }
   ],
   "large_trade_data": [],
@@ -253,105 +263,105 @@
     {
       "title": "Partnership Proposal: Majority.Fun",
       "link": "https://discourse.uma.xyz/t/partnership-proposal-majority-fun/2236",
-      "published": "Thu, 06 Nov 2025 17:14:14 +0000",
+      "published": "Nov 06, 2025",
       "summary": "Name of Project: Majority Proposer: Mr. Bahama Proposal Summary The Majority team is seeking a formal partnership with UMA to integrate its oracle with AI-driven mechanisms for crowdsourcing unbiased ",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "UMIP-189: Approve new ManagedOptimisticOracleV2 Deployment",
       "link": "https://discourse.uma.xyz/t/umip-189-approve-new-managedoptimisticoraclev2-deployment/2229",
-      "published": "Tue, 29 Jul 2025 18:17:02 +0000",
+      "published": "Jul 29, 2025",
       "summary": "UMIP-189 UMIP Title Approve new ManagedOptimisticOracleV2 Deployment Authors Lee Poettcker Created July 29, 2025 Summary This proposal introduces the ManagedOptimisticOracleV2, which is a modified ver",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "\u26a0\ufe0f Call for Slashing: Coordinated Bad-Faith P4 Votes After July 1 Deadline (Zelenskyy Suit Dispute)",
       "link": "https://discourse.uma.xyz/t/call-for-slashing-coordinated-bad-faith-p4-votes-after-july-1-deadline-zelenskyy-suit-dispute/2225",
-      "published": "Fri, 04 Jul 2025 06:07:35 +0000",
+      "published": "Jul 04, 2025",
       "summary": "Early P4 Lead \u2013 Potential Bad-Faith Voting in Zelenskyy Suit Dispute A significant number of voters in the ongoing Zelenskyy Suit dispute (Polymarket) have currently voted for P4 (\u201cToo Early\u201d), despit",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Proposal: Penalize Bad-Faith P4 \u2018Too Early\u2019 Votes to Prevent Resolution Abuse",
       "link": "https://discourse.uma.xyz/t/proposal-penalize-bad-faith-p4-too-early-votes-to-prevent-resolution-abuse/2208",
-      "published": "Sat, 28 Jun 2025 00:05:51 +0000",
+      "published": "Jun 28, 2025",
       "summary": "Proposal to Improve UMA Resolution System: Penalize Misuse of P4 \u2013 \u201cToo Early\u201d TL;DR: The P4 \u2013 \u201cToo Early\u201d option is currently being abused to delay market resolution even when the conditions are clea",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Reducing Proposal Disputes Through a Dual-Token Proposal Structure",
       "link": "https://discourse.uma.xyz/t/reducing-proposal-disputes-through-a-dual-token-proposal-structure/2196",
-      "published": "Thu, 05 Jun 2025 04:20:13 +0000",
+      "published": "Jun 05, 2025",
       "summary": "Summary This proposal introduces an alternative to raising the finalFee by requiring proposers to pay the finalFee in UMA while keeping the bond currency set by the integrator, typically USDC. For exa",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "UMIP-188: Increase Final Fee",
       "link": "https://discourse.uma.xyz/t/umip-188-increase-final-fee/2194",
-      "published": "Wed, 04 Jun 2025 22:44:03 +0000",
+      "published": "Jun 04, 2025",
       "summary": "Summary This proposal is to increase the finalFee (a component of proposal and disputing bonds) from $250 to $500. The number of dispute resolution votes are currently a strain on gas rebate costs and",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Clarification on MLB May 6 Market Resolution",
       "link": "https://discourse.uma.xyz/t/clarification-on-mlb-may-6-market-resolution/2190",
-      "published": "Fri, 09 May 2025 11:48:48 +0000",
+      "published": "May 09, 2025",
       "summary": "Dear UMA community, I would like to provide additional evidence regarding the MLB market on Polymarket dated May 6, specifically concerning the game between the Cleveland Guardians and Washington Nati",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Increase SPAT to 65%",
       "link": "https://discourse.uma.xyz/t/increase-spat-to-65/2177",
-      "published": "Thu, 10 Apr 2025 21:53:09 +0000",
+      "published": "Apr 10, 2025",
       "summary": "Summary This proposal modifies the Settlement Price Approval Threshold (SPAT) parameter within UMA\u2019s VotingV2 contract from 50% to 65%. SPAT is the percentage of staked UMA that needs to agree for a d",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Issue with Failed Proposal and Lost Tokens on UMA",
       "link": "https://discourse.uma.xyz/t/issue-with-failed-proposal-and-lost-tokens-on-uma/2164",
-      "published": "Sun, 16 Mar 2025 09:34:54 +0000",
+      "published": "Mar 16, 2025",
       "summary": "Hello UMA Support Team, I recently submitted a Propose Price transaction on UMA, but my proposal appears to have failed, and I lost my bonded tokens. I would like to understand the reason behind this ",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "UMA Tokenomics",
       "link": "https://discourse.uma.xyz/t/uma-tokenomics/2143",
-      "published": "Tue, 11 Feb 2025 19:57:44 +0000",
+      "published": "Feb 11, 2025",
       "summary": "Dear Hart, I hope you\u2019re doing well. I have been investing in UMA for the past four years and have remained a committed supporter, consistently participating in governance. As one of the Top 10 all-ti",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "UMIP 183 - add MULTIPLE_VALUES as an approved price identifier",
       "link": "https://discourse.uma.xyz/t/umip-183-add-multiple-values-as-an-approved-price-identifier/2138",
-      "published": "Thu, 09 Jan 2025 19:09:43 +0000",
+      "published": "Jan 09, 2025",
       "summary": "The DVM should support the below new price identifer for Optimistic Oracle V2 requests. This UMIP is planned to be used by Polymarket to request the score results of sports games. This will allow many",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Going Mainstream with KPI ^Tokens (Initial Research | Part One)",
       "link": "https://discourse.uma.xyz/t/going-mainstream-with-kpi-tokens-initial-research-part-one/2124",
-      "published": "Mon, 15 Jul 2024 20:01:01 +0000",
+      "published": "Jul 15, 2024",
       "summary": "The purpose of this post (Part One) is to gain feedback from the UMA community and Risk Labs team. A more formal follow-up proposal (Part Two) will be submitted in the following days/weeks. Video walk",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Funding Request: Oya Protocol MVP",
       "link": "https://discourse.uma.xyz/t/funding-request-oya-protocol-mvp/2062",
-      "published": "Wed, 22 Nov 2023 16:43:32 +0000",
+      "published": "Nov 22, 2023",
       "summary": "Name of Project: Oya Protocol Proposers: Vanessa Conyers vanessa@oya.market John Shutt john@oya.market Proposal Summary Provide a revocable stream of funding to help build the MVP of Oya Protocol, whi",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "Reclaim Protocol Funding Proposal",
       "link": "https://discourse.uma.xyz/t/reclaim-protocol-funding-proposal/2051",
-      "published": "Wed, 11 Oct 2023 17:31:06 +0000",
+      "published": "Oct 11, 2023",
       "summary": "Name of Project: Reclaim Protocol Proposer: Srijith (Srijith@creatoros.co, Reclaim team), Ruchil (ruchil@creatoros.co, Reclaim team) Proposal Summary To integrate Reclaim Protocol, a zk based data ver",
       "note": "Review: check if dispute participant holds a position in this market."
     },
     {
       "title": "UMA-GYSR Delegator Pool Proposal",
       "link": "https://discourse.uma.xyz/t/uma-gysr-delegator-pool-proposal/2032",
-      "published": "Wed, 23 Aug 2023 09:02:35 +0000",
+      "published": "Aug 23, 2023",
       "summary": "Name of Project: UMA-GYSR Delegator Pool Proposer: Deadcoin, Neondaemon, Pumpedlunch, Robbie (SuperUMAns) ; Devin (GYSR/Passage Labs); Bananachain (SuperUMAns, B Labs) Proposal Summary To set up a UMA",
       "note": "Review: check if dispute participant holds a position in this market."
     }
@@ -398,8 +408,8 @@
       "wallet": "3N6WeZ6i34taX8Ditser6LKWBcXmt2XXL4"
     },
     {
-      "name": "+ 76 more new OFAC crypto additions",
-      "wallet": "See data/ofac_cache.json for full list"
+      "name": "+ 76 more",
+      "wallet": "See data/ofac_cache.json"
     }
   ],
   "bill_updates": [
@@ -452,5 +462,7 @@
       "action_date": "2026-03-18",
       "url": "https://www.congress.gov/bill/119th-congress/house-bill/7840"
     }
-  ]
+  ],
+  "developing_stories": [],
+  "narrative": "Today's top story: Congress hits Polymarket and Kalshi with a massive insider trading probe (via CoinDesk, May 22, 2026). There are 10 high priority alerts total today. One suspicious market flagged: 'Will Marco Rubio win the 2028 US Presidential Election?' with $9,980,941 in volume at 12.6% probability. 15 UMA governance dispute(s) flagged \u2014 check the UMA tab for details. 11 new OFAC crypto sanctions added \u2014 cross-reference with Polymarket trading history."
 }

@@ -1,0 +1,21 @@
+{
+  "1439549": {
+    "question": "Fed rate cut by September 2026 meeting?",
+    "first_flagged": "2026-05-25",
+    "last_flagged": "2026-05-25",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-25"
+    ],
+    "insider_risk": "HIGH",
+    "volume_history": [
+      {
+        "date": "2026-05-25",
+        "volume": 99557.0,
+        "prob": 13.2
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/fed-rate-cut-by-september-2026-meeting-264-382"
+  }
+}

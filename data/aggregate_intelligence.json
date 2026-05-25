@@ -1,0 +1,75 @@
+{
+  "generated": "2026-05-25",
+  "days_of_data": 3,
+  "total_wallets_tracked": 0,
+  "total_markets_tracked": 1,
+  "recurring_wallets": [],
+  "high_risk_wallets": [],
+  "persistent_markets": [],
+  "daily_trend": [
+    {
+      "date": "2026-05-23",
+      "news": 14,
+      "suspicious_markets": 0,
+      "large_trades": 0,
+      "uma_alerts": 0,
+      "ofac_new": 0
+    },
+    {
+      "date": "2026-05-24",
+      "news": 0,
+      "suspicious_markets": 5,
+      "large_trades": 0,
+      "uma_alerts": 14,
+      "ofac_new": 0
+    },
+    {
+      "date": "2026-05-25",
+      "news": 2,
+      "suspicious_markets": 1,
+      "large_trades": 0,
+      "uma_alerts": 0,
+      "ofac_new": 0
+    }
+  ],
+  "top_sources": [
+    {
+      "source": "The Block",
+      "count": 6
+    },
+    {
+      "source": "Decrypt",
+      "count": 5
+    },
+    {
+      "source": "CoinDesk",
+      "count": 4
+    },
+    {
+      "source": "DLA Piper Market Edge",
+      "count": 1
+    }
+  ],
+  "top_keywords": [
+    {
+      "keyword": "polymarket",
+      "count": 11
+    },
+    {
+      "keyword": "prediction market",
+      "count": 11
+    },
+    {
+      "keyword": "kalshi",
+      "count": 6
+    }
+  ],
+  "win_rate_alerts": [],
+  "summary_stats": {
+    "total_alerts_30d": 16,
+    "total_suspicious_30d": 6,
+    "wallets_with_ofac": 0,
+    "wallets_on_watchlist": 0,
+    "markets_flagged_3plus": 0
+  }
+}

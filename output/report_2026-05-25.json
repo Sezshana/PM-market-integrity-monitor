@@ -1,7 +1,7 @@
 {
   "date": "2026-05-25",
   "unique_news": 12,
-  "suspicious_markets": 2,
+  "suspicious_markets": 0,
   "large_trades": 0,
   "uma_alerts": 0,
   "ofac_new": 0,
@@ -197,34 +197,7 @@
       "also_covered_by": []
     }
   ],
-  "suspicious_market_data": [
-    {
-      "market_id": "561234",
-      "question": "Will Marco Rubio win the 2028 US Presidential Election?",
-      "outcome": "Yes",
-      "probability_pct": 12.6,
-      "volume_usd": 9981210.0,
-      "url": "https://polymarket.com/event/will-marco-rubio-win-the-2028-us-presidential-election",
-      "end_date": "2028-11-07",
-      "days_until_close": 897,
-      "flagged_date": "2026-05-25",
-      "insider_risk": "LOW",
-      "alert_reason": "UNUSUALLY HIGH VOLUME \u2014 $9,981,210 on a low insider-risk market. Check for wash trading or market manipulation."
-    },
-    {
-      "market_id": "898418",
-      "question": "Will Lance Stroll be the 2026 F1 Drivers' Champion?",
-      "outcome": "Yes",
-      "probability_pct": 0.1,
-      "volume_usd": 9924212.0,
-      "url": "https://polymarket.com/event/will-lance-stroll-be-the-2026-f1-drivers-champion",
-      "end_date": "2026-12-06",
-      "days_until_close": 195,
-      "flagged_date": "2026-05-25",
-      "insider_risk": "LOW",
-      "alert_reason": "UNUSUALLY HIGH VOLUME \u2014 $9,924,212 on a low insider-risk market. Check for wash trading or market manipulation."
-    }
-  ],
+  "suspicious_market_data": [],
   "large_trade_data": [],
   "onchain_txs": [],
   "uma_governance": [],
@@ -390,5 +363,5 @@
       "mention_count": 2
     }
   ],
-  "narrative": "Today's top story: Congress hits Polymarket and Kalshi with a massive insider trading probe (via CoinDesk, May 22, 2026). There are 9 high priority alerts total today. One suspicious market flagged: 'Will Marco Rubio win the 2028 US Presidential Election?' with $9,981,210 in volume at 12.6% probability. Developing story to watch: 'Congress hits Polymarket and Kalshi with a massive insider trading probe...' has appeared for 2 consecutive days."
+  "narrative": "Today's top story: Congress hits Polymarket and Kalshi with a massive insider trading probe (via CoinDesk, May 22, 2026). There are 9 high priority alerts total today. No suspicious trading activity detected today. Developing story to watch: 'Congress hits Polymarket and Kalshi with a massive insider trading probe...' has appeared for 2 consecutive days."
 }

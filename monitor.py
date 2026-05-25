@@ -76,6 +76,15 @@ KEYWORDS = [
     "UMA protocol","oracle manipulation","prediction market regulation",
 ]
 
+# Articles matching these are excluded — meme coins, crypto price noise
+NOISE_EXCLUSION_KEYWORDS = [
+    "meme coin", "memecoin", "pump and dump", "shitcoin", "altcoin season",
+    "xmr vs", "zec vs", "monero vs", "token launch", "nft drop",
+    "rate cuts", "fed rate", "bitcoin price", "ethereum price", "solana price",
+    "under exposed", "heating up", "moon", "wen lambo", "degen",
+    "airdrop", "yield farming", "liquidity mining",
+]
+
 # Priority keywords with weights — more matches = higher score
 PRIORITY_WEIGHTS = {
     "polymarket": 3,
@@ -119,6 +128,38 @@ BILLS = [
 LARGE_TRADE_USD  = 10_000
 LOW_PROB_MAX_PCT = 15
 WIN_RATE_ALERT   = 75
+
+# Market categories with HIGH insider trading risk
+# These are events where someone could plausibly have nonpublic information
+INSIDER_RISK_KEYWORDS = [
+    # Government & policy
+    "president","prime minister","election","vote","senator","congress",
+    "government","minister","policy","legislation","bill","law","sanction",
+    "fed","federal reserve","rate","tariff","executive order","supreme court",
+    # Geopolitical & military
+    "war","invasion","attack","military","ceasefire","treaty","nato",
+    "ukraine","russia","iran","israel","china","taiwan","north korea",
+    "coup","assassination","nuclear",
+    # Regulatory & legal
+    "CFTC","SEC","FDA","DOJ","indictment","arrest","charges","verdict",
+    "merger","acquisition","ipo","bankruptcy","investigation",
+    # Corporate events
+    "CEO","earnings","layoffs","deal","partnership","acquisition",
+]
+
+# Market categories with LOW insider trading risk (filter these out)
+# These are public knowledge events or pure luck outcomes
+LOW_INSIDER_RISK_KEYWORDS = [
+    "f1","formula 1","nfl","nba","mlb","nhl","soccer","football","basketball",
+    "world cup","super bowl","stanley cup","championship","driver champion",
+    "meme","celebrity","divorce","baby","oscar","grammy","emmy","award",
+    "bitcoin price","ethereum price","crypto price","dip to","reach $",
+    "hyperliquid","solana","doge","shib",
+]
+
+# Markets closing more than 180 days away are lower priority unless very high volume
+NEAR_TERM_DAYS = 180
+HIGH_VOLUME_THRESHOLD = 1_000_000  # $1M+ always flag regardless
 
 
 # ════════════════════════════════════════════════════════════
@@ -321,6 +362,13 @@ def fetch_rss(feeds, keywords):
                 if not matched:
                     continue
 
+                # Skip meme/crypto-price noise articles
+                combined_lower = combined
+                if any(noise in combined_lower for noise in NOISE_EXCLUSION_KEYWORDS):
+                    # Only keep if it also has a strong Polymarket-specific signal
+                    if not any(kw in combined_lower for kw in ["polymarket","kalshi","prediction market insider","CFTC enforcement"]):
+                        continue
+
                 wl      = check_watchlist(title + " " + summary)
                 score   = score_article(title, summary, matched)
                 pub_date = parse_date(entry.get("published", ""))
@@ -381,6 +429,7 @@ def fetch_polymarket_suspicious_trades():
             if isinstance(prices, str):   prices   = json.loads(prices)
             # Skip markets that have already closed
             end_date_raw = market.get("endDate","")
+            end_date_parsed = None
             if end_date_raw:
                 try:
                     end_date_parsed = datetime.date.fromisoformat(end_date_raw[:10])
@@ -388,21 +437,64 @@ def fetch_polymarket_suspicious_trades():
                         continue  # Market already closed — skip
                 except: pass
 
+            question_lower = question.lower()
+
+            # Skip low insider-risk markets unless volume is very high
+            is_low_risk = any(kw in question_lower for kw in LOW_INSIDER_RISK_KEYWORDS)
+            is_high_risk = any(kw in question_lower for kw in INSIDER_RISK_KEYWORDS)
+
+            # Calculate days until close
+            days_until_close = 9999
+            if end_date_parsed:
+                days_until_close = (end_date_parsed - datetime.date.today()).days
+
             for outcome, price in zip(outcomes, prices):
                 try:
                     prob = float(price) * 100
-                    if prob <= LOW_PROB_MAX_PCT and volume >= LARGE_TRADE_USD:
-                        flagged.append({
-                            "market_id":       market_id,
-                            "question":        question,
-                            "outcome":         outcome,
-                            "probability_pct": round(prob, 1),
-                            "volume_usd":      round(volume, 0),
-                            "url":             f"https://polymarket.com/event/{market.get('slug', market_id)}",
-                            "end_date":        end_date_raw[:10] if end_date_raw else "unknown",
-                            "flagged_date":    TODAY,
-                            "alert_reason":    f"${volume:,.0f} volume on {prob:.1f}% probability outcome",
-                        })
+                    if not (prob <= LOW_PROB_MAX_PCT and volume >= LARGE_TRADE_USD):
+                        continue
+
+                    # Determine insider trade risk level
+                    if is_low_risk and not is_high_risk:
+                        risk_level = "LOW"
+                        # Only flag low-risk markets if extremely high volume
+                        if volume < HIGH_VOLUME_THRESHOLD:
+                            continue
+                    elif is_high_risk:
+                        risk_level = "HIGH"
+                    else:
+                        risk_level = "MEDIUM"
+
+                    # Determine if near-term (closes within 180 days)
+                    is_near_term = days_until_close <= NEAR_TERM_DAYS
+
+                    # Skip far-future low/medium risk markets under $1M
+                    if not is_near_term and risk_level != "HIGH" and volume < HIGH_VOLUME_THRESHOLD:
+                        continue
+
+                    # Build alert reason with insider risk context
+                    if risk_level == "HIGH" and is_near_term:
+                        alert_reason = f"HIGH INSIDER RISK — ${volume:,.0f} volume on {prob:.1f}% probability, closes in {days_until_close} days. Someone could plausibly have nonpublic information."
+                    elif risk_level == "HIGH":
+                        alert_reason = f"HIGH INSIDER RISK — ${volume:,.0f} volume on {prob:.1f}% probability. Long-term market but high-risk category."
+                    elif risk_level == "LOW":
+                        alert_reason = f"UNUSUALLY HIGH VOLUME — ${volume:,.0f} on a low insider-risk market. Check for wash trading or market manipulation."
+                    else:
+                        alert_reason = f"${volume:,.0f} volume on {prob:.1f}% probability outcome. Moderate insider risk."
+
+                    flagged.append({
+                        "market_id":       market_id,
+                        "question":        question,
+                        "outcome":         outcome,
+                        "probability_pct": round(prob, 1),
+                        "volume_usd":      round(volume, 0),
+                        "url":             f"https://polymarket.com/event/{market.get('slug', market_id)}",
+                        "end_date":        end_date_raw[:10] if end_date_raw else "unknown",
+                        "days_until_close": days_until_close,
+                        "flagged_date":    TODAY,
+                        "insider_risk":    risk_level,
+                        "alert_reason":    alert_reason,
+                    })
                 except: continue
     except Exception as e:
         print(f"  Polymarket API error: {e}")
@@ -629,23 +721,29 @@ def build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, d
 
 def build_subject(news, suspicious_markets, large_trades, is_quiet):
     if is_quiet:
-        return f"Polymarket Digest {TODAY_PRETTY} — Quiet day, no major alerts"
+        return f"PM Integrity Monitor {TODAY_PRETTY} — Quiet day"
 
-    high = [h for h in news if h["priority"]]
+    high = [h for h in news if h.get("priority")]
+    high_risk = [m for m in suspicious_markets if m.get("insider_risk") == "HIGH"]
+    near_term = [m for m in suspicious_markets if m.get("days_until_close", 9999) <= 30]
 
-    if suspicious_markets and high:
-        top_market  = suspicious_markets[0]
-        top_article = high[0]["title"][:50]
-        return f"Polymarket Digest {TODAY_PRETTY} — {top_article}... + suspicious trade flagged"
+    if high_risk and near_term:
+        top = high_risk[0] if high_risk else near_term[0]
+        return f"PM Monitor {TODAY_PRETTY} — ⚠ HIGH RISK: {top['question'][:55]}..."
+    elif high_risk:
+        top = high_risk[0]
+        return f"PM Monitor {TODAY_PRETTY} — High insider risk: {top['question'][:50]}..."
+    elif near_term:
+        top = near_term[0]
+        return f"PM Monitor {TODAY_PRETTY} — Near-term flag: ${top['volume_usd']:,.0f} on {top['probability_pct']}% market"
     elif suspicious_markets:
         top = suspicious_markets[0]
-        return f"Polymarket Digest {TODAY_PRETTY} — Suspicious trade: ${top['volume_usd']:,.0f} on {top['probability_pct']}% market"
+        return f"PM Monitor {TODAY_PRETTY} — {len(suspicious_markets)} markets flagged + {len(high)} news alerts"
     elif high:
         top = high[0]["title"][:60]
-        count = len(high)
-        return f"Polymarket Digest {TODAY_PRETTY} — {top}{'...' if len(top)==60 else ''} [{count} alerts]"
+        return f"PM Monitor {TODAY_PRETTY} — {top}{'...' if len(top)==60 else ''}"
     else:
-        return f"Polymarket Digest {TODAY_PRETTY} — {len(news)} stories"
+        return f"PM Monitor {TODAY_PRETTY} — {len(news)} stories, no flags"
 
 
 # ════════════════════════════════════════════════════════════
@@ -746,6 +844,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
               f"Win rate alerts:          {len(win_alerts)}",
               f"Bills tracked:            {len(bills)}",
               f"Report generated:         {TODAY} | Cleveland EDT = UTC-4",
+              f"On-chain monitoring:      {'ACTIVE' if POLYGONSCAN_KEY else 'INACTIVE — add POLYGONSCAN_KEY to GitHub Secrets'}",
               ""]
 
     # QUIET DAY — short version

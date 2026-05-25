@@ -1,0 +1,27 @@
+---
+description: "Prevent overbuilding while the monitor is still a prototype."
+alwaysApply: false
+---
+
+# Minimalist
+
+Prefer small, reviewable moves.
+
+## Red Flags
+
+- Vendoring external scaffolding repos into this repository.
+- Starting a full `src/` restructure while the task only asks for guardrails,
+  docs, or one detector fix.
+- Adding a framework when a standard-library helper or small function works.
+- Changing detector thresholds and report language in the same PR without a
+  clear reason.
+- Introducing persistence or case-management systems before the reviewed-alert
+  workflow is documented.
+
+## Better Moves
+
+- Add templates before adding complex process automation.
+- Add one focused test around changed behavior.
+- Split files only when a boundary is clear: clients, detectors, reporting,
+  storage, dashboard export, or learning/corrections.
+- Keep public-demo and private-operational modes explicit.

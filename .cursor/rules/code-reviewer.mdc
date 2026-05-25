@@ -1,0 +1,50 @@
+---
+description: "Repo-specific code review checklist for monitor changes. Use after any code or workflow edit."
+alwaysApply: true
+---
+
+# Code Reviewer
+
+Review every change as if a future analyst will rely on the report output.
+
+## Checklist
+
+### Architecture
+
+- Keep prototype changes scoped; do not start a broad `src/` restructure unless
+  the task explicitly asks for it.
+- Keep external-source clients, detector logic, storage, and reporting concerns
+  separable even while they still live in top-level scripts.
+- Avoid expanding god functions; extract helpers when logic becomes hard to
+  test in isolation.
+
+### Surveillance Language
+
+- Prefer "criteria matched", "flagged by heuristic", "observed pattern", and
+  "analyst review required".
+- Avoid unsupported conclusions such as "controlled by", "very likely",
+  "insider", "manipulation", or "suspicious" in generated findings unless the
+  phrase is historical/source context.
+- Include alternative explanations for detector outputs where practical.
+
+### Data and State
+
+- Treat `output/`, `data/`, `cases/`, and `watchlist.txt` as sensitive by
+  default. If they are versioned for public-demo mode, keep them sanitized.
+- Do not commit real credentials, personal secrets, or private case notes.
+- Preserve dashboard/report JSON contracts unless the PR documents a migration.
+
+### Tests
+
+- Add or update focused tests for detector, parser, scoring, storage, or schema
+  behavior.
+- Run syntax checks on touched Python scripts.
+- If a dependency is unavailable in CI/local environments, prefer dependency
+  injection or stubs for pure unit tests.
+
+### Security
+
+- Use environment variables for keys and email credentials.
+- Set conservative GitHub Actions permissions.
+- Avoid shelling out with untrusted input.
+- Validate or constrain URLs before making requests to user-provided locations.

@@ -1,0 +1,49 @@
+---
+description: "Systematic debugging process for monitor, workflow, and dashboard failures."
+alwaysApply: true
+---
+
+# Debugger
+
+Use evidence before guessing.
+
+## Common Failure Areas
+
+### Daily Workflow
+
+- Missing secret: confirm `ALERT_EMAIL`, `SMTP_PASSWORD`, `CONGRESS_API_KEY`,
+  `DUNE_API_KEY`, and `POLYGONSCAN_KEY` environment variables.
+- Permission failure on generated commits: check workflow `permissions` and the
+  branch protection rules.
+- No generated report: inspect monitor output first, then aggregator output.
+
+### Data Collection
+
+- RSS parser returns no entries: verify the feed URL and parser dependency.
+- Polymarket API returns non-200: capture status code and response shape.
+- Polygonscan/Etherscan responses have `status != "1"`: check rate limits and
+  API key configuration.
+
+### Dashboard
+
+- Empty dashboard: verify `output/report_<date>.json` and
+  `data/aggregate_intelligence.json` exist relative to `dashboard.html`.
+- Browser fetch errors: open the dashboard through a local server, not a raw
+  `file://` URL.
+- Schema mismatch: compare the latest JSON report with dashboard field usage.
+
+### Tests
+
+- Import errors: verify dependencies from `requirements.txt` or stub external
+  parser libraries for pure unit tests.
+- Flaky network behavior: keep unit tests offline and move API calls behind
+  focused integration checks.
+
+## Method
+
+1. Reproduce the failure with the smallest command.
+2. Read the full traceback or workflow log.
+3. Identify the failing boundary: source client, detector, storage, reporting,
+   dashboard, or GitHub Actions.
+4. Add or update a focused test if behavior changes.
+5. Run the focused validation and then the wider validation.

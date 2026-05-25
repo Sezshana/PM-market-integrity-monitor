@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  guardrails:
+    name: Guardrails and syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate guardrail files
+        run: python3 scripts/validate_guardrails.py
+
+      - name: Compile Python scripts
+        run: python3 -m py_compile monitor.py wash_trading_module.py aggregator.py email_template.py onchain_monitor.py scripts/validate_guardrails.py
+
+      - name: Run unit tests when present
+        run: |
+          if compgen -G "tests/test*.py" > /dev/null || compgen -G "tests/**/test*.py" > /dev/null; then
+            python3 -m unittest discover -s tests
+          else
+            echo "No unit test files yet; skipping unit tests."
+          fi

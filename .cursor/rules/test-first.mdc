@@ -1,0 +1,35 @@
+---
+description: "Require focused tests before behavioral detector, parsing, scoring, reporting, or storage changes."
+alwaysApply: true
+---
+
+# Test First
+
+Use a test-first loop for behavioral changes:
+
+1. Add or update the focused test.
+2. Run it and confirm it covers the expected behavior.
+3. Implement the smallest change needed.
+4. Run the focused test again.
+5. Run the relevant wider validation before committing.
+
+## Applies To
+
+- Detector thresholds or scoring logic
+- Watchlist parsing and matching
+- RSS deduplication or priority scoring
+- Report JSON schema or dashboard contract changes
+- State files in `data/`
+- Email/report copy generated from structured findings
+- GitHub Actions behavior that changes generated artifacts
+
+## Exemptions
+
+- Documentation-only edits
+- Cursor rules and process guardrails
+- PR templates
+- Mechanical formatting
+- Exploratory spikes that will be replaced before merge
+
+When tests are difficult to add, stop and simplify the interface before adding
+more code.

@@ -19,6 +19,15 @@ from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 import email.utils
 
+# HTML email template
+from email_template import build_html_email
+
+# On-chain monitoring via Polygonscan/Etherscan
+POLYGONSCAN_KEY = os.environ.get("POLYGONSCAN_KEY", "")
+POLYMARKET_CTF  = "0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E"  # Main CTF Exchange on Polygon
+USDC_POLYGON    = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
+ETHERSCAN_POLY  = "https://api.etherscan.io/v2/api"
+
 ALERT_EMAIL   = os.environ.get("ALERT_EMAIL", "shanabautista0819@gmail.com")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
 CONGRESS_KEY  = os.environ.get("CONGRESS_API_KEY", "")
@@ -92,13 +101,9 @@ PRIORITY_WEIGHTS = {
     "ban": 2,
 }
 
-# UMA: must mention Polymarket directly OR be about resolution/dispute abuse
-# General UMA governance posts (fees, emissions, tokenomics) are filtered out entirely
-UMA_POLYMARKET_TERMS = ["polymarket"]  # Must mention Polymarket specifically
-UMA_DISPUTE_TERMS = [                  # OR must be about active dispute/resolution abuse
-    "bad faith", "bad-faith", "slashing", "governance attack",
-    "p4 abuse", "resolution abuse", "incorrect resolution",
-    "dispute resolution", "coordinated"
+UMA_REQUIRED = [
+    "polymarket", "dispute", "resolution", "incorrect", "manipulat",
+    "bad faith", "exploit", "governance attack", "slashing", "bad-faith"
 ]
 
 BILLS = [
@@ -374,6 +379,15 @@ def fetch_polymarket_suspicious_trades():
             volume    = float(market.get("volume",0) or 0)
             if isinstance(outcomes, str): outcomes = json.loads(outcomes)
             if isinstance(prices, str):   prices   = json.loads(prices)
+            # Skip markets that have already closed
+            end_date_raw = market.get("endDate","")
+            if end_date_raw:
+                try:
+                    end_date_parsed = datetime.date.fromisoformat(end_date_raw[:10])
+                    if end_date_parsed < datetime.date.today():
+                        continue  # Market already closed — skip
+                except: pass
+
             for outcome, price in zip(outcomes, prices):
                 try:
                     prob = float(price) * 100
@@ -385,7 +399,7 @@ def fetch_polymarket_suspicious_trades():
                             "probability_pct": round(prob, 1),
                             "volume_usd":      round(volume, 0),
                             "url":             f"https://polymarket.com/event/{market.get('slug', market_id)}",
-                            "end_date":        market.get("endDate","")[:10] if market.get("endDate") else "unknown",
+                            "end_date":        end_date_raw[:10] if end_date_raw else "unknown",
                             "flagged_date":    TODAY,
                             "alert_reason":    f"${volume:,.0f} volume on {prob:.1f}% probability outcome",
                         })
@@ -469,55 +483,24 @@ def get_win_rate_alerts():
 # ════════════════════════════════════════════════════════════
 
 def fetch_uma_governance():
-    """
-    Only flag UMA posts that are genuinely relevant to Polymarket market integrity.
-    Two valid alert types:
-    1. Post mentions Polymarket by name AND involves a dispute or resolution
-    2. Post is about systematic bad-faith voting or governance abuse (affects all markets)
-    Everything else — emissions, fees, tokenomics, general governance — is ignored.
-    """
     alerts = []
     try:
         feed = feedparser.parse("https://discourse.uma.xyz/latest.rss")
         for entry in feed.entries[:30]:
-            title    = entry.get("title","")
-            summary  = entry.get("summary","")
+            title   = entry.get("title","")
+            summary = entry.get("summary","")
             combined = (title + " " + summary).lower()
-
-            mentions_polymarket = any(t in combined for t in UMA_POLYMARKET_TERMS)
-            is_dispute_abuse    = any(t in combined for t in UMA_DISPUTE_TERMS)
-
-            # Type 1: Mentions Polymarket + has resolution/dispute context
-            type1 = mentions_polymarket and any(
-                w in combined for w in ["dispute", "resolution", "resolve", "incorrect",
-                                        "market", "outcome", "vote", "slashing"]
-            )
-
-            # Type 2: Systematic governance abuse (bad-faith voting, governance attacks)
-            type2 = is_dispute_abuse
-
-            if not type1 and not type2:
-                continue
-
-            # Determine alert type for the note
-            if type1 and mentions_polymarket:
-                note = "Polymarket market resolution dispute — check if any voter holds a position in this market."
-                alert_type = "POLYMARKET DISPUTE"
-            else:
-                note = "Systematic governance abuse pattern — this affects resolution integrity across all markets."
-                alert_type = "GOVERNANCE ABUSE"
-
-            alerts.append({
-                "title":      title,
-                "link":       entry.get("link",""),
-                "published":  parse_date(entry.get("published","")),
-                "summary":    clean_text(summary)[:200],
-                "note":       note,
-                "alert_type": alert_type,
-            })
+            if any(kw in combined for kw in UMA_REQUIRED):
+                alerts.append({
+                    "title":     title,
+                    "link":      entry.get("link",""),
+                    "published": parse_date(entry.get("published","")),
+                    "summary":   clean_text(summary)[:200],
+                    "note":      "Review: check if dispute participant holds a position in this market.",
+                })
     except Exception as e:
         print(f"  UMA error: {e}")
-    print(f"  UMA alerts (filtered): {len(alerts)}")
+    print(f"  UMA alerts: {len(alerts)}")
     return alerts
 
 
@@ -738,7 +721,7 @@ def generate_weekly_summary(developing_stories):
 # EMAIL BUILDER
 # ════════════════════════════════════════════════════════════
 
-def build_email(news, suspicious_markets, large_trades, uma, ofac,
+def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 bills, win_alerts, weekly, narrative, developing_stories):
     high   = [h for h in news if h["priority"]]
     normal = [h for h in news if not h["priority"]]
@@ -804,6 +787,25 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac,
             ]
         lines.append("")
 
+    # ON-CHAIN LARGE TRANSACTIONS
+    onchain = report_data.get("onchain_txs", []) if isinstance(report_data, dict) else []
+
+    # ON-CHAIN LARGE TRANSACTIONS
+    if onchain_txs:
+        lines += ["ON-CHAIN LARGE TRANSACTIONS (POLYGON)", "=" * 60]
+        lines.append("Direct Polymarket contract transactions over $10,000 USDC in last 24 hours.")
+        for tx in onchain_txs:
+            wl_note = f" *** WATCHLIST HIT" if tx.get("watchlist") else ""
+            lines += [
+                f"\n${tx['value_usdc']:,.2f} USDC  |  {tx['timestamp']}",
+                f"  From:    {tx['from']}{wl_note}",
+                f"  To:      {tx['to']}",
+                f"  TX:      {tx['polygonscan']}",
+                f"  Wallet:  {tx['from_link']}",
+                f"  ACTION:  Check wallet age, funding source, and Polymarket position history.",
+            ]
+        lines.append("")
+
     # LARGE TRADES
     if large_trades:
         lines += ["LARGE INDIVIDUAL TRADES — CLOB DATA", "=" * 60]
@@ -824,16 +826,9 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac,
     # UMA GOVERNANCE
     if uma:
         lines += ["UMA GOVERNANCE / ORACLE DISPUTES", "=" * 60]
-        lines.append("Note: Only Polymarket-specific disputes and governance abuse patterns are shown here.")
         for a in uma:
-            alert_type = a.get("alert_type", "DISPUTE")
-            lines += [
-                f"\n[{alert_type}] {a['title']}",
-                f"  Published: {a['published']}",
-                f"  Summary:   {a['summary']}",
-                f"  Link:      {a['link']}",
-                f"  ACTION:    {a['note']}",
-            ]
+            lines += [f"\n{a['title']}", f"  Published: {a['published']}",
+                      f"  {a['summary']}", f"  Link: {a['link']}", f"  NOTE: {a['note']}"]
         lines.append("")
 
     # OFAC
@@ -904,7 +899,7 @@ def build_email(news, suspicious_markets, large_trades, uma, ofac,
 # SAVE + SEND
 # ════════════════════════════════════════════════════════════
 
-def save_report(news, suspicious_markets, large_trades, uma, ofac,
+def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 bills, win_alerts, weekly, narrative, developing_stories):
     report = {
         "date":                TODAY,
@@ -916,6 +911,7 @@ def save_report(news, suspicious_markets, large_trades, uma, ofac,
         "alerts":              news,
         "suspicious_market_data": suspicious_markets,
         "large_trade_data":    large_trades,
+        "onchain_txs":         onchain_txs,
         "uma_governance":      uma,
         "ofac_additions":      ofac,
         "bill_updates":        bills,
@@ -930,29 +926,38 @@ def save_report(news, suspicious_markets, large_trades, uma, ofac,
                 and len(large_trades) == 0
                 and len(uma) == 0)
 
-    body    = build_email(news, suspicious_markets, large_trades, uma, ofac,
+    body    = build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                          bills, win_alerts, weekly, narrative, developing_stories)
     subject = build_subject(news, suspicious_markets, large_trades, is_quiet)
 
     with open(f"output/report_{TODAY}.md","w") as f:
         f.write(body)
 
+    # Build HTML version
+    body_html = build_html_email(
+        news, suspicious_markets, large_trades, onchain_txs,
+        uma, ofac, bills, win_alerts, weekly,
+        narrative, developing_stories, TODAY_PRETTY
+    )
+
     # Save seen articles
     seen_urls = set(h.get("link","") for h in news if h.get("link",""))
     save_seen_articles(seen_urls)
 
-    return body, subject
+    return body, body_html, subject
 
 
-def send_email(body, subject):
+def send_email(body_plain, body_html, subject):
     if not SMTP_PASSWORD:
         print("No SMTP password — skipping email")
         return
-    msg = MIMEMultipart()
+    msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"]    = ALERT_EMAIL
     msg["To"]      = ALERT_EMAIL
-    msg.attach(MIMEText(body, "plain"))
+    # Plain text fallback first, HTML preferred
+    msg.attach(MIMEText(body_plain, "plain"))
+    msg.attach(MIMEText(body_html,  "html"))
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(ALERT_EMAIL, SMTP_PASSWORD)
@@ -960,6 +965,97 @@ def send_email(body, subject):
         print(f"Email sent: {subject}")
     except Exception as e:
         print(f"Email error: {e}")
+
+
+# ════════════════════════════════════════════════════════════
+# ON-CHAIN MONITORING (Polygonscan/Etherscan)
+# ════════════════════════════════════════════════════════════
+
+def fetch_onchain_large_txs():
+    """
+    Scan Polymarket's CTF Exchange contract for large USDC transactions
+    in the last 24 hours using Etherscan's Polygon API.
+    """
+    if not POLYGONSCAN_KEY:
+        print("  On-chain: no POLYGONSCAN_KEY set — skipping")
+        return []
+
+    flagged = []
+    yesterday_ts = int((datetime.datetime.now() - datetime.timedelta(days=1)).timestamp())
+
+    try:
+        resp = requests.get(ETHERSCAN_POLY, params={
+            "chainid":         137,
+            "module":          "account",
+            "action":          "tokentx",
+            "contractaddress": USDC_POLYGON,
+            "address":         POLYMARKET_CTF,
+            "sort":            "desc",
+            "apikey":          POLYGONSCAN_KEY,
+            "offset":          200,
+            "page":            1,
+        }, timeout=15)
+
+        data = resp.json()
+        if data.get("status") != "1":
+            print(f"  On-chain API response: {data.get('message','unknown error')}")
+            return []
+
+        for tx in data.get("result", []):
+            ts    = int(tx.get("timeStamp", 0))
+            if ts < yesterday_ts:
+                continue
+            value = int(tx.get("value", 0)) / 1e6  # USDC 6 decimals
+            if value < LARGE_TRADE_USD:
+                continue
+
+            from_addr = tx.get("from","")
+            to_addr   = tx.get("to","")
+            tx_date   = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M UTC")
+            wl        = check_watchlist(from_addr + " " + to_addr)
+
+            flagged.append({
+                "from":        from_addr,
+                "to":          to_addr,
+                "value_usdc":  round(value, 2),
+                "tx_hash":     tx.get("hash",""),
+                "timestamp":   tx_date,
+                "polygonscan": f"https://polygonscan.com/tx/{tx.get('hash','')}",
+                "from_link":   f"https://polygonscan.com/address/{from_addr}",
+                "watchlist":   wl,
+            })
+
+    except Exception as e:
+        print(f"  On-chain error: {e}")
+
+    flagged = sorted(flagged, key=lambda x: x["value_usdc"], reverse=True)[:10]
+    print(f"  On-chain large USDC transactions: {len(flagged)}")
+    return flagged
+
+
+def get_wallet_age(address):
+    """Check when a wallet first appeared on Polygon."""
+    if not POLYGONSCAN_KEY:
+        return None
+    try:
+        resp = requests.get(ETHERSCAN_POLY, params={
+            "chainid": 137,
+            "module":  "account",
+            "action":  "txlist",
+            "address": address,
+            "startblock": 0,
+            "sort":    "asc",
+            "apikey":  POLYGONSCAN_KEY,
+            "offset":  1,
+            "page":    1,
+        }, timeout=10)
+        data = resp.json()
+        if data.get("status") == "1" and data.get("result"):
+            ts = int(data["result"][0].get("timeStamp", 0))
+            if ts:
+                return datetime.datetime.fromtimestamp(ts).date().isoformat()
+    except: pass
+    return None
 
 
 # ════════════════════════════════════════════════════════════
@@ -978,6 +1074,9 @@ def main():
 
     print("3. Polymarket suspicious markets...")
     suspicious_markets = fetch_polymarket_suspicious_trades()
+
+    print("3b. On-chain large transactions (Polygonscan)...")
+    onchain_txs = fetch_onchain_large_txs()
 
     print("4. Large individual trades...")
     large_trades = fetch_polymarket_recent_large_trades()
@@ -1004,11 +1103,12 @@ def main():
     narrative = build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, developing_stories)
 
     print("12. Saving report and sending email...")
-    body, subject = save_report(news, suspicious_markets, large_trades, uma, ofac,
+    body, body_html, subject = save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                                 bills, win_alerts, weekly, narrative, developing_stories)
-    send_email(body, subject)
+    send_email(body, body_html, subject)
 
     high = len([h for h in news if h["priority"]])
+    print(f"On-chain txs: {len(onchain_txs)}")
     print(f"Done. {len(news)} new stories ({high} high priority) | {len(suspicious_markets)} suspicious markets | subject: {subject}")
 
 

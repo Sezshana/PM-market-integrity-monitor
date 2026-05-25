@@ -767,7 +767,8 @@ def build_subject(news, suspicious_markets, large_trades, is_quiet):
         top = high[0]["title"][:60]
         return f"PM Monitor {TODAY_PRETTY} — {top}{'...' if len(top)==60 else ''}"
     else:
-        return f"PM Monitor {TODAY_PRETTY} — {len(news)} stories, no flags{" [DEMO]" if DEMO_MODE else ""}"
+        demo_tag = " [DEMO]" if DEMO_MODE else ""
+    return f"PM Monitor {TODAY_PRETTY} — {len(news)} stories, no flags{demo_tag}"
 
 
 # ════════════════════════════════════════════════════════════

@@ -74,6 +74,37 @@ class ArticleScoringTests(unittest.TestCase):
         self.assertEqual(deduped[0]["also_covered_by"], ["Decrypt"])
 
 
+class OfacParsingTests(unittest.TestCase):
+    def test_parse_ofac_crypto_entries_extracts_digital_wallet_ids(self):
+        xml = """<?xml version="1.0" encoding="UTF-8"?>
+        <sdnList>
+          <sdnEntry>
+            <uid>123</uid>
+            <lastName>Example Entity</lastName>
+            <idList>
+              <id>
+                <idType>Digital Currency Address - ETH</idType>
+                <idNumber>0xabc123</idNumber>
+              </id>
+            </idList>
+          </sdnEntry>
+          <sdnEntry>
+            <uid>456</uid>
+            <lastName>Non Crypto Entity</lastName>
+            <idList>
+              <id>
+                <idType>Passport</idType>
+                <idNumber>123456789</idNumber>
+              </id>
+            </idList>
+          </sdnEntry>
+        </sdnList>"""
+
+        entries = monitor.parse_ofac_crypto_entries(xml)
+
+        self.assertEqual(entries, {"123": {"name": "Example Entity", "wallet": "0xabc123"}})
+
+
 class WashTradingSignalTests(unittest.TestCase):
     def test_detect_repeated_counterparties_flags_repeated_pair(self):
         trades = [

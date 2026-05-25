@@ -16,6 +16,12 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
     def esc(s):
         return str(s or "").replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;")
 
+    def safe_url(url):
+        raw = str(url or "").strip()
+        if raw.startswith("https://") or raw.startswith("http://"):
+            return esc(raw)
+        return "#"
+
     def badge(text, color):
         colors = {
             "red":    ("#ff5c5c","#2a1010"),
@@ -53,7 +59,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
         wl = f'&nbsp;{badge("WATCHLIST","yellow")}' if item.get("watchlist_hit") else ""
         pub = f'<span style="color:#5a6080;font-size:11px">{esc(item.get("pub_date",""))}</span>'
         summary = f'<div style="color:#8b91a8;font-size:13px;line-height:1.5;margin:6px 0">{esc(item.get("summary",""))}</div>' if item.get("summary") and len(item.get("summary","")) > 20 else ""
-        link = f'<a href="{esc(item.get("link",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none">Read article ↗</a>' if item.get("link") else ""
+        link = f'<a href="{safe_url(item.get("link",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none">Read article ↗</a>' if item.get("link") else ""
         return f'''<tr><td style="padding:14px 0;border-bottom:1px solid #ffffff0a">
             <div style="margin-bottom:6px">{pri}{src}{also}{wl}&nbsp;&nbsp;{pub}</div>
             <div style="font-size:14px;font-weight:500;color:#f0f2f8;line-height:1.4;margin-bottom:4px">{esc(item.get("title",""))}</div>
@@ -85,7 +91,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
             </div>
             <div style="font-size:12px;color:#5a6080;margin-bottom:8px">Closes: {esc(market.get("end_date",""))} &nbsp;·&nbsp; Flagged: {esc(market.get("flagged_date",""))}</div>
             <div style="margin-top:6px;font-size:12px;color:{border_color};background:{risk_bg};padding:8px;border-radius:6px">{esc(market.get("alert_reason",""))}</div>
-            <a href="{esc(market.get("url",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none;display:inline-block;margin-top:8px">View on Polymarket ↗</a>
+            <a href="{safe_url(market.get("url",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none;display:inline-block;margin-top:8px">View on Polymarket ↗</a>
         </td></tr>'''
 
     def onchain_row(tx):
@@ -95,15 +101,15 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
             <div style="font-size:11px;color:#5a6080;font-family:monospace;margin-bottom:3px">From: {esc(tx.get("from",""))}</div>
             <div style="font-size:11px;color:#5a6080;font-family:monospace;margin-bottom:3px">To: {esc(tx.get("to",""))}</div>
             <div style="font-size:11px;color:#5a6080;margin-bottom:8px">{esc(tx.get("timestamp",""))}</div>
-            <a href="{esc(tx.get("polygonscan",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none;margin-right:12px">View TX ↗</a>
-            <a href="{esc(tx.get("from_link",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none">Wallet profile ↗</a>
+            <a href="{safe_url(tx.get("polygonscan",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none;margin-right:12px">View TX ↗</a>
+            <a href="{safe_url(tx.get("from_link",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none">Wallet profile ↗</a>
         </td></tr>'''
 
     def bill_row(b):
         return f'''<tr><td style="padding:12px 0;border-bottom:1px solid #ffffff0a">
             <table width="100%" cellpadding="0" cellspacing="0"><tr>
                 <td style="vertical-align:top">
-                    <a href="{esc(b.get("url",""))}" style="font-size:13px;font-weight:500;color:#00c2aa;text-decoration:none">{esc(b.get("bill",""))}</a>
+                    <a href="{safe_url(b.get("url",""))}" style="font-size:13px;font-weight:500;color:#00c2aa;text-decoration:none">{esc(b.get("bill",""))}</a>
                     <div style="font-size:11px;color:#5a6080;font-family:monospace;margin-top:2px">{esc(b.get("id",""))}</div>
                 </td>
                 <td style="text-align:right;vertical-align:top;max-width:260px;padding-left:12px">
@@ -120,7 +126,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
             <div style="font-size:13px;font-weight:500;color:#f0f2f8;margin-bottom:6px">{esc(a.get("title",""))}</div>
             <div style="font-size:12px;color:#8b91a8;margin-bottom:6px">{esc(a.get("summary",""))}</div>
             <div style="font-size:12px;color:#ffb547;margin-bottom:6px">⚠ {esc(a.get("note",""))}</div>
-            <a href="{esc(a.get("link",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none">View on UMA forum ↗</a>
+            <a href="{safe_url(a.get("link",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none">View on UMA forum ↗</a>
         </td></tr>'''
 
     # Build sections

@@ -19,6 +19,11 @@ from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 import email.utils
 
+try:
+    from defusedxml import ElementTree as SafeET
+except ImportError:  # pragma: no cover - requirements.txt installs defusedxml.
+    import xml.etree.ElementTree as SafeET
+
 # HTML email template
 from email_template import build_html_email
 # Wash trading detection
@@ -677,18 +682,7 @@ def fetch_ofac_new():
                            headers={"User-Agent":"Mozilla/5.0"}, timeout=20)
         if resp.status_code != 200:
             return []
-        soup    = BeautifulSoup(resp.text, "xml")
-        current = {}
-        for entry in soup.find_all("sdnEntry"):
-            uid  = entry.find("uid")
-            name = entry.find("lastName")
-            if not uid or not name:
-                continue
-            for id_tag in entry.find_all("id"):
-                id_type = id_tag.find("idType")
-                id_num  = id_tag.find("idNumber")
-                if id_type and id_num and "Digital" in (id_type.text or ""):
-                    current[uid.text] = {"name": name.text, "wallet": id_num.text}
+        current = parse_ofac_crypto_entries(resp.text)
         seen = set()
         if OFAC_SEEN.exists():
             seen = set(json.loads(OFAC_SEEN.read_text()))
@@ -705,6 +699,38 @@ def fetch_ofac_new():
         new_entries.append({"name": f"+ {overflow} more", "wallet": "See data/ofac_cache.json"})
     print(f"  New OFAC additions: {len(new_entries)}")
     return new_entries
+
+
+def _xml_tag_name(element):
+    return str(element.tag).rsplit("}", 1)[-1]
+
+
+def _child_text(element, tag_name):
+    for child in list(element):
+        if _xml_tag_name(child) == tag_name and child.text:
+            return child.text.strip()
+    return ""
+
+
+def parse_ofac_crypto_entries(xml_text):
+    """Parse OFAC SDN XML for digital wallet identifiers using a safe XML parser."""
+    root = SafeET.fromstring(xml_text)
+    current = {}
+    for entry in root.iter():
+        if _xml_tag_name(entry) != "sdnEntry":
+            continue
+        uid = _child_text(entry, "uid")
+        name = _child_text(entry, "lastName")
+        if not uid or not name:
+            continue
+        for id_tag in entry.iter():
+            if _xml_tag_name(id_tag) != "id":
+                continue
+            id_type = _child_text(id_tag, "idType")
+            id_num = _child_text(id_tag, "idNumber")
+            if id_type and id_num and "Digital" in id_type:
+                current[uid] = {"name": name, "wallet": id_num}
+    return current
 
 
 # ════════════════════════════════════════════════════════════

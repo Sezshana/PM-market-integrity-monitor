@@ -239,7 +239,22 @@ function showTab(id, el) {
 }
 
 function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(s||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function safeUrl(url) {
+  try {
+    const parsed = new URL(String(url||''), window.location.href);
+    if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
+      return esc(parsed.href);
+    }
+  } catch(e) {}
+  return '#';
 }
 
 function badge(text, color) {
@@ -265,7 +280,7 @@ function renderWalletRow(w, i) {
       <div>
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
           ${riskFlag}
-          <a href="${esc(w.polygonscan)}" target="_blank" class="wallet-addr">${esc(w.short)}</a>
+          <a href="${safeUrl(w.polygonscan)}" target="_blank" rel="noopener noreferrer" class="wallet-addr">${esc(w.short)}</a>
         </div>
         <div class="wallet-meta">First seen: ${esc(w.first_seen)} &nbsp;·&nbsp; Last seen: ${esc(w.last_seen)} ${amount ? '&nbsp;·&nbsp; '+esc(amount) : ''}</div>
         ${w.markets && w.markets.length ? `<div class="wallet-meta" style="color:var(--text3)">Markets: ${w.markets.slice(0,2).map(m=>esc(m.slice(0,40))).join(' · ')}</div>` : ''}
@@ -296,7 +311,7 @@ function renderMarketRow(m) {
         <span>Last flagged: ${esc(m.last_flagged)}</span>
         ${m.latest_volume ? `<span>Latest volume: $${Number(m.latest_volume).toLocaleString()}</span>` : ''}
         ${m.latest_prob ? `<span>${m.latest_prob}% probability</span>` : ''}
-        ${m.url ? `<a href="${esc(m.url)}" target="_blank" style="color:var(--teal);text-decoration:none;font-size:11px">View ↗</a>` : ''}
+        ${m.url ? `<a href="${safeUrl(m.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--teal);text-decoration:none;font-size:11px">View ↗</a>` : ''}
       </div>
     </div>`;
 }
@@ -311,7 +326,7 @@ function renderTodayMarket(m) {
         <span style="font-size:14px;font-weight:700;color:var(--red)">$${Number(m.volume_usd||0).toLocaleString()}</span>
         <span>${m.probability_pct||0}% prob</span>
         <span>Closes: ${esc(m.end_date||'')}</span>
-        ${m.url ? `<a href="${esc(m.url)}" target="_blank" style="color:var(--teal);text-decoration:none">View ↗</a>` : ''}
+        ${m.url ? `<a href="${safeUrl(m.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--teal);text-decoration:none">View ↗</a>` : ''}
       </div>
     </div>`;
 }
@@ -326,7 +341,7 @@ function renderTrendChart(trend) {
     const h     = max > 0 ? Math.max(4, Math.round((total/max)*52)) : 4;
     const date  = d.date ? d.date.slice(5) : '';
     return `<div class="bar-col">
-      <div class="bar" style="height:${h}px;background:${d.suspicious_markets>0?'var(--red)':'var(--teal)'}44;border-top:2px solid ${d.suspicious_markets>0?'var(--red)':'var(--teal)'}" title="${d.date}: ${total} alerts"></div>
+      <div class="bar" style="height:${h}px;background:${d.suspicious_markets>0?'var(--red)':'var(--teal)'}44;border-top:2px solid ${d.suspicious_markets>0?'var(--red)':'var(--teal)'}" title="${esc(d.date)}: ${esc(total)} alerts"></div>
       <div class="bar-date">${date}</div>
     </div>`;
   }).join('');
@@ -429,7 +444,7 @@ async function loadAll() {
             </div>
             <div class="news-title">${esc(item.title||'')}</div>
             <div class="news-summary">${esc(item.summary||'')}</div>
-            ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="news-link">Read article ↗</a>` : ''}
+            ${item.link ? `<a href="${safeUrl(item.link)}" target="_blank" rel="noopener noreferrer" class="news-link">Read article ↗</a>` : ''}
           </div>`).join('')
       : '<div class="empty">No high priority news today</div>';
 
@@ -444,7 +459,7 @@ async function loadAll() {
             </div>
             <div class="news-title">${esc(item.title||'')}</div>
             <div class="news-summary">${esc(item.summary||'')}</div>
-            ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="news-link">Read article ↗</a>` : ''}
+            ${item.link ? `<a href="${safeUrl(item.link)}" target="_blank" rel="noopener noreferrer" class="news-link">Read article ↗</a>` : ''}
           </div>`).join('')
       : '<div class="empty">No general news today</div>';
 
@@ -453,7 +468,7 @@ async function loadAll() {
       ? bills.map(b => `
           <div class="bill-row">
             <div>
-              <a href="${esc(b.url||'')}" target="_blank" class="bill-name">${esc(b.bill||'')}</a>
+              <a href="${safeUrl(b.url||'')}" target="_blank" rel="noopener noreferrer" class="bill-name">${esc(b.bill||'')}</a>
               <div class="bill-id">${esc(b.id||'')}</div>
             </div>
             <div>
@@ -486,7 +501,7 @@ async function loadAll() {
       ? wins.map(w => `
           <div class="win-row">
             <div>
-              <a href="${esc(w.polygonscan||'')}" target="_blank" style="font-size:12px;font-family:monospace;color:var(--teal);text-decoration:none">${esc((w.wallet||'').slice(0,20))}...</a>
+              <a href="${safeUrl(w.polygonscan||'')}" target="_blank" rel="noopener noreferrer" style="font-size:12px;font-family:monospace;color:var(--teal);text-decoration:none">${esc((w.wallet||'').slice(0,20))}...</a>
               <div style="font-size:11px;color:var(--text2);margin-top:3px">${w.trades} tracked long-shot trades</div>
             </div>
             <div><div class="win-rate-pct">${w.win_rate}%</div><div style="font-size:10px;color:var(--text3)">win rate</div></div>

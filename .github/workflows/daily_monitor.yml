@@ -2,11 +2,18 @@ name: Polymarket OSINT Daily Monitor
 
 on:
   schedule:
-    - cron: '0 11 * * *'
+    # Avoid top-of-hour scheduling and add a backup run because GitHub cron
+    # jobs can be delayed or occasionally skipped under load.
+    - cron: '17 11 * * *'
+    - cron: '47 12 * * *'
   workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: daily-monitor
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -14,6 +21,7 @@ permissions:
 jobs:
   monitor:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -32,6 +40,22 @@ jobs:
         env:
           POLYGONSCAN_KEY: ${{ secrets.POLYGONSCAN_KEY }}
         run: python aggregator.py
+      - name: Run diagnostics
+        if: always()
+        env:
+          ALERT_EMAIL_CONFIGURED: ${{ secrets.ALERT_EMAIL != '' }}
+          SMTP_PASSWORD_CONFIGURED: ${{ secrets.SMTP_PASSWORD != '' }}
+        run: |
+          today="$(date -u +%F)"
+          echo "event=${{ github.event_name }}"
+          echo "ref=${{ github.ref }}"
+          echo "sha=${{ github.sha }}"
+          echo "alert_email_configured=${ALERT_EMAIL_CONFIGURED}"
+          echo "smtp_password_configured=${SMTP_PASSWORD_CONFIGURED}"
+          echo "report_json_exists=$([ -f "output/report_${today}.json" ] && echo true || echo false)"
+          echo "report_markdown_exists=$([ -f "output/report_${today}.md" ] && echo true || echo false)"
+          echo "aggregate_intelligence_exists=$([ -f "data/aggregate_intelligence.json" ] && echo true || echo false)"
+          git status --short output data || true
       - name: Save all outputs
         run: |
           git config --local user.email "action@github.com"

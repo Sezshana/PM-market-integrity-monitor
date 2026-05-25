@@ -61,7 +61,15 @@ Runs every morning at 7 AM EDT and delivers a structured intelligence digest cov
 
 ```
 polymarket-osint-monitor/
-├── monitor.py              # Main script — all detection and reporting logic
+├── monitor.py              # Daily orchestration entry point
+├── aggregator.py           # Cross-day aggregate dashboard state
+├── wash_trading_module.py  # Backwards-compatible wash detector entry point
+├── src/
+│   └── polymarket_monitor/
+│       ├── clients/        # RSS, Polymarket, OFAC, UMA, Congress, on-chain clients
+│       ├── detectors/      # Market review and wash-trading detector logic
+│       ├── reporting/      # Report schema helpers
+│       └── storage/        # JSON state helpers
 ├── requirements.txt        # Python dependencies
 ├── watchlist.txt           # Keywords, wallets, handles to monitor (customizable)
 ├── dashboard.html          # Local web dashboard — reads daily JSON reports

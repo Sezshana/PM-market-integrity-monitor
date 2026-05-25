@@ -7,8 +7,13 @@ from daily JSON reports. Surfaces patterns invisible in single-day views.
 import os
 import json
 import datetime
+import sys
 from pathlib import Path
 from collections import defaultdict
+
+SRC_DIR = Path(__file__).resolve().parent / "src"
+if SRC_DIR.exists() and str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 TODAY     = datetime.date.today().isoformat()
 OUTPUT    = Path("output")
@@ -373,6 +378,9 @@ def run_aggregator():
 
     print(f"  Done — {aggregate['summary_stats']}")
     return aggregate
+
+
+from polymarket_monitor.storage.json_store import load_json, save_json
 
 
 if __name__ == "__main__":

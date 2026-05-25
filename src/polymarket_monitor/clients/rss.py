@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime
 import email.utils
+import logging
 import re
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,7 @@ from bs4 import BeautifulSoup
 import feedparser
 
 from polymarket_monitor import config
+from polymarket_monitor.source_status import STATUS_FAILED, STATUS_OK, mark_source
 from polymarket_monitor.storage.json_store import (
     load_seen_articles,
     load_story_threads,
@@ -103,6 +105,7 @@ def load_watchlist(path: Path = Path("watchlist.txt")) -> dict[str, list[str]]:
 
 
 WATCHLIST = load_watchlist()
+logger = logging.getLogger(__name__)
 
 
 def check_watchlist(text: str) -> list[str]:
@@ -159,6 +162,7 @@ def save_seen_articles(urls: set[str]) -> None:
 
 def fetch_rss(feeds: dict[str, str], keywords: list[str]) -> list[dict[str, Any]]:
     raw = []
+    errors = []
     for source, url in feeds.items():
         try:
             feed = feedparser.parse(url)
@@ -195,6 +199,8 @@ def fetch_rss(feeds: dict[str, str], keywords: list[str]) -> list[dict[str, Any]
                     "also_covered_by": [],
                 })
         except Exception as e:
+            errors.append(source)
+            logger.warning("RSS fetch failed for %s: %s", source, e)
             print(f"  RSS error [{source}]: {e}")
 
     deduped = deduplicate(raw)
@@ -204,6 +210,11 @@ def fetch_rss(feeds: dict[str, str], keywords: list[str]) -> list[dict[str, Any]
         print("  DEMO MODE: bypassing seen articles cache")
 
     fresh = sorted(fresh, key=lambda x: x["score"], reverse=True)
+    status = STATUS_FAILED if errors and not raw else STATUS_OK
+    detail = f"{len(raw)} raw, {len(fresh)} fresh"
+    if errors:
+        detail += f"; errors: {', '.join(errors)}"
+    mark_source("RSS", status, detail=detail, records=len(fresh))
     print(f"  RSS: {len(raw)} raw -> {len(deduped)} unique -> {len(fresh)} new today")
     return fresh
 

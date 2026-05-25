@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any
 
 import requests
@@ -13,6 +14,9 @@ except ImportError:  # pragma: no cover
     import xml.etree.ElementTree as SafeET
 
 from polymarket_monitor import config
+from polymarket_monitor.source_status import STATUS_FAILED, STATUS_OK, get_source_status, mark_source
+
+logger = logging.getLogger(__name__)
 
 
 def _xml_tag_name(element: Any) -> str:
@@ -55,6 +59,7 @@ def fetch_ofac_new() -> list[dict[str, str]]:
             timeout=20,
         )
         if resp.status_code != 200:
+            mark_source("OFAC", STATUS_FAILED, detail=f"HTTP {resp.status_code}", records=0)
             return []
         current = parse_ofac_crypto_entries(resp.text)
         seen = set()
@@ -66,11 +71,15 @@ def fetch_ofac_new() -> list[dict[str, str]]:
         config.OFAC_SEEN.write_text(json.dumps(list(current.keys()), indent=2))
         config.OFAC_CACHE.write_text(json.dumps(current, indent=2))
     except Exception as e:
+        logger.warning("OFAC collection failed: %s", e)
+        mark_source("OFAC", STATUS_FAILED, detail=str(e), records=0)
         print(f"  OFAC error: {e}")
     if len(new_entries) > 10:
         overflow = len(new_entries) - 10
         new_entries = new_entries[:10]
         new_entries.append({"name": f"+ {overflow} more", "wallet": "See data/ofac_cache.json"})
     print(f"  New OFAC additions: {len(new_entries)}")
+    if "OFAC" not in get_source_status():
+        mark_source("OFAC", STATUS_OK, detail=f"{len(new_entries)} new entries", records=len(new_entries))
     return new_entries
 

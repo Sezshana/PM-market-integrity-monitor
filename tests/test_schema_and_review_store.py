@@ -15,6 +15,7 @@ from polymarket_monitor.reporting.schema import (
     build_daily_report,
 )
 from polymarket_monitor.storage.review_store import ReviewStore, ReviewedAlert
+from polymarket_monitor.storage.json_store import load_json, save_json
 
 
 class ReportSchemaTests(unittest.TestCase):
@@ -70,14 +71,25 @@ class ReportSchemaTests(unittest.TestCase):
             narrative="No criteria matched.",
             developing_stories=[],
             wash_reports=[],
+            source_coverage={"RSS": {"status": "OK"}},
         )
 
         daily_report = DailyReport(**report)
         self.assertEqual(daily_report.unique_news, 0)
         self.assertEqual(daily_report.narrative, "No criteria matched.")
+        self.assertEqual(daily_report.source_coverage["RSS"]["status"], "OK")
 
 
 class ReviewStoreTests(unittest.TestCase):
+    def test_json_store_loads_defaults_and_round_trips_data(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "state.json"
+            self.assertEqual(load_json(path, {"missing": True}), {"missing": True})
+
+            save_json(path, {"ok": True, "count": 2})
+
+            self.assertEqual(load_json(path, {}), {"ok": True, "count": 2})
+
     def test_review_store_upserts_and_updates_alert_status(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             store = ReviewStore(Path(tmpdir) / "reviewed_alerts.sqlite3")

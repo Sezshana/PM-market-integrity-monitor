@@ -25,6 +25,7 @@ REPORT_TOP_LEVEL_FIELDS = {
     "wash_trading_reports",
     "developing_stories",
     "narrative",
+    "source_coverage",
 }
 
 
@@ -142,6 +143,7 @@ class DailyReport:
     wash_trading_reports: list[dict[str, Any]]
     developing_stories: list[dict[str, Any]]
     narrative: str
+    source_coverage: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -170,6 +172,7 @@ def build_daily_report(
     narrative: str,
     developing_stories: list[dict[str, Any]],
     wash_reports: list[dict[str, Any]] | None = None,
+    source_coverage: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     report = DailyReport(
         date=config.TODAY,
@@ -188,6 +191,7 @@ def build_daily_report(
         wash_trading_reports=normalize_wash_reports(wash_reports),
         developing_stories=developing_stories,
         narrative=narrative,
+        source_coverage=source_coverage or {},
     )
     return report.to_dict()
 

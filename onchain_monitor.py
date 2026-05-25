@@ -3,8 +3,12 @@ Polymarket On-Chain Monitor
 Replaces Dune with Polygonscan API — free, reliable, no polling needed.
 Identifies flagged wallets, funding sources, new vs experienced traders,
 and cross-references against OFAC and watchlist.
+
+Legacy note: daily runtime now uses src/polymarket_monitor/clients/onchain.py.
+This module remains as a backwards-compatible exploratory helper.
 """
 
+import os
 import requests
 import json
 import datetime
@@ -19,7 +23,7 @@ POLYMARKET_CONTRACTS = [
     "0xd91E80cF2EA7be683CE154334e14859001c4A0b7",  # Neg Risk Adapter
 ]
 
-POLYGONSCAN_KEY = "YourEtherscanAPIKeyHere"  # Set as POLYGONSCAN_KEY in GitHub Secrets (use your Etherscan key)
+POLYGONSCAN_KEY = os.environ.get("POLYGONSCAN_KEY", "")
 
 LARGE_TX_THRESHOLD = 10_000   # Flag transactions over $10k USDC
 NEW_WALLET_DAYS    = 30       # Flag wallets created less than 30 days ago
@@ -27,7 +31,6 @@ HIGH_FREQ_THRESHOLD = 50      # Flag wallets with 50+ Polymarket transactions
 
 
 def get_polygonscan_key():
-    import os
     return os.environ.get("POLYGONSCAN_KEY", "")  # Your Etherscan API key works here
 
 

@@ -34,6 +34,7 @@ from email_template import build_html_email
 # Wash trading detection
 from wash_trading_module import run_wash_trading_detection, format_wash_trading_email_section
 from polymarket_monitor.reporting.schema import build_daily_report
+from polymarket_monitor.source_status import get_source_status, reset_source_status
 
 # On-chain monitoring via Polygonscan/Etherscan
 POLYGONSCAN_KEY = os.environ.get("POLYGONSCAN_KEY", "")
@@ -1126,6 +1127,7 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         narrative=narrative,
         developing_stories=developing_stories,
         wash_reports=wash_reports,
+        source_coverage=get_source_status(),
     )
     with open(f"output/report_{TODAY}.json","w") as f:
         json.dump(report, f, indent=2)
@@ -1403,6 +1405,7 @@ from polymarket_monitor.storage.json_store import load_win_rate, save_win_rate
 
 def main():
     print(f"Polymarket OSINT Monitor v8 — {TODAY}")
+    reset_source_status()
 
     print("1. RSS feeds (with cross-day deduplication and priority scoring)...")
     news = fetch_rss(RSS_FEEDS, KEYWORDS)

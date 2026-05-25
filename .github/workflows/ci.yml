@@ -28,8 +28,8 @@ jobs:
 
       - name: Run unit tests when present
         run: |
-          if [ -d tests ]; then
+          if compgen -G "tests/test*.py" > /dev/null || compgen -G "tests/**/test*.py" > /dev/null; then
             python3 -m unittest discover -s tests
           else
-            echo "No tests directory yet; skipping unit tests."
+            echo "No unit test files yet; skipping unit tests."
           fi

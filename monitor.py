@@ -481,8 +481,8 @@ def fetch_polymarket_suspicious_trades():
                     # Determine insider trade risk level
                     if is_low_risk and not is_high_risk:
                         risk_level = "LOW"
-                        # Only flag low-risk markets if extremely high volume
-                        if volume < HIGH_VOLUME_THRESHOLD:
+                        # Only flag low-risk markets if wash-trading-scale volume
+                        if volume < 50_000_000:  # $50M threshold for low-risk markets
                             continue
                     elif is_high_risk:
                         risk_level = "HIGH"
@@ -502,7 +502,7 @@ def fetch_polymarket_suspicious_trades():
                     elif risk_level == "HIGH":
                         alert_reason = f"HIGH INSIDER RISK — ${volume:,.0f} volume on {prob:.1f}% probability. Long-term market but high-risk category."
                     elif risk_level == "LOW":
-                        alert_reason = f"UNUSUALLY HIGH VOLUME — ${volume:,.0f} on a low insider-risk market. Check for wash trading or market manipulation."
+                        alert_reason = f"WASH TRADING CHECK — ${volume:,.0f} on a market where insider trading is unlikely (sports/election). Volume this high suggests possible wash trading or coordinated manipulation rather than information advantage."
                     else:
                         alert_reason = f"${volume:,.0f} volume on {prob:.1f}% probability outcome. Moderate insider risk."
 

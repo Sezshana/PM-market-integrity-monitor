@@ -1,4 +1,4 @@
-requests==2.31.0
-feedparser==6.0.10
-beautifulsoup4==4.12.2
-lxml==4.9.3
+requests==2.34.2
+feedparser==6.0.12
+beautifulsoup4==4.14.3
+defusedxml==0.7.1

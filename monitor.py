@@ -9,6 +9,7 @@ import os
 import json
 import datetime
 import re
+import sys
 import time
 import requests
 from bs4 import BeautifulSoup
@@ -19,10 +20,20 @@ from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 import email.utils
 
+SRC_DIR = Path(__file__).resolve().parent / "src"
+if SRC_DIR.exists() and str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+try:
+    from defusedxml import ElementTree as SafeET
+except ImportError:  # pragma: no cover - requirements.txt installs defusedxml.
+    import xml.etree.ElementTree as SafeET
+
 # HTML email template
 from email_template import build_html_email
 # Wash trading detection
 from wash_trading_module import run_wash_trading_detection, format_wash_trading_email_section
+from polymarket_monitor.reporting.schema import build_daily_report
 
 # On-chain monitoring via Polygonscan/Etherscan
 POLYGONSCAN_KEY = os.environ.get("POLYGONSCAN_KEY", "")
@@ -677,18 +688,7 @@ def fetch_ofac_new():
                            headers={"User-Agent":"Mozilla/5.0"}, timeout=20)
         if resp.status_code != 200:
             return []
-        soup    = BeautifulSoup(resp.text, "xml")
-        current = {}
-        for entry in soup.find_all("sdnEntry"):
-            uid  = entry.find("uid")
-            name = entry.find("lastName")
-            if not uid or not name:
-                continue
-            for id_tag in entry.find_all("id"):
-                id_type = id_tag.find("idType")
-                id_num  = id_tag.find("idNumber")
-                if id_type and id_num and "Digital" in (id_type.text or ""):
-                    current[uid.text] = {"name": name.text, "wallet": id_num.text}
+        current = parse_ofac_crypto_entries(resp.text)
         seen = set()
         if OFAC_SEEN.exists():
             seen = set(json.loads(OFAC_SEEN.read_text()))
@@ -705,6 +705,38 @@ def fetch_ofac_new():
         new_entries.append({"name": f"+ {overflow} more", "wallet": "See data/ofac_cache.json"})
     print(f"  New OFAC additions: {len(new_entries)}")
     return new_entries
+
+
+def _xml_tag_name(element):
+    return str(element.tag).rsplit("}", 1)[-1]
+
+
+def _child_text(element, tag_name):
+    for child in list(element):
+        if _xml_tag_name(child) == tag_name and child.text:
+            return child.text.strip()
+    return ""
+
+
+def parse_ofac_crypto_entries(xml_text):
+    """Parse OFAC SDN XML for digital wallet identifiers using a safe XML parser."""
+    root = SafeET.fromstring(xml_text)
+    current = {}
+    for entry in root.iter():
+        if _xml_tag_name(entry) != "sdnEntry":
+            continue
+        uid = _child_text(entry, "uid")
+        name = _child_text(entry, "lastName")
+        if not uid or not name:
+            continue
+        for id_tag in entry.iter():
+            if _xml_tag_name(id_tag) != "id":
+                continue
+            id_type = _child_text(id_tag, "idType")
+            id_num = _child_text(id_tag, "idNumber")
+            if id_type and id_num and "Digital" in id_type:
+                current[uid] = {"name": name, "wallet": id_num}
+    return current
 
 
 # ════════════════════════════════════════════════════════════
@@ -1083,24 +1115,18 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
 
 def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 bills, win_alerts, weekly, narrative, developing_stories, wash_reports=None):
-    report = {
-        "date":                TODAY,
-        "unique_news":         len(news),
-        "suspicious_markets":  len(suspicious_markets),
-        "large_trades":        len(large_trades),
-        "uma_alerts":          len(uma),
-        "ofac_new":            len(ofac),
-        "alerts":              news,
-        "suspicious_market_data": suspicious_markets,
-        "large_trade_data":    large_trades,
-        "onchain_txs":         onchain_txs,
-        "uma_governance":      uma,
-        "ofac_additions":      ofac,
-        "bill_updates":        bills,
-        "wash_trading_reports": wash_reports or [],
-        "developing_stories":  developing_stories,
-        "narrative":           narrative,
-    }
+    report = build_daily_report(
+        news=news,
+        suspicious_markets=suspicious_markets,
+        large_trades=large_trades,
+        onchain_txs=onchain_txs,
+        uma=uma,
+        ofac=ofac,
+        bills=bills,
+        narrative=narrative,
+        developing_stories=developing_stories,
+        wash_reports=wash_reports,
+    )
     with open(f"output/report_{TODAY}.json","w") as f:
         json.dump(report, f, indent=2)
 
@@ -1333,6 +1359,42 @@ def get_wallet_tx_count(address):
             return len(data.get("result", []))
     except: pass
     return 999
+
+
+# Live implementations extracted into the package. The top-level functions are
+# kept above for compatibility/history while runtime entry points call these
+# package functions.
+from polymarket_monitor.clients.congress import check_congress_bills
+from polymarket_monitor.clients.ofac import (
+    _child_text,
+    _xml_tag_name,
+    fetch_ofac_new,
+    parse_ofac_crypto_entries,
+)
+from polymarket_monitor.clients.onchain import fetch_onchain_large_txs
+from polymarket_monitor.clients.polygonscan import get_wallet_age, get_wallet_tx_count
+from polymarket_monitor.clients.polymarket import (
+    fetch_polymarket_recent_large_trades,
+    fetch_polymarket_suspicious_trades,
+)
+from polymarket_monitor.clients.rss import (
+    check_watchlist,
+    clean_text,
+    deduplicate,
+    fetch_rss,
+    load_seen_articles,
+    load_story_threads,
+    load_watchlist,
+    parse_date,
+    save_seen_articles,
+    save_story_threads,
+    score_article,
+    stories_are_similar,
+    title_fingerprint,
+    update_story_threads,
+)
+from polymarket_monitor.clients.uma import fetch_uma_governance
+from polymarket_monitor.storage.json_store import load_win_rate, save_win_rate
 
 
 # ════════════════════════════════════════════════════════════

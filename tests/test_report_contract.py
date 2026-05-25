@@ -206,6 +206,16 @@ class DashboardContractTests(unittest.TestCase):
         self.assertEqual(missing_report_fields, [])
         self.assertEqual(missing_aggregate_fields, [])
 
+    def test_dashboard_escapes_attribute_quotes_and_sanitizes_links(self):
+        dashboard = Path("dashboard.html").read_text()
+
+        self.assertIn("function safeUrl(url)", dashboard)
+        self.assertIn("parsed.protocol === 'https:' || parsed.protocol === 'http:'", dashboard)
+        self.assertIn("rel=\"noopener noreferrer\"", dashboard)
+        self.assertIn(".replace(/\"/g,'&quot;')", dashboard)
+        self.assertIn(".replace(/'/g,'&#39;')", dashboard)
+        self.assertNotIn('href="${esc(', dashboard)
+
 
 if __name__ == "__main__":
     unittest.main()

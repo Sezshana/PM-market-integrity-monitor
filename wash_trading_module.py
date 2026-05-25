@@ -13,9 +13,14 @@ Key signals:
 import os
 import json
 import datetime
+import sys
 import requests
 from pathlib import Path
 from collections import defaultdict
+
+SRC_DIR = Path(__file__).resolve().parent / "src"
+if SRC_DIR.exists() and str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 POLYGONSCAN_KEY  = os.environ.get("POLYGONSCAN_KEY", "")
 TODAY            = datetime.date.today().isoformat()
@@ -374,3 +379,17 @@ def format_wash_trading_email_section(wash_reports):
         lines.append("\n" + "-" * 40)
 
     return "\n".join(lines)
+
+
+# Runtime implementations live in the package; keep this module as a backwards
+# compatible import surface for monitor.py and tests.
+from polymarket_monitor.detectors.wash_trading import (
+    analyze_market_for_wash_trading,
+    check_shared_funding_source,
+    detect_near_zero_net_position,
+    detect_repeated_counterparties,
+    detect_synchronized_timing,
+    fetch_market_trades,
+    format_wash_trading_email_section,
+    run_wash_trading_detection,
+)

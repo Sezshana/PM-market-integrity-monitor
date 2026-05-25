@@ -1,10 +1,8 @@
 name: Deploy Dashboard to GitHub Pages
 
 on:
-  push:
-    paths:
-      - 'output/**'
-      - 'dashboard.html'
+  # GitHub Pages is optional for this repo. Keep deployment manual so pushes
+  # do not fail in repositories where Pages has not been enabled yet.
   workflow_dispatch:
 
 permissions:

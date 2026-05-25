@@ -1,0 +1,246 @@
+{
+  "date": "2026-05-25",
+  "unique_news": 0,
+  "suspicious_markets": 6,
+  "large_trades": 0,
+  "uma_alerts": 14,
+  "ofac_new": 0,
+  "alerts": [],
+  "suspicious_market_data": [
+    {
+      "market_id": "561234",
+      "question": "Will Marco Rubio win the 2028 US Presidential Election?",
+      "outcome": "Yes",
+      "probability_pct": 12.6,
+      "volume_usd": 9981107.0,
+      "url": "https://polymarket.com/event/will-marco-rubio-win-the-2028-us-presidential-election",
+      "end_date": "2028-11-07",
+      "flagged_date": "2026-05-25",
+      "alert_reason": "$9,981,107 volume on 12.6% probability outcome"
+    },
+    {
+      "market_id": "898418",
+      "question": "Will Lance Stroll be the 2026 F1 Drivers' Champion?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 9924086.0,
+      "url": "https://polymarket.com/event/will-lance-stroll-be-the-2026-f1-drivers-champion",
+      "end_date": "2026-12-06",
+      "flagged_date": "2026-05-25",
+      "alert_reason": "$9,924,086 volume on 0.1% probability outcome"
+    },
+    {
+      "market_id": "1193230",
+      "question": "Will An\u017ee Logar be the next Prime Minister of Slovenia?",
+      "outcome": "Yes",
+      "probability_pct": 0.9,
+      "volume_usd": 996963.0,
+      "url": "https://polymarket.com/event/will-ane-logar-be-the-next-prime-minister-of-slovenia",
+      "end_date": "2026-03-22",
+      "flagged_date": "2026-05-25",
+      "alert_reason": "$996,963 volume on 0.9% probability outcome"
+    },
+    {
+      "market_id": "2143000",
+      "question": "Will Hyperliquid dip to $24 in May?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99425.0,
+      "url": "https://polymarket.com/event/will-hyperliquid-dip-to-24-in-may",
+      "end_date": "2026-06-01",
+      "flagged_date": "2026-05-25",
+      "alert_reason": "$99,425 volume on 0.1% probability outcome"
+    },
+    {
+      "market_id": "1067187",
+      "question": "Xi Jinping divorce before 2027?",
+      "outcome": "Yes",
+      "probability_pct": 1.4,
+      "volume_usd": 99249.0,
+      "url": "https://polymarket.com/event/xi-jinping-divorce-before-2027",
+      "end_date": "2026-12-31",
+      "flagged_date": "2026-05-25",
+      "alert_reason": "$99,249 volume on 1.4% probability outcome"
+    },
+    {
+      "market_id": "1373645",
+      "question": "Ink FDV above $250M one day after launch?",
+      "outcome": "No",
+      "probability_pct": 15.0,
+      "volume_usd": 99214.0,
+      "url": "https://polymarket.com/event/ink-fdv-above-250m-one-day-after-launch-949",
+      "end_date": "2027-01-01",
+      "flagged_date": "2026-05-25",
+      "alert_reason": "$99,214 volume on 15.0% probability outcome"
+    }
+  ],
+  "large_trade_data": [],
+  "uma_governance": [
+    {
+      "title": "Partnership Proposal: Majority.Fun",
+      "link": "https://discourse.uma.xyz/t/partnership-proposal-majority-fun/2236",
+      "published": "Nov 06, 2025",
+      "summary": "Name of Project: Majority Proposer: Mr. Bahama Proposal Summary The Majority team is seeking a formal partnership with UMA to integrate its oracle with AI-driven mechanisms for crowdsourcing unbiased ",
+      "note": "Systematic governance abuse pattern \u2014 this affects resolution integrity across all markets.",
+      "alert_type": "GOVERNANCE ABUSE"
+    },
+    {
+      "title": "UMIP-189: Approve new ManagedOptimisticOracleV2 Deployment",
+      "link": "https://discourse.uma.xyz/t/umip-189-approve-new-managedoptimisticoraclev2-deployment/2229",
+      "published": "Jul 29, 2025",
+      "summary": "UMIP-189 UMIP Title Approve new ManagedOptimisticOracleV2 Deployment Authors Lee Poettcker Created July 29, 2025 Summary This proposal introduces the ManagedOptimisticOracleV2, which is a modified ver",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "\u26a0\ufe0f Call for Slashing: Coordinated Bad-Faith P4 Votes After July 1 Deadline (Zelenskyy Suit Dispute)",
+      "link": "https://discourse.uma.xyz/t/call-for-slashing-coordinated-bad-faith-p4-votes-after-july-1-deadline-zelenskyy-suit-dispute/2225",
+      "published": "Jul 04, 2025",
+      "summary": "Early P4 Lead \u2013 Potential Bad-Faith Voting in Zelenskyy Suit Dispute A significant number of voters in the ongoing Zelenskyy Suit dispute (Polymarket) have currently voted for P4 (\u201cToo Early\u201d), despit",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "Proposal: Penalize Bad-Faith P4 \u2018Too Early\u2019 Votes to Prevent Resolution Abuse",
+      "link": "https://discourse.uma.xyz/t/proposal-penalize-bad-faith-p4-too-early-votes-to-prevent-resolution-abuse/2208",
+      "published": "Jun 28, 2025",
+      "summary": "Proposal to Improve UMA Resolution System: Penalize Misuse of P4 \u2013 \u201cToo Early\u201d TL;DR: The P4 \u2013 \u201cToo Early\u201d option is currently being abused to delay market resolution even when the conditions are clea",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "Reducing Proposal Disputes Through a Dual-Token Proposal Structure",
+      "link": "https://discourse.uma.xyz/t/reducing-proposal-disputes-through-a-dual-token-proposal-structure/2196",
+      "published": "Jun 05, 2025",
+      "summary": "Summary This proposal introduces an alternative to raising the finalFee by requiring proposers to pay the finalFee in UMA while keeping the bond currency set by the integrator, typically USDC. For exa",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "UMIP-188: Increase Final Fee",
+      "link": "https://discourse.uma.xyz/t/umip-188-increase-final-fee/2194",
+      "published": "Jun 04, 2025",
+      "summary": "Summary This proposal is to increase the finalFee (a component of proposal and disputing bonds) from $250 to $500. The number of dispute resolution votes are currently a strain on gas rebate costs and",
+      "note": "Systematic governance abuse pattern \u2014 this affects resolution integrity across all markets.",
+      "alert_type": "GOVERNANCE ABUSE"
+    },
+    {
+      "title": "Clarification on MLB May 6 Market Resolution",
+      "link": "https://discourse.uma.xyz/t/clarification-on-mlb-may-6-market-resolution/2190",
+      "published": "May 09, 2025",
+      "summary": "Dear UMA community, I would like to provide additional evidence regarding the MLB market on Polymarket dated May 6, specifically concerning the game between the Cleveland Guardians and Washington Nati",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "Increase SPAT to 65%",
+      "link": "https://discourse.uma.xyz/t/increase-spat-to-65/2177",
+      "published": "Apr 10, 2025",
+      "summary": "Summary This proposal modifies the Settlement Price Approval Threshold (SPAT) parameter within UMA\u2019s VotingV2 contract from 50% to 65%. SPAT is the percentage of staked UMA that needs to agree for a d",
+      "note": "Systematic governance abuse pattern \u2014 this affects resolution integrity across all markets.",
+      "alert_type": "GOVERNANCE ABUSE"
+    },
+    {
+      "title": "UMA Tokenomics",
+      "link": "https://discourse.uma.xyz/t/uma-tokenomics/2143",
+      "published": "Feb 11, 2025",
+      "summary": "Dear Hart, I hope you\u2019re doing well. I have been investing in UMA for the past four years and have remained a committed supporter, consistently participating in governance. As one of the Top 10 all-ti",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "UMIP 183 - add MULTIPLE_VALUES as an approved price identifier",
+      "link": "https://discourse.uma.xyz/t/umip-183-add-multiple-values-as-an-approved-price-identifier/2138",
+      "published": "Jan 09, 2025",
+      "summary": "The DVM should support the below new price identifer for Optimistic Oracle V2 requests. This UMIP is planned to be used by Polymarket to request the score results of sports games. This will allow many",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "Going Mainstream with KPI ^Tokens (Initial Research | Part One)",
+      "link": "https://discourse.uma.xyz/t/going-mainstream-with-kpi-tokens-initial-research-part-one/2124",
+      "published": "Jul 15, 2024",
+      "summary": "The purpose of this post (Part One) is to gain feedback from the UMA community and Risk Labs team. A more formal follow-up proposal (Part Two) will be submitted in the following days/weeks. Video walk",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "Funding Request: Oya Protocol MVP",
+      "link": "https://discourse.uma.xyz/t/funding-request-oya-protocol-mvp/2062",
+      "published": "Nov 22, 2023",
+      "summary": "Name of Project: Oya Protocol Proposers: Vanessa Conyers vanessa@oya.market John Shutt john@oya.market Proposal Summary Provide a revocable stream of funding to help build the MVP of Oya Protocol, whi",
+      "note": "Polymarket market resolution dispute \u2014 check if any voter holds a position in this market.",
+      "alert_type": "POLYMARKET DISPUTE"
+    },
+    {
+      "title": "Reclaim Protocol Funding Proposal",
+      "link": "https://discourse.uma.xyz/t/reclaim-protocol-funding-proposal/2051",
+      "published": "Oct 11, 2023",
+      "summary": "Name of Project: Reclaim Protocol Proposer: Srijith (Srijith@creatoros.co, Reclaim team), Ruchil (ruchil@creatoros.co, Reclaim team) Proposal Summary To integrate Reclaim Protocol, a zk based data ver",
+      "note": "Systematic governance abuse pattern \u2014 this affects resolution integrity across all markets.",
+      "alert_type": "GOVERNANCE ABUSE"
+    },
+    {
+      "title": "UMA-GYSR Delegator Pool Proposal",
+      "link": "https://discourse.uma.xyz/t/uma-gysr-delegator-pool-proposal/2032",
+      "published": "Aug 23, 2023",
+      "summary": "Name of Project: UMA-GYSR Delegator Pool Proposer: Deadcoin, Neondaemon, Pumpedlunch, Robbie (SuperUMAns) ; Devin (GYSR/Passage Labs); Bananachain (SuperUMAns, B Labs) Proposal Summary To set up a UMA",
+      "note": "Systematic governance abuse pattern \u2014 this affects resolution integrity across all markets.",
+      "alert_type": "GOVERNANCE ABUSE"
+    }
+  ],
+  "ofac_additions": [],
+  "bill_updates": [
+    {
+      "bill": "PREDICT Act",
+      "id": "HR8076",
+      "latest_action": "Referred to the Committee on Oversight and Government Reform, and in addition to the Committees on House Administration, and the Judiciary, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/8076"
+    },
+    {
+      "bill": "End Prediction Market Corruption Act",
+      "id": "S4017",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-05",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4017"
+    },
+    {
+      "bill": "Prediction Markets Security and Integrity Act",
+      "id": "S4060",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-11",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4060"
+    },
+    {
+      "bill": "Public Integrity in Financial Prediction Markets Act",
+      "id": "S4188",
+      "latest_action": "Read twice and referred to the Committee on Homeland Security and Governmental Affairs.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4188"
+    },
+    {
+      "bill": "STOP Corrupt Bets Act",
+      "id": "S4226",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-26",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4226"
+    },
+    {
+      "bill": "BETS OFF Act",
+      "id": "S4115",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-17",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4115"
+    },
+    {
+      "bill": "Event Contract Enforcement Act",
+      "id": "HR7840",
+      "latest_action": "Sponsor introductory remarks on measure. (CR H2588-2589)",
+      "action_date": "2026-03-18",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/7840"
+    }
+  ],
+  "developing_stories": [],
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One suspicious market flagged: 'Will Marco Rubio win the 2028 US Presidential Election?' with $9,981,107 in volume at 12.6% probability. 14 UMA governance dispute(s) flagged \u2014 check the UMA tab for details."
+}

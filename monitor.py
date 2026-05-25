@@ -21,6 +21,8 @@ import email.utils
 
 # HTML email template
 from email_template import build_html_email
+# Wash trading detection
+from wash_trading_module import run_wash_trading_detection, format_wash_trading_email_section
 
 # On-chain monitoring via Polygonscan/Etherscan
 POLYGONSCAN_KEY = os.environ.get("POLYGONSCAN_KEY", "")
@@ -889,7 +891,7 @@ def generate_weekly_summary(developing_stories):
 # ════════════════════════════════════════════════════════════
 
 def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                bills, win_alerts, weekly, narrative, developing_stories):
+                bills, win_alerts, weekly, narrative, developing_stories, wash_reports=None):
     high   = [h for h in news if h["priority"]]
     normal = [h for h in news if not h["priority"]]
 
@@ -914,6 +916,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
               f"Bills tracked:            {len(bills)}",
               f"Report generated:         {TODAY} | Cleveland EDT = UTC-4",
               f"On-chain monitoring:      {'ACTIVE' if POLYGONSCAN_KEY else 'INACTIVE — add POLYGONSCAN_KEY to GitHub Secrets'}",
+              f"Wash trading alerts:      {len(wash_reports or [])} markets analyzed",
               ""]
 
     # QUIET DAY — short version
@@ -956,6 +959,12 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         lines.append("")
 
     # ON-CHAIN LARGE TRANSACTIONS
+
+    # WASH TRADING SECTION
+    if wash_reports:
+        wash_section = format_wash_trading_email_section(wash_reports)
+        if wash_section:
+            lines += ["", wash_section]
 
     # ON-CHAIN RISK-FLAGGED TRADES
     if onchain_txs:
@@ -1074,7 +1083,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
 # ════════════════════════════════════════════════════════════
 
 def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                bills, win_alerts, weekly, narrative, developing_stories):
+                bills, win_alerts, weekly, narrative, developing_stories, wash_reports=None):
     report = {
         "date":                TODAY,
         "unique_news":         len(news),
@@ -1089,6 +1098,7 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         "uma_governance":      uma,
         "ofac_additions":      ofac,
         "bill_updates":        bills,
+        "wash_trading_reports": wash_reports or [],
         "developing_stories":  developing_stories,
         "narrative":           narrative,
     }
@@ -1101,7 +1111,7 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 and len(uma) == 0)
 
     body    = build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                         bills, win_alerts, weekly, narrative, developing_stories)
+                         bills, win_alerts, weekly, narrative, developing_stories, wash_reports=wash_reports)
     subject = build_subject(news, suspicious_markets, large_trades, is_quiet)
 
     with open(f"output/report_{TODAY}.md","w") as f:
@@ -1343,6 +1353,9 @@ def main():
     print("3b. On-chain large transactions (Polygonscan)...")
     onchain_txs = fetch_onchain_large_txs()
 
+    print("3c. Wash trading analysis...")
+    wash_reports = run_wash_trading_detection(suspicious_markets)
+
     print("4. Large individual trades...")
     large_trades = fetch_polymarket_recent_large_trades()
 
@@ -1369,7 +1382,7 @@ def main():
 
     print("12. Saving report and sending email...")
     body, body_html, subject = save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                                bills, win_alerts, weekly, narrative, developing_stories)
+                                bills, win_alerts, weekly, narrative, developing_stories, wash_reports=wash_reports)
     send_email(body, body_html, subject)
 
     high = len([h for h in news if h["priority"]])

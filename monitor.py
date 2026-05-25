@@ -37,6 +37,10 @@ TODAY        = datetime.date.today().isoformat()
 TODAY_PRETTY = datetime.date.today().strftime("%B %d, %Y")
 WEEKDAY      = datetime.date.today().weekday()
 
+# Demo mode: bypasses seen articles cache and shows full report
+# Triggered by setting DEMO_MODE=true in GitHub Actions environment
+DEMO_MODE = os.environ.get("DEMO_MODE", "").lower() == "true"
+
 for folder in ["output", "cases", "data"]:
     Path(folder).mkdir(exist_ok=True)
 
@@ -129,36 +133,53 @@ LARGE_TRADE_USD  = 10_000
 LOW_PROB_MAX_PCT = 15
 WIN_RATE_ALERT   = 75
 
-# Market categories with HIGH insider trading risk
-# These are events where someone could plausibly have nonpublic information
+# HIGH insider trading risk = small group of people have controlling nonpublic knowledge
+# Key test: could a specific person know the answer before it becomes public?
 INSIDER_RISK_KEYWORDS = [
-    # Government & policy
-    "president","prime minister","election","vote","senator","congress",
-    "government","minister","policy","legislation","bill","law","sanction",
-    "fed","federal reserve","rate","tariff","executive order","supreme court",
-    # Geopolitical & military
-    "war","invasion","attack","military","ceasefire","treaty","nato",
-    "ukraine","russia","iran","israel","china","taiwan","north korea",
-    "coup","assassination","nuclear",
-    # Regulatory & legal
-    "CFTC","SEC","FDA","DOJ","indictment","arrest","charges","verdict",
-    "merger","acquisition","ipo","bankruptcy","investigation",
-    # Corporate events
-    "CEO","earnings","layoffs","deal","partnership","acquisition",
+    # Regulatory decisions — small number of officials decide
+    "fed rate","federal reserve rate","rate decision","rate cut","rate hike",
+    "FDA approval","FDA decision","drug approval","clinical trial",
+    "CFTC ruling","SEC ruling","SEC charges","regulatory approval",
+    "tariff","executive order","sanction",
+    # Military/intelligence operations — classified advance knowledge
+    "invasion","military strike","attack on","launch attack","military operation",
+    "ceasefire","peace deal","withdrawal","troop","airstrike",
+    "nuclear","missile","coup","assassination",
+    # Corporate events — insiders know before announcement
+    "merger","acquisition","takeover","buyout","ipo","bankruptcy","default",
+    "earnings","revenue miss","revenue beat","layoffs announced",
+    "CEO resign","CEO fired","CEO appointed",
+    # Criminal/legal outcomes — prosecutors and defendants know first
+    "indictment","arrest","charges filed","verdict","conviction","plea",
+    "guilty","sentence","extradition",
+    # Classified/intelligence — government knows before public
+    "classified","intelligence","covert","operation",
 ]
 
-# Market categories with LOW insider trading risk (filter these out)
-# These are public knowledge events or pure luck outcomes
+# LOW insider risk = no one has controlling nonpublic information
+# Elections, sports, public market prices, long-term predictions
 LOW_INSIDER_RISK_KEYWORDS = [
-    "f1","formula 1","nfl","nba","mlb","nhl","soccer","football","basketball",
-    "world cup","super bowl","stanley cup","championship","driver champion",
-    "meme","celebrity","divorce","baby","oscar","grammy","emmy","award",
-    "bitcoin price","ethereum price","crypto price","dip to","reach $",
-    "hyperliquid","solana","doge","shib",
+    # Elections — millions of voters, no one controls outcome
+    "win the election","win the presidency","win the primary",
+    "presidential election","senate election","house election",
+    "prime minister election","general election","gubernatorial",
+    "win in 2026","win in 2027","win in 2028","win in 2029","win in 2030",
+    # Sports — match-fixing is separate category, outcome hard to predict
+    "f1","formula 1","nfl","nba","mlb","nhl","premier league",
+    "world cup","super bowl","stanley cup","champion","championship",
+    "driver champion","mvp","tournament",
+    # Celebrity/personal — pure public information
+    "divorce","baby","oscar","grammy","emmy","award","celebrity",
+    "married","wedding","breakup",
+    # Crypto prices — fully public market data
+    "bitcoin price","ethereum price","crypto price","dip to $","reach $",
+    "hyperliquid","solana price","doge","shib","ath","all time high",
+    # Long-term public predictions
+    "before 2027","before 2028","before 2029","before 2030",
 ]
 
-# Markets closing more than 180 days away are lower priority unless very high volume
-NEAR_TERM_DAYS = 180
+# Markets closing more than 90 days away are lower priority
+NEAR_TERM_DAYS = 90
 HIGH_VOLUME_THRESHOLD = 1_000_000  # $1M+ always flag regardless
 
 
@@ -396,8 +417,11 @@ def fetch_rss(feeds, keywords):
     deduped = deduplicate(raw)
 
     # Cross-day deduplication — skip articles already sent
-    seen = load_seen_articles()
+    # In demo mode, show everything regardless of seen cache
+    seen = set() if DEMO_MODE else load_seen_articles()
     fresh = [h for h in deduped if h.get("link","") not in seen]
+    if DEMO_MODE:
+        print("  DEMO MODE: bypassing seen articles cache")
 
     # Sort by score descending so most important comes first
     fresh = sorted(fresh, key=lambda x: x["score"], reverse=True)
@@ -743,7 +767,7 @@ def build_subject(news, suspicious_markets, large_trades, is_quiet):
         top = high[0]["title"][:60]
         return f"PM Monitor {TODAY_PRETTY} — {top}{'...' if len(top)==60 else ''}"
     else:
-        return f"PM Monitor {TODAY_PRETTY} — {len(news)} stories, no flags"
+        return f"PM Monitor {TODAY_PRETTY} — {len(news)} stories, no flags{" [DEMO]" if DEMO_MODE else ""}"
 
 
 # ════════════════════════════════════════════════════════════
@@ -1072,18 +1096,19 @@ def send_email(body_plain, body_html, subject):
 def fetch_onchain_large_txs():
     """
     Scan Polymarket's CTF Exchange contract for large USDC transactions
-    in the last 24 hours using Etherscan's Polygon API.
+    in the last 24 hours using Etherscan's Polygon API (chain ID 137).
     """
     if not POLYGONSCAN_KEY:
-        print("  On-chain: no POLYGONSCAN_KEY set — skipping")
+        print("  On-chain: no POLYGONSCAN_KEY set — add POLYGONSCAN_KEY to GitHub Secrets")
         return []
 
     flagged = []
     yesterday_ts = int((datetime.datetime.now() - datetime.timedelta(days=1)).timestamp())
 
     try:
-        resp = requests.get(ETHERSCAN_POLY, params={
-            "chainid":         137,
+        # Etherscan v2 unified API — chain ID 137 = Polygon
+        url = f"{ETHERSCAN_POLY}?chainid=137"
+        resp = requests.get(url, params={
             "module":          "account",
             "action":          "tokentx",
             "contractaddress": USDC_POLYGON,
@@ -1095,8 +1120,9 @@ def fetch_onchain_large_txs():
         }, timeout=15)
 
         data = resp.json()
+        print(f"  On-chain API status: {data.get('status')} — {data.get('message','')}")
         if data.get("status") != "1":
-            print(f"  On-chain API response: {data.get('message','unknown error')}")
+            print(f"  On-chain full response: {str(data)[:300]}")
             return []
 
         for tx in data.get("result", []):

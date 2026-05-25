@@ -3,252 +3,519 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Polymarket OSINT Dashboard</title>
+<title>Polymarket Intelligence Dashboard</title>
 <style>
   :root {
-    --bg: #0a1628;
-    --card: #0f2040;
-    --border: #1e3a5f;
-    --teal: #00c2d4;
-    --red: #ff4444;
-    --yellow: #ffcc00;
-    --green: #00cc88;
-    --text: #e0e8f0;
-    --muted: #5a7a9a;
+    --bg: #0f1117; --surface: #1a1d27; --surface2: #222536;
+    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
+    --text: #f0f2f8; --text2: #8b91a8; --text3: #5a6080;
+    --teal: #00c2aa; --red: #ff5c5c; --yellow: #ffb547;
+    --blue: #5b8dee; --green: #42c97c; --purple: #a78bfa;
+    --radius: 10px; --radius-sm: 6px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; padding: 20px; }
-  h1 { color: var(--teal); font-size: 1.4rem; margin-bottom: 4px; }
-  .subtitle { color: var(--muted); font-size: 0.8rem; margin-bottom: 20px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
-  .stat .num { font-size: 2rem; font-weight: bold; color: var(--teal); }
-  .stat .label { font-size: 0.7rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
-  .stat.alert .num { color: var(--red); }
-  .stat.warn .num { color: var(--yellow); }
-  .section { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-  .section h2 { color: var(--teal); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-  .item { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 0.82rem; }
-  .item:last-child { border-bottom: none; }
-  .item .title { color: var(--text); margin-bottom: 4px; font-weight: bold; }
-  .item .meta { color: var(--muted); font-size: 0.72rem; margin-bottom: 4px; }
-  .item .summary { color: #8ab0cc; font-size: 0.78rem; line-height: 1.4; }
-  .item a { color: var(--teal); text-decoration: none; font-size: 0.72rem; }
-  .item a:hover { text-decoration: underline; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; margin-right: 4px; text-transform: uppercase; }
-  .badge.high { background: #ff440022; color: var(--red); border: 1px solid var(--red); }
-  .badge.warn { background: #ffcc0022; color: var(--yellow); border: 1px solid var(--yellow); }
-  .badge.ok { background: #00cc8822; color: var(--green); border: 1px solid var(--green); }
-  .badge.source { background: #1e3a5f; color: #7ecfda; border: 1px solid var(--border); }
-  .trade { background: #0a1e35; border-left: 3px solid var(--red); padding: 10px; margin-bottom: 8px; border-radius: 0 6px 6px 0; font-size: 0.78rem; }
-  .trade .amount { color: var(--red); font-size: 1.1rem; font-weight: bold; }
-  .trade .prob { color: var(--yellow); }
-  .bill { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.78rem; }
-  .bill:last-child { border-bottom: none; }
-  .bill .name { color: var(--text); flex: 1; }
-  .bill .action { color: var(--muted); font-size: 0.7rem; max-width: 300px; text-align: right; }
-  .loading { text-align: center; color: var(--muted); padding: 40px; }
-  .error { color: var(--red); text-align: center; padding: 20px; }
-  .updated { color: var(--muted); font-size: 0.7rem; text-align: right; margin-bottom: 16px; }
-  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-  .tab { padding: 6px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.78rem; color: var(--muted); }
-  .tab.active { border-color: var(--teal); color: var(--teal); }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; padding: 20px; }
+
+  /* HEADER */
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .header h1 { font-size: 18px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+  .last-updated { font-size: 11px; color: var(--text3); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 12px; }
+
+  /* STAT GRID */
+  .stats { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin-bottom: 20px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; }
+  .stat .num { font-size: 26px; font-weight: 700; letter-spacing: -1px; line-height: 1; margin-bottom: 5px; }
+  .stat .lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .8px; }
+  .c-teal .num{color:var(--teal)} .c-red .num{color:var(--red)} .c-yellow .num{color:var(--yellow)}
+  .c-blue .num{color:var(--blue)} .c-green .num{color:var(--green)} .c-purple .num{color:var(--purple)}
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; margin-bottom: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; }
+  .tab { flex: 1; padding: 8px 10px; background: transparent; border: none; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 500; color: var(--text2); transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .tab:hover { background: var(--surface2); color: var(--text); }
+  .tab.active { background: var(--surface2); color: var(--text); border: 1px solid var(--border2); }
+  .badge { font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 600; }
+  .badge-red { background: rgba(255,92,92,.15); color: var(--red); }
+  .badge-teal { background: rgba(0,194,170,.15); color: var(--teal); }
+  .badge-yellow { background: rgba(255,181,71,.15); color: var(--yellow); }
+  .badge-purple { background: rgba(167,139,250,.15); color: var(--purple); }
+
+  /* PANELS */
+  .panel { display: none; } .panel.active { display: block; }
+
+  /* SECTIONS */
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 14px; }
+  .sec-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .sec-header h2 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text2); }
+  .sec-count { font-size: 11px; color: var(--text3); }
+
+  /* WALLET ROWS */
+  .wallet-row { padding: 12px 16px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; transition: background .15s; }
+  .wallet-row:last-child { border-bottom: none; }
+  .wallet-row:hover { background: var(--surface2); }
+  .wallet-rank { font-size: 11px; color: var(--text3); font-weight: 600; min-width: 20px; padding-top: 2px; }
+  .wallet-addr { font-size: 12px; font-family: monospace; color: var(--teal); margin-bottom: 4px; }
+  .wallet-meta { font-size: 11px; color: var(--text2); margin-bottom: 3px; }
+  .wallet-signals { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+  .signal-tag { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .wallet-count { text-align: right; }
+  .wallet-count .big { font-size: 20px; font-weight: 700; color: var(--red); letter-spacing: -0.5px; }
+  .wallet-count .lbl { font-size: 10px; color: var(--text3); }
+
+  /* MARKET ROWS */
+  .market-row { padding: 12px 16px; border-bottom: 1px solid var(--border); transition: background .15s; }
+  .market-row:last-child { border-bottom: none; }
+  .market-row:hover { background: var(--surface2); }
+  .market-question { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
+  .market-meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px; color: var(--text2); }
+  .market-badges { display: flex; gap: 5px; margin-bottom: 5px; }
+
+  /* TREND CHART */
+  .trend-bar { display: flex; align-items: flex-end; gap: 3px; height: 60px; padding: 12px 16px 8px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .bar { width: 100%; border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
+  .bar-date { font-size: 8px; color: var(--text3); transform: rotate(-45deg); transform-origin: top left; margin-top: 4px; white-space: nowrap; }
+
+  /* KEYWORD PILLS */
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+  .kw-pill { padding: 5px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+  .kw-count { font-size: 11px; font-weight: 700; color: var(--teal); }
+
+  /* NEWS ITEMS */
+  .news-item { padding: 12px 16px; border-bottom: 1px solid var(--border); transition: background .15s; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item:hover { background: var(--surface2); }
+  .news-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+  .news-meta { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .news-summary { font-size: 12px; color: var(--text2); line-height: 1.4; margin-bottom: 5px; }
+  .news-link { font-size: 11px; color: var(--teal); text-decoration: none; }
+
+  /* EMPTY */
+  .empty { padding: 32px 16px; text-align: center; color: var(--text3); font-size: 13px; }
+  .loading { text-align: center; padding: 40px; color: var(--text3); }
+  .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--teal); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 10px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* WIN RATE */
+  .win-row { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .win-row:last-child { border-bottom: none; }
+  .win-rate-pct { font-size: 20px; font-weight: 700; color: var(--red); }
+
+  /* BILL ROWS */
+  .bill-row { padding: 12px 16px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto; gap: 12px; }
+  .bill-row:last-child { border-bottom: none; }
+  .bill-name { font-size: 13px; font-weight: 500; color: var(--teal); text-decoration: none; }
+  .bill-id { font-size: 10px; color: var(--text3); font-family: monospace; margin-top: 2px; }
+  .bill-action { font-size: 11px; color: var(--text2); text-align: right; max-width: 250px; }
+  .bill-date { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(3,1fr); } }
 </style>
 </head>
 <body>
 
-<h1>POLYMARKET OSINT DASHBOARD</h1>
-<p class="subtitle">Automated daily surveillance intelligence — updates every morning at 8 AM EST</p>
-<div class="updated" id="last-updated">Loading...</div>
-
-<div id="stats" class="grid">
-  <div class="stat"><div class="num" id="stat-stories">—</div><div class="label">News Stories</div></div>
-  <div class="stat alert"><div class="num" id="stat-markets">—</div><div class="label">Suspicious Markets</div></div>
-  <div class="stat alert"><div class="num" id="stat-trades">—</div><div class="label">Large Trades</div></div>
-  <div class="stat warn"><div class="num" id="stat-uma">—</div><div class="label">UMA Alerts</div></div>
-  <div class="stat warn"><div class="num" id="stat-ofac">—</div><div class="label">OFAC New</div></div>
-  <div class="stat ok"><div class="num" id="stat-bills">—</div><div class="label">Bills Tracked</div></div>
+<div class="header">
+  <div>
+    <h1><span class="dot"></span> Polymarket Intelligence Dashboard</h1>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px">Aggregate surveillance intelligence — updated daily</div>
+  </div>
+  <div class="last-updated" id="last-updated">Loading...</div>
 </div>
 
+<!-- STAT GRID -->
+<div class="stats">
+  <div class="stat c-red"><div class="num" id="s-wallets">—</div><div class="lbl">Wallets Tracked</div></div>
+  <div class="stat c-red"><div class="num" id="s-recurring">—</div><div class="lbl">Recurring Wallets</div></div>
+  <div class="stat c-yellow"><div class="num" id="s-markets">—</div><div class="lbl">Markets Tracked</div></div>
+  <div class="stat c-purple"><div class="num" id="s-persistent">—</div><div class="lbl">Persistent Flags</div></div>
+  <div class="stat c-teal"><div class="num" id="s-alerts30">—</div><div class="lbl">Alerts (30d)</div></div>
+  <div class="stat c-green"><div class="num" id="s-ofac">—</div><div class="lbl">OFAC Matches</div></div>
+</div>
+
+<!-- TABS -->
 <div class="tabs">
-  <div class="tab active" onclick="showTab('tab-alerts')">Alerts</div>
-  <div class="tab" onclick="showTab('tab-news')">News</div>
-  <div class="tab" onclick="showTab('tab-trades')">Trades</div>
-  <div class="tab" onclick="showTab('tab-bills')">Bills</div>
-  <div class="tab" onclick="showTab('tab-uma')">UMA</div>
+  <button class="tab active" onclick="showTab('today',this)">Today <span class="badge badge-red" id="tb-today">—</span></button>
+  <button class="tab" onclick="showTab('wallets',this)">Wallet Intel <span class="badge badge-red" id="tb-wallets">—</span></button>
+  <button class="tab" onclick="showTab('markets',this)">Market History <span class="badge badge-yellow" id="tb-markets">—</span></button>
+  <button class="tab" onclick="showTab('trends',this)">Trends</button>
+  <button class="tab" onclick="showTab('news',this)">News <span class="badge badge-teal" id="tb-news">—</span></button>
+  <button class="tab" onclick="showTab('bills',this)">Bills <span class="badge badge-teal" id="tb-bills">—</span></button>
 </div>
 
-<div id="tab-alerts" class="tab-content active">
+<!-- TODAY PANEL -->
+<div id="panel-today" class="panel active">
   <div class="section">
-    <h2>High Priority Alerts</h2>
-    <div id="high-priority-list"><div class="loading">Loading...</div></div>
+    <div class="sec-header"><h2>Intelligence Summary</h2></div>
+    <div style="padding:14px 16px;font-size:13px;color:var(--text2);line-height:1.6" id="today-narrative">Loading...</div>
+  </div>
+  <div class="two-col">
+    <div class="section">
+      <div class="sec-header"><h2>Suspicious Markets Today</h2><span class="sec-count" id="cnt-markets">0</span></div>
+      <div id="today-markets"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+    <div class="section">
+      <div class="sec-header"><h2>Developing Stories</h2></div>
+      <div id="today-developing"><div class="empty">No developing stories</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-header"><h2>Wash Trading Alerts</h2><span class="sec-count" id="cnt-wash">0</span></div>
+    <div id="today-wash"><div class="empty">No wash trading alerts today</div></div>
   </div>
 </div>
 
-<div id="tab-news" class="tab-content">
+<!-- WALLET INTEL PANEL -->
+<div id="panel-wallets" class="panel">
   <div class="section">
-    <h2>All News Stories</h2>
-    <div id="all-news-list"><div class="loading">Loading...</div></div>
+    <div class="sec-header"><h2>High Risk Wallets — OFAC / Watchlist Matches</h2><span class="sec-count" id="cnt-highrisk">0</span></div>
+    <div id="wallets-highrisk"><div class="empty">No OFAC or watchlist matches yet</div></div>
+  </div>
+  <div class="section">
+    <div class="sec-header"><h2>Recurring Suspicious Wallets — Seen 2+ Times</h2><span class="sec-count" id="cnt-recurring">0</span></div>
+    <div id="wallets-recurring"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+  <div class="section">
+    <div class="sec-header"><h2>Win Rate Tracker — Suspicious Long-Shot Winners</h2></div>
+    <div id="wallets-winrate"><div class="empty">No win rate alerts yet — data builds over time</div></div>
   </div>
 </div>
 
-<div id="tab-trades" class="tab-content">
+<!-- MARKET HISTORY PANEL -->
+<div id="panel-markets" class="panel">
   <div class="section">
-    <h2>Suspicious Markets (Polymarket API)</h2>
-    <div id="suspicious-markets-list"><div class="loading">Loading...</div></div>
-  </div>
-  <div class="section">
-    <h2>Large Individual Trades (CLOB)</h2>
-    <div id="large-trades-list"><div class="loading">Loading...</div></div>
+    <div class="sec-header"><h2>Markets Flagged Multiple Days</h2><span class="sec-count" id="cnt-persistent">0</span></div>
+    <div id="markets-persistent"><div class="loading"><div class="spinner"></div></div></div>
   </div>
 </div>
 
-<div id="tab-bills" class="tab-content">
+<!-- TRENDS PANEL -->
+<div id="panel-trends" class="panel">
+  <div class="two-col">
+    <div class="section">
+      <div class="sec-header"><h2>Alert Volume — Last 30 Days</h2></div>
+      <div class="trend-bar" id="trend-chart"></div>
+    </div>
+    <div class="section">
+      <div class="sec-header"><h2>Top Keywords This Month</h2></div>
+      <div class="keywords" id="trend-keywords"></div>
+    </div>
+  </div>
   <div class="section">
-    <h2>Congressional Bill Tracker</h2>
-    <div id="bills-list"><div class="loading">Loading...</div></div>
+    <div class="sec-header"><h2>Top News Sources</h2></div>
+    <div class="keywords" id="trend-sources"></div>
   </div>
 </div>
 
-<div id="tab-uma" class="tab-content">
+<!-- NEWS PANEL -->
+<div id="panel-news" class="panel">
   <div class="section">
-    <h2>UMA Governance Disputes</h2>
-    <div id="uma-list"><div class="loading">Loading...</div></div>
+    <div class="sec-header"><h2>High Priority News</h2><span class="sec-count" id="cnt-hp">0</span></div>
+    <div id="news-high"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+  <div class="section">
+    <div class="sec-header"><h2>General News</h2></div>
+    <div id="news-general"></div>
+  </div>
+</div>
+
+<!-- BILLS PANEL -->
+<div id="panel-bills" class="panel">
+  <div class="section">
+    <div class="sec-header"><h2>Congressional Bill Tracker</h2></div>
+    <div id="bills-list"><div class="loading"><div class="spinner"></div></div></div>
   </div>
 </div>
 
 <script>
-function showTab(id) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+function showTab(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
 }
 
-function getToday() {
-  const d = new Date();
-  return d.toISOString().split('T')[0];
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function renderNews(items, containerId, highOnly) {
-  const el = document.getElementById(containerId);
-  const filtered = highOnly ? items.filter(i => i.priority) : items;
-  if (!filtered.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No items</div>'; return; }
-  el.innerHTML = filtered.map(item => `
-    <div class="item">
-      <div class="title">
-        ${item.priority ? '<span class="badge high">HIGH</span>' : '<span class="badge ok">NEWS</span>'}
-        <span class="badge source">${item.source}</span>
-        ${item.title}
+function badge(text, color) {
+  const colors = {red:'var(--red)',yellow:'var(--yellow)',teal:'var(--teal)',blue:'var(--blue)',green:'var(--green)',purple:'var(--purple)',gray:'var(--text3)'};
+  const c = colors[color]||colors.gray;
+  return `<span style="background:${c}22;color:${c};border:1px solid ${c}44;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600">${esc(text)}</span>`;
+}
+
+function riskBadge(risk) {
+  if (risk==='HIGH') return badge('HIGH INSIDER RISK','red');
+  if (risk==='LOW')  return badge('LOW INSIDER RISK','blue');
+  return badge('MEDIUM RISK','yellow');
+}
+
+// ── WALLET RENDERING ──
+function renderWalletRow(w, i) {
+  const riskFlag = w.ofac_match ? badge('OFAC','red') : w.watchlist_hit ? badge('WATCHLIST','yellow') : '';
+  const signals  = (w.signals||[]).map(s => `<span class="signal-tag">${esc(s.replace(/_/g,' '))}</span>`).join('');
+  const amount   = w.total_amount > 0 ? `$${Number(w.total_amount).toLocaleString()} flagged` : '';
+  return `
+    <div class="wallet-row">
+      <div class="wallet-rank">#${i+1}</div>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          ${riskFlag}
+          <a href="${esc(w.polygonscan)}" target="_blank" class="wallet-addr">${esc(w.short)}</a>
+        </div>
+        <div class="wallet-meta">First seen: ${esc(w.first_seen)} &nbsp;·&nbsp; Last seen: ${esc(w.last_seen)} ${amount ? '&nbsp;·&nbsp; '+esc(amount) : ''}</div>
+        ${w.markets && w.markets.length ? `<div class="wallet-meta" style="color:var(--text3)">Markets: ${w.markets.slice(0,2).map(m=>esc(m.slice(0,40))).join(' · ')}</div>` : ''}
+        <div class="wallet-signals">${signals}</div>
       </div>
-      ${item.also_covered_by && item.also_covered_by.length ? `<div class="meta">Also covered by: ${item.also_covered_by.join(', ')}</div>` : ''}
-      <div class="summary">${item.summary || '[See source for details]'}</div>
-      <a href="${item.link}" target="_blank">Read full article →</a>
-    </div>
-  `).join('');
-}
-
-function renderSuspiciousMarkets(markets) {
-  const el = document.getElementById('suspicious-markets-list');
-  if (!markets || !markets.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No suspicious markets detected today</div>'; return; }
-  el.innerHTML = markets.map(m => `
-    <div class="trade">
-      <div class="title">${m.question}</div>
-      <div style="margin-top:6px">
-        <span class="amount">$${Number(m.volume_usd).toLocaleString()}</span> volume on
-        <span class="prob">${m.probability_pct}% probability</span> outcome: <strong>${m.outcome}</strong>
+      <div class="wallet-count">
+        <div class="big">${w.count}</div>
+        <div class="lbl">appearances</div>
+        ${w.max_risk_score > 0 ? `<div style="font-size:11px;color:var(--yellow);margin-top:3px">Risk: ${w.max_risk_score}</div>` : ''}
       </div>
-      <div class="meta" style="margin-top:4px">${m.alert_reason}</div>
-      <a href="${m.url}" target="_blank">View on Polymarket →</a>
-    </div>
-  `).join('');
+    </div>`;
 }
 
-function renderLargeTrades(trades) {
-  const el = document.getElementById('large-trades-list');
-  if (!trades || !trades.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No large individual trades flagged today</div>'; return; }
-  el.innerHTML = trades.map(t => `
-    <div class="trade">
-      <span class="amount">$${Number(t.size_usd).toLocaleString()}</span>
-      <span class="prob"> | ${t.prob_pct}% prob | ${t.side}</span>
-      <div class="meta" style="margin-top:4px">
-        Maker: <code>${t.maker.slice(0,16)}...</code>
-        ${t.wl_maker && t.wl_maker.length ? '<span class="badge high">WATCHLIST</span>' : ''}
+// ── MARKET RENDERING ──
+function renderMarketRow(m) {
+  const washBadge = m.max_wash_score >= 8 ? badge('HIGH WASH RISK','red') :
+                    m.max_wash_score >= 4 ? badge('WASH SIGNALS','yellow') : '';
+  return `
+    <div class="market-row">
+      <div class="market-badges">
+        ${riskBadge(m.insider_risk)}
+        ${washBadge}
+        ${badge(m.flag_count + 'x flagged', m.flag_count >= 3 ? 'red' : 'yellow')}
       </div>
-      <div class="meta">Taker: <code>${t.taker.slice(0,16)}...</code></div>
-    </div>
-  `).join('');
+      <div class="market-question">${esc(m.question)}</div>
+      <div class="market-meta">
+        <span>First flagged: ${esc(m.first_flagged)}</span>
+        <span>Last flagged: ${esc(m.last_flagged)}</span>
+        ${m.latest_volume ? `<span>Latest volume: $${Number(m.latest_volume).toLocaleString()}</span>` : ''}
+        ${m.latest_prob ? `<span>${m.latest_prob}% probability</span>` : ''}
+        ${m.url ? `<a href="${esc(m.url)}" target="_blank" style="color:var(--teal);text-decoration:none;font-size:11px">View ↗</a>` : ''}
+      </div>
+    </div>`;
 }
 
-function renderBills(bills) {
-  const el = document.getElementById('bills-list');
-  if (!bills || !bills.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">Add CONGRESS_API_KEY to enable</div>'; return; }
-  el.innerHTML = bills.map(b => `
-    <div class="bill">
-      <div class="name"><a href="${b.url}" target="_blank">${b.bill} (${b.id})</a></div>
-      <div class="action">${b.latest_action}<br><span style="color:var(--muted)">${b.action_date || ''}</span></div>
-    </div>
-  `).join('');
+// ── TODAY MARKETS ──
+function renderTodayMarket(m) {
+  return `
+    <div class="market-row">
+      <div class="market-badges">${riskBadge(m.insider_risk||'MEDIUM')}</div>
+      <div class="market-question">${esc(m.question)}</div>
+      <div class="market-meta">
+        <span style="font-size:14px;font-weight:700;color:var(--red)">$${Number(m.volume_usd||0).toLocaleString()}</span>
+        <span>${m.probability_pct||0}% prob</span>
+        <span>Closes: ${esc(m.end_date||'')}</span>
+        ${m.url ? `<a href="${esc(m.url)}" target="_blank" style="color:var(--teal);text-decoration:none">View ↗</a>` : ''}
+      </div>
+    </div>`;
 }
 
-function renderUMA(uma) {
-  const el = document.getElementById('uma-list');
-  if (!uma || !uma.length) { el.innerHTML = '<div class="item" style="color:var(--muted)">No relevant UMA disputes today</div>'; return; }
-  el.innerHTML = uma.map(a => `
-    <div class="item">
-      <div class="title"><span class="badge warn">DISPUTE</span> ${a.title}</div>
-      <div class="summary">${a.summary}</div>
-      <div class="meta" style="margin-top:4px; color: var(--yellow)">${a.note}</div>
-      <a href="${a.link}" target="_blank">View on UMA forum →</a>
-    </div>
-  `).join('');
+// ── TREND CHART ──
+function renderTrendChart(trend) {
+  const el  = document.getElementById('trend-chart');
+  if (!trend || !trend.length) { el.innerHTML = '<div class="empty">Not enough data yet — builds over time</div>'; return; }
+  const max = Math.max(...trend.map(d => d.news + d.suspicious_markets));
+  el.innerHTML = trend.slice(-21).map(d => {
+    const total = d.news + d.suspicious_markets;
+    const h     = max > 0 ? Math.max(4, Math.round((total/max)*52)) : 4;
+    const date  = d.date ? d.date.slice(5) : '';
+    return `<div class="bar-col">
+      <div class="bar" style="height:${h}px;background:${d.suspicious_markets>0?'var(--red)':'var(--teal)'}44;border-top:2px solid ${d.suspicious_markets>0?'var(--red)':'var(--teal)'}" title="${d.date}: ${total} alerts"></div>
+      <div class="bar-date">${date}</div>
+    </div>`;
+  }).join('');
 }
 
-async function loadReport() {
-  const today = getToday();
-  const url = `output/report_${today}.json`;
+// ── MAIN LOAD ──
+async function loadAll() {
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now()-86400000).toISOString().split('T')[0];
 
+  // Load today's report
+  let report = null;
+  for (const date of [today, yesterday]) {
+    try {
+      const r = await fetch(`output/report_${date}.json`);
+      if (r.ok) { report = await r.json(); break; }
+    } catch(e) {}
+  }
+
+  // Load aggregate intelligence
+  let agg = null;
   try {
-    const resp = await fetch(url);
-    if (!resp.ok) {
-      // Try yesterday
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yd = yesterday.toISOString().split('T')[0];
-      const resp2 = await fetch(`output/report_${yd}.json`);
-      if (!resp2.ok) throw new Error('No report found');
-      const data = await resp2.json();
-      renderAll(data, yd);
-    } else {
-      const data = await resp.json();
-      renderAll(data, today);
-    }
-  } catch (e) {
-    document.getElementById('high-priority-list').innerHTML = `<div class="error">Could not load report. Run the monitor first via GitHub Actions.</div>`;
-    document.getElementById('last-updated').textContent = 'No report loaded';
+    const r = await fetch('data/aggregate_intelligence.json');
+    if (r.ok) agg = await r.json();
+  } catch(e) {}
+
+  // Update last updated
+  document.getElementById('last-updated').textContent =
+    report ? `Report: ${report.date||today}` : 'No report loaded';
+
+  // ── STATS ──
+  if (agg) {
+    document.getElementById('s-wallets').textContent   = agg.total_wallets_tracked||0;
+    document.getElementById('s-recurring').textContent = (agg.recurring_wallets||[]).length;
+    document.getElementById('s-markets').textContent   = agg.total_markets_tracked||0;
+    document.getElementById('s-persistent').textContent= (agg.persistent_markets||[]).length;
+    document.getElementById('s-alerts30').textContent  = agg.summary_stats?.total_alerts_30d||0;
+    document.getElementById('s-ofac').textContent      = agg.summary_stats?.wallets_with_ofac||0;
+    document.getElementById('tb-wallets').textContent  = (agg.recurring_wallets||[]).length;
+    document.getElementById('tb-markets').textContent  = (agg.persistent_markets||[]).length;
+  }
+
+  if (report) {
+    const alerts   = report.alerts||[];
+    const high     = alerts.filter(a=>a.priority);
+    const normal   = alerts.filter(a=>!a.priority);
+    const markets  = report.suspicious_market_data||[];
+    const bills    = report.bill_updates||[];
+    const wash     = report.wash_trading_reports||[];
+    const devs     = report.developing_stories||[];
+
+    document.getElementById('tb-today').textContent = high.length;
+    document.getElementById('tb-news').textContent  = alerts.length;
+    document.getElementById('tb-bills').textContent = bills.length;
+    document.getElementById('cnt-markets').textContent = markets.length;
+    document.getElementById('cnt-wash').textContent    = wash.length;
+
+    // Today narrative
+    document.getElementById('today-narrative').textContent = report.narrative||'No summary available.';
+
+    // Today markets
+    document.getElementById('today-markets').innerHTML = markets.length
+      ? markets.map(renderTodayMarket).join('')
+      : '<div class="empty">No suspicious markets today</div>';
+
+    // Developing stories
+    document.getElementById('today-developing').innerHTML = devs.length
+      ? devs.slice(0,5).map(d => `
+          <div class="market-row">
+            <div style="font-size:11px;font-weight:600;color:var(--yellow);margin-bottom:4px">DAY ${(d.dates_seen||[]).length}</div>
+            <div style="font-size:13px;color:var(--text)">${esc((d.representative_title||'').slice(0,80))}</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px">Active since ${esc((d.dates_seen||['?'])[0])}</div>
+          </div>`).join('')
+      : '<div class="empty">No developing stories</div>';
+
+    // Wash trading
+    document.getElementById('today-wash').innerHTML = wash.length
+      ? wash.map(w => `
+          <div class="market-row">
+            <div class="market-badges">
+              ${w.wash_score>=8 ? badge('HIGH WASH PROBABILITY','red') : w.wash_score>=4 ? badge('MODERATE SIGNALS','yellow') : badge('LOW SIGNALS','blue')}
+              ${badge('Score: '+w.wash_score,'gray')}
+            </div>
+            <div class="market-question">${esc(w.question||'')}</div>
+            <div class="market-meta">
+              <span>$${Number(w.volume_usd||0).toLocaleString()} volume</span>
+              <span>${w.signal_count||0} signals detected</span>
+            </div>
+          </div>`).join('')
+      : '<div class="empty">No wash trading alerts today</div>';
+
+    // News
+    document.getElementById('news-high').innerHTML = high.length
+      ? high.map(item => `
+          <div class="news-item">
+            <div style="display:flex;gap:6px;margin-bottom:5px">
+              ${badge('HIGH PRIORITY','red')}
+              ${badge(item.source||'','gray')}
+              <span style="font-size:11px;color:var(--text3)">${esc(item.pub_date||'')}</span>
+            </div>
+            <div class="news-title">${esc(item.title||'')}</div>
+            <div class="news-summary">${esc(item.summary||'')}</div>
+            ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="news-link">Read article ↗</a>` : ''}
+          </div>`).join('')
+      : '<div class="empty">No high priority news today</div>';
+
+    document.getElementById('cnt-hp').textContent = high.length;
+
+    document.getElementById('news-general').innerHTML = normal.length
+      ? normal.map(item => `
+          <div class="news-item">
+            <div style="display:flex;gap:6px;margin-bottom:5px">
+              ${badge(item.source||'','gray')}
+              <span style="font-size:11px;color:var(--text3)">${esc(item.pub_date||'')}</span>
+            </div>
+            <div class="news-title">${esc(item.title||'')}</div>
+            <div class="news-summary">${esc(item.summary||'')}</div>
+            ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="news-link">Read article ↗</a>` : ''}
+          </div>`).join('')
+      : '<div class="empty">No general news today</div>';
+
+    // Bills
+    document.getElementById('bills-list').innerHTML = bills.length
+      ? bills.map(b => `
+          <div class="bill-row">
+            <div>
+              <a href="${esc(b.url||'')}" target="_blank" class="bill-name">${esc(b.bill||'')}</a>
+              <div class="bill-id">${esc(b.id||'')}</div>
+            </div>
+            <div>
+              <div class="bill-action">${esc(b.latest_action||'')}</div>
+              <div class="bill-date">${esc(b.action_date||'')}</div>
+            </div>
+          </div>`).join('')
+      : '<div class="empty">Add CONGRESS_API_KEY to enable bill tracking</div>';
+  }
+
+  // ── AGGREGATE DATA ──
+  if (agg) {
+    // High risk wallets
+    const highRisk = agg.high_risk_wallets||[];
+    document.getElementById('cnt-highrisk').textContent = highRisk.length;
+    document.getElementById('wallets-highrisk').innerHTML = highRisk.length
+      ? highRisk.map((w,i) => renderWalletRow(w,i)).join('')
+      : '<div class="empty">No OFAC or watchlist matches yet — builds over time</div>';
+
+    // Recurring wallets
+    const recurring = (agg.recurring_wallets||[]).filter(w => !w.ofac_match && !w.watchlist_hit);
+    document.getElementById('cnt-recurring').textContent = recurring.length;
+    document.getElementById('wallets-recurring').innerHTML = recurring.length
+      ? recurring.slice(0,15).map((w,i) => renderWalletRow(w,i)).join('')
+      : '<div class="empty">No recurring wallets yet — builds as more daily reports accumulate</div>';
+
+    // Win rate
+    const wins = agg.win_rate_alerts||[];
+    document.getElementById('wallets-winrate').innerHTML = wins.length
+      ? wins.map(w => `
+          <div class="win-row">
+            <div>
+              <a href="${esc(w.polygonscan||'')}" target="_blank" style="font-size:12px;font-family:monospace;color:var(--teal);text-decoration:none">${esc((w.wallet||'').slice(0,20))}...</a>
+              <div style="font-size:11px;color:var(--text2);margin-top:3px">${w.trades} tracked long-shot trades</div>
+            </div>
+            <div><div class="win-rate-pct">${w.win_rate}%</div><div style="font-size:10px;color:var(--text3)">win rate</div></div>
+          </div>`).join('')
+      : '<div class="empty">No win rate alerts yet — builds as trade outcomes are recorded</div>';
+
+    // Persistent markets
+    const persistent = agg.persistent_markets||[];
+    document.getElementById('cnt-persistent').textContent = persistent.length;
+    document.getElementById('markets-persistent').innerHTML = persistent.length
+      ? persistent.map(renderMarketRow).join('')
+      : '<div class="empty">No markets flagged on multiple days yet — builds over time</div>';
+
+    // Trends
+    renderTrendChart(agg.daily_trend||[]);
+
+    // Keywords
+    document.getElementById('trend-keywords').innerHTML = (agg.top_keywords||[]).map(k =>
+      `<div class="kw-pill"><span class="kw-count">${k.count}</span>${esc(k.keyword)}</div>`
+    ).join('') || '<div class="empty">Not enough data yet</div>';
+
+    // Sources
+    document.getElementById('trend-sources').innerHTML = (agg.top_sources||[]).map(s =>
+      `<div class="kw-pill"><span class="kw-count">${s.count}</span>${esc(s.source)}</div>`
+    ).join('') || '<div class="empty">Not enough data yet</div>';
   }
 }
 
-function renderAll(data, date) {
-  document.getElementById('last-updated').textContent = `Last report: ${date} | Run daily at 8 AM EST`;
-  document.getElementById('stat-stories').textContent = data.unique_news || data.alerts?.length || 0;
-  document.getElementById('stat-markets').textContent = data.suspicious_markets || 0;
-  document.getElementById('stat-trades').textContent = data.large_trades || 0;
-  document.getElementById('stat-uma').textContent = data.uma_alerts || 0;
-  document.getElementById('stat-ofac').textContent = data.ofac_new || 0;
-  document.getElementById('stat-bills').textContent = data.bill_updates?.length || 0;
-
-  renderNews(data.alerts || [], 'high-priority-list', true);
-  renderNews(data.alerts || [], 'all-news-list', false);
-  renderSuspiciousMarkets(data.suspicious_market_data || []);
-  renderLargeTrades(data.large_trade_data || []);
-  renderBills(data.bill_updates || []);
-  renderUMA(data.uma_governance || []);
-}
-
-loadReport();
+loadAll();
 </script>
 </body>
 </html>

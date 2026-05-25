@@ -1,121 +1,37 @@
 {
   "date": "2026-05-25",
-  "unique_news": 4,
-  "suspicious_markets": 4,
+  "unique_news": 0,
+  "suspicious_markets": 2,
   "large_trades": 0,
   "uma_alerts": 15,
   "ofac_new": 0,
-  "alerts": [
-    {
-      "source": "Decrypt",
-      "title": "Pump & Memes HEATING up! XMR vs ZEC! How important are these rate cuts? - Under Exposed",
-      "link": "https://decrypt.co/videos/interviews/IuLdmgP6/pump-memes-heating-up-xmr-vs-zec-how-important-are-these-rate-cuts-under-exposed",
-      "published": "Wed, 14 Jan 2026 16:01:53 +0000",
-      "pub_date": "Jan 14, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of t",
-      "score": 7,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "PsyopAnime Meme up 30X! Are Memes back? Monero ATH! Interview W/ Joseph Chalom, CEO of Sharplink",
-      "link": "https://decrypt.co/videos/interviews/mefbKZgQ/psyopanime-meme-up-30x-are-memes-back-monero-ath-interview-w-joseph-chalom-ceo-of-sharplink",
-      "published": "Tue, 13 Jan 2026 18:12:27 +0000",
-      "pub_date": "Jan 13, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of t",
-      "score": 7,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Trump\u2019s speech at Davos gives small boost to Crypto! Saylor buys $2.13B BTC! Blondish Interview!",
-      "link": "https://decrypt.co/videos/interviews/nWmEOl4c/trumps-speech-at-davos-gives-small-boost-to-crypto-saylor-buys-213b-btc-blondish-interview",
-      "published": "Wed, 21 Jan 2026 16:17:26 +0000",
-      "pub_date": "Jan 21, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "prediction market"
-      ],
-      "summary": "Crypto majors are very red following a red Tuesday across markets; BTC -3% at $88,200; ETH -6% at $2,905, SOL -2% at $127; XRP -2% to $1.88. MYX (+11%) and ZRO (+10%) led top movers. Bitcoin and Solana both fell below key technical support levels as ",
-      "score": 3,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "A16z raise $15B! Jerome Powell vs Trump! Crypto remains flat! Special Guest: Dudas!",
-      "link": "https://decrypt.co/videos/interviews/0y90noNs/a16z-raise-15b-jerome-powell-vs-trump-crypto-remains-flat-special-guest-dudas",
-      "published": "Mon, 12 Jan 2026 17:15:46 +0000",
-      "pub_date": "Jan 12, 2026",
-      "matched_keywords": [
-        "prediction market"
-      ],
-      "summary": "Crypto majors are mostly flat headed into Monday open; btc even at $90,600; eth +1% at $3,110, sol +2% at $140; xrp -2% to $2.04. Ip (+20%) and xmr (+15%) led top movers; xmr hit a new ath at $590. Fed chair Jerome Powell released a video message cla",
-      "score": 0,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    }
-  ],
+  "alerts": [],
   "suspicious_market_data": [
     {
       "market_id": "561234",
       "question": "Will Marco Rubio win the 2028 US Presidential Election?",
       "outcome": "Yes",
       "probability_pct": 12.6,
-      "volume_usd": 9981130.0,
+      "volume_usd": 9981193.0,
       "url": "https://polymarket.com/event/will-marco-rubio-win-the-2028-us-presidential-election",
       "end_date": "2028-11-07",
+      "days_until_close": 897,
       "flagged_date": "2026-05-25",
-      "alert_reason": "$9,981,130 volume on 12.6% probability outcome"
+      "insider_risk": "HIGH",
+      "alert_reason": "HIGH INSIDER RISK \u2014 $9,981,193 volume on 12.6% probability. Long-term market but high-risk category."
     },
     {
       "market_id": "898418",
       "question": "Will Lance Stroll be the 2026 F1 Drivers' Champion?",
       "outcome": "Yes",
       "probability_pct": 0.1,
-      "volume_usd": 9924086.0,
+      "volume_usd": 9924210.0,
       "url": "https://polymarket.com/event/will-lance-stroll-be-the-2026-f1-drivers-champion",
       "end_date": "2026-12-06",
+      "days_until_close": 195,
       "flagged_date": "2026-05-25",
-      "alert_reason": "$9,924,086 volume on 0.1% probability outcome"
-    },
-    {
-      "market_id": "2143000",
-      "question": "Will Hyperliquid dip to $24 in May?",
-      "outcome": "Yes",
-      "probability_pct": 0.1,
-      "volume_usd": 99425.0,
-      "url": "https://polymarket.com/event/will-hyperliquid-dip-to-24-in-may",
-      "end_date": "2026-06-01",
-      "flagged_date": "2026-05-25",
-      "alert_reason": "$99,425 volume on 0.1% probability outcome"
-    },
-    {
-      "market_id": "1067187",
-      "question": "Xi Jinping divorce before 2027?",
-      "outcome": "Yes",
-      "probability_pct": 1.4,
-      "volume_usd": 99249.0,
-      "url": "https://polymarket.com/event/xi-jinping-divorce-before-2027",
-      "end_date": "2026-12-31",
-      "flagged_date": "2026-05-25",
-      "alert_reason": "$99,249 volume on 1.4% probability outcome"
+      "insider_risk": "LOW",
+      "alert_reason": "UNUSUALLY HIGH VOLUME \u2014 $9,924,210 on a low insider-risk market. Check for wash trading or market manipulation."
     }
   ],
   "large_trade_data": [],
@@ -280,5 +196,5 @@
     }
   ],
   "developing_stories": [],
-  "narrative": "Today's top story: Pump & Memes HEATING up! XMR vs ZEC! How important are these rate cuts? - Under Exposed (via Decrypt, Jan 14, 2026). There are 3 high priority alerts total today. One suspicious market flagged: 'Will Marco Rubio win the 2028 US Presidential Election?' with $9,981,130 in volume at 12.6% probability. 15 UMA governance dispute(s) flagged \u2014 check the UMA tab for details."
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One suspicious market flagged: 'Will Marco Rubio win the 2028 US Presidential Election?' with $9,981,193 in volume at 12.6% probability. 15 UMA governance dispute(s) flagged \u2014 check the UMA tab for details."
 }

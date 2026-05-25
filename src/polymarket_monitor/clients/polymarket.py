@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any
 
 import requests
@@ -10,6 +11,9 @@ import requests
 from polymarket_monitor import config
 from polymarket_monitor.clients.rss import check_watchlist
 from polymarket_monitor.detectors.market_review import build_market_signal
+from polymarket_monitor.source_status import STATUS_FAILED, STATUS_OK, get_source_status, mark_source
+
+logger = logging.getLogger(__name__)
 
 
 def fetch_polymarket_suspicious_trades() -> list[dict[str, Any]]:
@@ -22,6 +26,7 @@ def fetch_polymarket_suspicious_trades() -> list[dict[str, Any]]:
             timeout=15,
         )
         if resp.status_code != 200:
+            mark_source("Gamma API", STATUS_FAILED, detail=f"HTTP {resp.status_code}", records=0)
             return []
         markets = resp.json()
         for market in markets[:50]:
@@ -39,8 +44,12 @@ def fetch_polymarket_suspicious_trades() -> list[dict[str, Any]]:
                 except Exception:
                     continue
     except Exception as e:
+        logger.warning("Polymarket Gamma API failed: %s", e)
+        mark_source("Gamma API", STATUS_FAILED, detail=str(e), records=0)
         print(f"  Polymarket API error: {e}")
     flagged = sorted(flagged, key=lambda x: x["volume_usd"], reverse=True)[:10]
+    if "Gamma API" not in get_source_status():
+        mark_source("Gamma API", STATUS_OK, detail=f"{len(flagged)} markets matched", records=len(flagged))
     print(f"  Suspicious markets: {len(flagged)}")
     return flagged
 
@@ -77,9 +86,15 @@ def fetch_polymarket_recent_large_trades() -> list[dict[str, Any]]:
                         "wl_maker": check_watchlist(maker),
                         "wl_taker": check_watchlist(taker),
                     })
+        else:
+            mark_source("CLOB API", STATUS_FAILED, detail=f"HTTP {resp.status_code}", records=0)
         flagged = sorted(flagged, key=lambda x: x["size_usd"], reverse=True)[:10]
     except Exception as e:
+        logger.warning("Polymarket CLOB large-trade fetch failed: %s", e)
+        mark_source("CLOB API", STATUS_FAILED, detail=str(e), records=0)
         print(f"  CLOB error: {e}")
+    if "CLOB API" not in get_source_status():
+        mark_source("CLOB API", STATUS_OK, detail=f"{len(flagged)} large trades matched", records=len(flagged))
     print(f"  Large trades: {len(flagged)}")
     return flagged
 
@@ -95,7 +110,10 @@ def fetch_market_trades(market_id: str, limit: int = 500) -> list[dict[str, Any]
         if resp.status_code == 200:
             data = resp.json()
             return data if isinstance(data, list) else data.get("data", [])
+        mark_source("CLOB API", STATUS_FAILED, detail=f"market trades HTTP {resp.status_code}", records=0)
     except Exception as e:
+        logger.warning("Polymarket CLOB market trades failed for %s: %s", market_id, e)
+        mark_source("CLOB API", STATUS_FAILED, detail=str(e), records=0)
         print(f"  Wash trading: CLOB error for {market_id}: {e}")
     return []
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime
+import logging
 from typing import Any
 
 import requests
@@ -10,11 +11,15 @@ import requests
 from polymarket_monitor import config
 from polymarket_monitor.clients.polygonscan import get_wallet_age, get_wallet_tx_count
 from polymarket_monitor.clients.rss import check_watchlist
+from polymarket_monitor.source_status import STATUS_FAILED, STATUS_OK, STATUS_SKIPPED, get_source_status, mark_source
+
+logger = logging.getLogger(__name__)
 
 
 def fetch_onchain_large_txs() -> list[dict[str, Any]]:
     if not config.POLYGONSCAN_KEY:
         print("  On-chain: no POLYGONSCAN_KEY set — add POLYGONSCAN_KEY to GitHub Secrets")
+        mark_source("On-chain/Polygonscan", STATUS_SKIPPED, detail="POLYGONSCAN_KEY not configured", records=0)
         return []
 
     flagged = []
@@ -27,6 +32,7 @@ def fetch_onchain_large_txs() -> list[dict[str, Any]]:
         )
         if resp.status_code != 200:
             print(f"  CLOB API error: {resp.status_code}")
+            mark_source("On-chain/Polygonscan", STATUS_FAILED, detail=f"CLOB HTTP {resp.status_code}", records=0)
             return []
         data = resp.json()
         trades = data if isinstance(data, list) else data.get("data", [])
@@ -114,9 +120,13 @@ def fetch_onchain_large_txs() -> list[dict[str, Any]]:
                     "watchlist": watchlist_hits,
                 })
     except Exception as e:
+        logger.warning("On-chain large transaction collection failed: %s", e)
+        mark_source("On-chain/Polygonscan", STATUS_FAILED, detail=str(e), records=0)
         print(f"  On-chain error: {e}")
 
     flagged = sorted(flagged, key=lambda x: x["risk_score"], reverse=True)[:10]
+    if "On-chain/Polygonscan" not in get_source_status():
+        mark_source("On-chain/Polygonscan", STATUS_OK, detail=f"{len(flagged)} review trades", records=len(flagged))
     print(f"  On-chain risk-flagged trades: {len(flagged)}")
     return flagged
 

@@ -4,11 +4,15 @@ from __future__ import annotations
 
 import datetime
 import email.utils
+import logging
 from typing import Any
 
 import feedparser
 
 from polymarket_monitor.clients.rss import clean_text, parse_date
+from polymarket_monitor.source_status import STATUS_FAILED, STATUS_OK, get_source_status, mark_source
+
+logger = logging.getLogger(__name__)
 
 
 def fetch_uma_governance() -> list[dict[str, Any]]:
@@ -58,8 +62,12 @@ def fetch_uma_governance() -> list[dict[str, Any]]:
                 "alert_type": alert_type,
             })
     except Exception as e:
+        logger.warning("UMA governance collection failed: %s", e)
+        mark_source("UMA", STATUS_FAILED, detail=str(e), records=0)
         print(f"  UMA error: {e}")
 
+    if "UMA" not in get_source_status():
+        mark_source("UMA", STATUS_OK, detail=f"{len(alerts)} alerts", records=len(alerts))
     print(f"  UMA alerts (last 14 days, strict): {len(alerts)}")
     return alerts
 

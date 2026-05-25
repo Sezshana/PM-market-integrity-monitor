@@ -33,6 +33,7 @@ REPORT_TOP_LEVEL_FIELDS = {
     "wash_trading_reports",
     "developing_stories",
     "narrative",
+    "source_coverage",
 }
 
 MARKET_FIELDS = {
@@ -188,6 +189,7 @@ class ReportSchemaContractTests(unittest.TestCase):
         self.assertTrue(NEWS_FIELDS.issubset(report["alerts"][0].keys()))
         self.assertTrue(MARKET_FIELDS.issubset(report["suspicious_market_data"][0].keys()))
         self.assertTrue(WASH_REPORT_FIELDS.issubset(report["wash_trading_reports"][0].keys()))
+        self.assertIn("source_coverage", report)
 
 
 class DashboardContractTests(unittest.TestCase):

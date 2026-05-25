@@ -48,7 +48,7 @@ class ReviewedAlert:
     updated_at: str = ""
 
     def to_row(self) -> dict[str, Any]:
-        now = datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+        now = datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
         created = self.created_at or now
         updated = self.updated_at or now
         return {
@@ -118,7 +118,7 @@ class ReviewStore:
     ) -> None:
         if status not in VALID_STATUSES:
             raise ValueError(f"Invalid alert status: {status}")
-        now = datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+        now = datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
         updates = ["status = ?", "updated_at = ?"]
         values: list[Any] = [status, now]
         if notes is not None:

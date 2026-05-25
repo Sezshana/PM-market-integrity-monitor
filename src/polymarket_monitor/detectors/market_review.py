@@ -10,8 +10,8 @@ from polymarket_monitor import config
 
 def classify_market(question: str) -> tuple[str, bool, bool]:
     question_lower = question.lower()
-    is_low_risk = any(kw in question_lower for kw in config.LOW_INSIDER_RISK_KEYWORDS)
-    is_high_risk = any(kw in question_lower for kw in config.INSIDER_RISK_KEYWORDS)
+    is_low_risk = any(kw.lower() in question_lower for kw in config.LOW_INSIDER_RISK_KEYWORDS)
+    is_high_risk = any(kw.lower() in question_lower for kw in config.INSIDER_RISK_KEYWORDS)
     if is_low_risk and not is_high_risk:
         return "LOW", is_low_risk, is_high_risk
     if is_high_risk:

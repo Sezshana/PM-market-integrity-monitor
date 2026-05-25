@@ -599,31 +599,75 @@ def get_win_rate_alerts():
 # ════════════════════════════════════════════════════════════
 
 def fetch_uma_governance():
+    """
+    Strict UMA filtering — only two alert types:
+    1. Post mentions Polymarket by name AND involves active dispute/resolution
+    2. Post contains explicit bad-faith voting or governance attack language
+    All posts older than 14 days are dropped.
+    """
     alerts = []
+    cutoff_date = datetime.date.today() - datetime.timedelta(days=14)
+
+    ABUSE_TERMS = [
+        "bad-faith p4", "bad faith p4", "coordinated bad-faith",
+        "governance attack", "incorrect resolution", "call for slashing",
+    ]
+
     try:
         feed = feedparser.parse("https://discourse.uma.xyz/latest.rss")
         for entry in feed.entries[:30]:
-            title   = entry.get("title","")
-            summary = entry.get("summary","")
+            title    = entry.get("title","")
+            summary  = entry.get("summary","")
             combined = (title + " " + summary).lower()
-            if any(kw in combined for kw in UMA_REQUIRED):
-                alerts.append({
-                    "title":     title,
-                    "link":      entry.get("link",""),
-                    "published": parse_date(entry.get("published","")),
-                    "summary":   clean_text(summary)[:200],
-                    "note":      "Review: check if dispute participant holds a position in this market.",
-                })
+
+            # Drop anything older than 14 days
+            raw_date = entry.get("published","")
+            try:
+                parsed_dt = email.utils.parsedate_to_datetime(raw_date)
+                post_date = parsed_dt.date()
+                if post_date < cutoff_date:
+                    continue
+            except:
+                pass
+
+            mentions_polymarket = "polymarket" in combined
+
+            type1 = (
+                mentions_polymarket and
+                any(w in combined for w in [
+                    "dispute","incorrect","contested","slashing",
+                    "bad-faith","bad faith","p4","resolution"
+                ]) and
+                any(w in combined for w in [
+                    "market","outcome","resolved","vote","voter"
+                ])
+            )
+
+            type2 = any(term in combined for term in ABUSE_TERMS)
+
+            if not type1 and not type2:
+                continue
+
+            alert_type = "POLYMARKET DISPUTE" if type1 else "GOVERNANCE ABUSE"
+            note = (
+                "Active Polymarket resolution dispute — check if any voter holds a position in this market."
+                if type1 else
+                "Explicit governance abuse pattern — affects resolution integrity across Polymarket markets."
+            )
+
+            alerts.append({
+                "title":      title,
+                "link":       entry.get("link",""),
+                "published":  parse_date(raw_date),
+                "summary":    clean_text(summary)[:200],
+                "note":       note,
+                "alert_type": alert_type,
+            })
     except Exception as e:
         print(f"  UMA error: {e}")
-    print(f"  UMA alerts: {len(alerts)}")
+
+    print(f"  UMA alerts (last 14 days, strict): {len(alerts)}")
     return alerts
-
-
-# ════════════════════════════════════════════════════════════
-# OFAC
-# ════════════════════════════════════════════════════════════
-
 def fetch_ofac_new():
     new_entries = []
     try:
@@ -913,19 +957,26 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
 
     # ON-CHAIN LARGE TRANSACTIONS
 
-    # ON-CHAIN LARGE TRANSACTIONS
+    # ON-CHAIN RISK-FLAGGED TRADES
     if onchain_txs:
-        lines += ["ON-CHAIN LARGE TRANSACTIONS (POLYGON)", "=" * 60]
-        lines.append("Direct Polymarket contract transactions over $10,000 USDC in last 24 hours.")
+        lines += ["ON-CHAIN RISK-FLAGGED TRADES", "=" * 60]
+        lines.append("Large trades on low-probability markets where wallet context raises concerns.")
         for tx in onchain_txs:
             wl_note = f" *** WATCHLIST HIT" if tx.get("watchlist") else ""
+            risk_factors = tx.get("risk_factors", [])
             lines += [
-                f"\n${tx['value_usdc']:,.2f} USDC  |  {tx['timestamp']}",
-                f"  From:    {tx['from']}{wl_note}",
-                f"  To:      {tx['to']}",
-                f"  TX:      {tx['polygonscan']}",
-                f"  Wallet:  {tx['from_link']}",
-                f"  ACTION:  Check wallet age, funding source, and Polymarket position history.",
+                f"\nRISK SCORE: {tx.get('risk_score', 0)} | ${tx.get('size_usd', 0):,.0f} at {tx.get('prob_pct', 0)}% probability | {tx.get('side','')}",
+                f"  Date:        {tx.get('timestamp', '')}",
+                f"  Maker:       {tx.get('maker', '')}{wl_note}",
+                f"  Maker age:   {tx.get('maker_age', 'unknown')}",
+                f"  Taker:       {tx.get('taker', '')}",
+                f"  Taker age:   {tx.get('taker_age', 'unknown')}",
+            ]
+            if risk_factors:
+                lines.append(f"  Risk flags:  {' | '.join(risk_factors)}")
+            lines += [
+                f"  Wallet:      {tx.get('polygonscan', '')}",
+                f"  ACTION:      Investigate wallet history, funding source, and linked wallets.",
             ]
         lines.append("")
 
@@ -1096,65 +1147,133 @@ def send_email(body_plain, body_html, subject):
 
 def fetch_onchain_large_txs():
     """
-    Scan Polymarket's CTF Exchange contract for large USDC transactions
-    in the last 24 hours using Etherscan's Polygon API (chain ID 137).
+    On-chain risk detection — combines trade data with wallet context.
+    Flags: new wallet + large position on low-probability market.
+    Raw USDC transfers alone are not flagged — context is required.
     """
     if not POLYGONSCAN_KEY:
         print("  On-chain: no POLYGONSCAN_KEY set — add POLYGONSCAN_KEY to GitHub Secrets")
         return []
 
     flagged = []
-    yesterday_ts = int((datetime.datetime.now() - datetime.timedelta(days=1)).timestamp())
 
+    # Step 1: Get recent large trades from CLOB API (positions, not deposits)
     try:
-        # Etherscan v2 unified API — chain ID 137 = Polygon
-        url = f"{ETHERSCAN_POLY}?chainid=137"
-        resp = requests.get(url, params={
-            "module":          "account",
-            "action":          "tokentx",
-            "contractaddress": USDC_POLYGON,
-            "address":         POLYMARKET_CTF,
-            "sort":            "desc",
-            "apikey":          POLYGONSCAN_KEY,
-            "offset":          200,
-            "page":            1,
-        }, timeout=15)
-
-        data = resp.json()
-        print(f"  On-chain API status: {data.get('status')} — {data.get('message','')}")
-        if data.get("status") != "1":
-            print(f"  On-chain full response: {str(data)[:300]}")
+        resp = requests.get(
+            "https://clob.polymarket.com/trades",
+            params={"limit": 500},
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=15
+        )
+        if resp.status_code != 200:
+            print(f"  CLOB API error: {resp.status_code}")
             return []
 
-        for tx in data.get("result", []):
-            ts    = int(tx.get("timeStamp", 0))
-            if ts < yesterday_ts:
-                continue
-            value = int(tx.get("value", 0)) / 1e6  # USDC 6 decimals
-            if value < LARGE_TRADE_USD:
+        data   = resp.json()
+        trades = data if isinstance(data, list) else data.get("data", [])
+        print(f"  CLOB: {len(trades)} recent trades retrieved")
+
+        # Filter for large trades on low-probability markets
+        suspicious_trades = []
+        for trade in trades:
+            try:
+                size  = float(trade.get("size", 0) or 0)
+                price = float(trade.get("price", 1) or 1)
+                side  = trade.get("side", "")
+                prob  = price * 100 if side == "BUY" else (1 - price) * 100
+                if size >= LARGE_TRADE_USD and prob <= LOW_PROB_MAX_PCT:
+                    suspicious_trades.append({
+                        "maker":    trade.get("maker_address", ""),
+                        "taker":    trade.get("taker_address", ""),
+                        "size":     round(size, 0),
+                        "prob":     round(prob, 1),
+                        "side":     side,
+                        "asset_id": trade.get("asset_id", ""),
+                        "time":     trade.get("match_time", TODAY),
+                    })
+            except:
                 continue
 
-            from_addr = tx.get("from","")
-            to_addr   = tx.get("to","")
-            tx_date   = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M UTC")
-            wl        = check_watchlist(from_addr + " " + to_addr)
+        print(f"  CLOB: {len(suspicious_trades)} large low-probability trades")
 
-            flagged.append({
-                "from":        from_addr,
-                "to":          to_addr,
-                "value_usdc":  round(value, 2),
-                "tx_hash":     tx.get("hash",""),
-                "timestamp":   tx_date,
-                "polygonscan": f"https://polygonscan.com/tx/{tx.get('hash','')}",
-                "from_link":   f"https://polygonscan.com/address/{from_addr}",
-                "watchlist":   wl,
-            })
+        # Step 2: For each suspicious trade, check wallet age via Polygonscan
+        checked_wallets = {}
+        for trade in suspicious_trades[:10]:
+            for wallet in [trade["maker"], trade["taker"]]:
+                if not wallet or wallet in checked_wallets:
+                    continue
+
+                wallet_age = get_wallet_age(wallet)
+                tx_count   = get_wallet_tx_count(wallet)
+                checked_wallets[wallet] = {
+                    "age":      wallet_age,
+                    "tx_count": tx_count,
+                }
+
+        # Step 3: Score each trade by risk level
+        for trade in suspicious_trades[:10]:
+            maker_info = checked_wallets.get(trade["maker"], {})
+            taker_info = checked_wallets.get(trade["taker"], {})
+
+            risk_factors = []
+            risk_score   = 0
+
+            # New wallet — high risk signal
+            for label, info in [("Maker", maker_info), ("Taker", taker_info)]:
+                age = info.get("age")
+                txs = info.get("tx_count", 999)
+                if age:
+                    try:
+                        age_date = datetime.date.fromisoformat(age)
+                        days_old = (datetime.date.today() - age_date).days
+                        if days_old < 30:
+                            risk_factors.append(f"{label} wallet only {days_old} days old")
+                            risk_score += 4
+                        elif days_old < 90:
+                            risk_factors.append(f"{label} wallet {days_old} days old")
+                            risk_score += 2
+                    except:
+                        pass
+                if txs < 10:
+                    risk_factors.append(f"{label} wallet has only {txs} total transactions")
+                    risk_score += 2
+
+            # Watchlist hit
+            wl = check_watchlist(trade["maker"] + " " + trade["taker"])
+            if wl:
+                risk_factors.append(f"Watchlist: {', '.join(wl)}")
+                risk_score += 5
+
+            # Very low probability amplifies risk
+            if trade["prob"] <= 5:
+                risk_score += 2
+
+            # Only flag if there's actual risk context — not just size
+            if risk_score >= 2 or wl:
+                flagged.append({
+                    "maker":        trade["maker"],
+                    "taker":        trade["taker"],
+                    "size_usd":     trade["size"],
+                    "prob_pct":     trade["prob"],
+                    "side":         trade["side"],
+                    "asset_id":     trade["asset_id"],
+                    "timestamp":    str(trade["time"])[:10],
+                    "risk_score":   risk_score,
+                    "risk_factors": risk_factors,
+                    "wl_maker":     check_watchlist(trade["maker"]),
+                    "wl_taker":     check_watchlist(trade["taker"]),
+                    "maker_age":    maker_info.get("age", "unknown"),
+                    "taker_age":    taker_info.get("age", "unknown"),
+                    "polygonscan":  f"https://polygonscan.com/address/{trade['maker']}",
+                    "from_link":    f"https://polygonscan.com/address/{trade['maker']}",
+                    "watchlist":    wl,
+                })
 
     except Exception as e:
         print(f"  On-chain error: {e}")
 
-    flagged = sorted(flagged, key=lambda x: x["value_usdc"], reverse=True)[:10]
-    print(f"  On-chain large USDC transactions: {len(flagged)}")
+    flagged = sorted(flagged, key=lambda x: x["risk_score"], reverse=True)[:10]
+    print(f"  On-chain risk-flagged trades: {len(flagged)}")
     return flagged
 
 
@@ -1163,16 +1282,15 @@ def get_wallet_age(address):
     if not POLYGONSCAN_KEY:
         return None
     try:
-        resp = requests.get(ETHERSCAN_POLY, params={
-            "chainid": 137,
-            "module":  "account",
-            "action":  "txlist",
-            "address": address,
+        resp = requests.get("https://api.polygonscan.com/api", params={
+            "module":     "account",
+            "action":     "txlist",
+            "address":    address,
             "startblock": 0,
-            "sort":    "asc",
-            "apikey":  POLYGONSCAN_KEY,
-            "offset":  1,
-            "page":    1,
+            "sort":       "asc",
+            "apikey":     POLYGONSCAN_KEY,
+            "offset":     1,
+            "page":       1,
         }, timeout=10)
         data = resp.json()
         if data.get("status") == "1" and data.get("result"):
@@ -1181,6 +1299,28 @@ def get_wallet_age(address):
                 return datetime.datetime.fromtimestamp(ts).date().isoformat()
     except: pass
     return None
+
+
+def get_wallet_tx_count(address):
+    """Get total transaction count for a wallet on Polygon."""
+    if not POLYGONSCAN_KEY:
+        return 999
+    try:
+        resp = requests.get("https://api.polygonscan.com/api", params={
+            "module":     "account",
+            "action":     "txlist",
+            "address":    address,
+            "startblock": 0,
+            "sort":       "desc",
+            "apikey":     POLYGONSCAN_KEY,
+            "offset":     100,
+            "page":       1,
+        }, timeout=10)
+        data = resp.json()
+        if data.get("status") == "1":
+            return len(data.get("result", []))
+    except: pass
+    return 999
 
 
 # ════════════════════════════════════════════════════════════

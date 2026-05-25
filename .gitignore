@@ -11,6 +11,10 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 
+# Local operational review database
+data/*.sqlite3
+data/*.sqlite3-*
+
 # Local virtual environments
 .venv/
 venv/

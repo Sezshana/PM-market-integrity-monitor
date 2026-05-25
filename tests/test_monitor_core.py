@@ -1,6 +1,16 @@
 import tempfile
+import sys
+import types
 import unittest
 from pathlib import Path
+
+# These tests exercise pure helpers and do not need the RSS/HTML parser
+# dependencies that monitor.py imports for runtime collection.
+sys.modules.setdefault(
+    "bs4",
+    types.SimpleNamespace(BeautifulSoup=lambda html, parser: types.SimpleNamespace(get_text=lambda: html or "")),
+)
+sys.modules.setdefault("feedparser", types.SimpleNamespace(parse=lambda url: types.SimpleNamespace(entries=[])))
 
 import monitor
 from wash_trading_module import (

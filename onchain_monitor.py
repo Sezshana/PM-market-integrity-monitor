@@ -1,7 +1,7 @@
 """
 Polymarket On-Chain Monitor
 Replaces Dune with Polygonscan API — free, reliable, no polling needed.
-Identifies suspicious wallets, funding sources, new vs experienced traders,
+Identifies flagged wallets, funding sources, new vs experienced traders,
 and cross-references against OFAC and watchlist.
 """
 

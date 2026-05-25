@@ -9,9 +9,9 @@ An automated daily surveillance intelligence system for prediction market integr
 Runs every morning at 7 AM EDT and delivers a structured intelligence digest covering:
 
 ### Market Integrity Detection
-- **Suspicious market activity** — flags markets with high volume on low-probability outcomes using Polymarket's public Gamma API (the core insider trading detection signal)
+- **Market review criteria** — flags markets with high volume on low-probability outcomes using Polymarket's public Gamma API (a review signal, not a conclusion)
 - **Large individual trades** — scrapes Polymarket's CLOB order book for individual trades over $10k on markets under 15% probability
-- **On-chain wallet profiling** — uses Polygonscan to identify new wallets, contract addresses (bots), funding sources, and high-frequency traders behind suspicious positions
+- **On-chain wallet profiling** — uses Polygonscan to identify new wallets, contract addresses (bots), funding sources, and high-frequency traders behind flagged positions
 - **Win rate tracker** — maintains a rolling record of wallets betting large on long shots, flags anyone with >75% win rate across multiple markets
 
 ### Regulatory Intelligence
@@ -93,6 +93,18 @@ polymarket-osint-monitor/
 | `DUNE_API_KEY` | Free at dune.com |
 | `POLYGONSCAN_KEY` | Free at polygonscan.com/apis |
 
+Use `.env.example` as the local configuration template. Do not commit `.env` files or real credentials.
+
+### Data Versioning Policy
+
+This repository currently runs in **public demo/dashboard mode**:
+
+- `output/` reports and `data/` aggregate state are intentionally versioned.
+- The daily GitHub Action commits those generated files so GitHub Pages can render the dashboard without external infrastructure.
+- Treat committed reports as public artifacts and keep them sanitized.
+
+For a private operational deployment, stop committing generated intelligence and add `output/`, `data/`, and `watchlist.txt` to `.gitignore`.
+
 ### Local Dashboard
 Requires VS Code with Live Server extension.
 Open repo folder in VS Code, right-click `dashboard.html`, select Open with Live Server.
@@ -103,7 +115,7 @@ Pull latest from GitHub Desktop each morning before viewing.
 ## Investigation Framework
 
 The `cases/` folder uses a structured investigation memo format covering:
-- Suspected violation type and applicable rule (CEA, Polymarket Market Integrity Rules)
+- Review criteria and applicable rule context (CEA, Polymarket Market Integrity Rules)
 - Market details (question, probability at trade, position size, outcome, profit)
 - On-chain data (wallet addresses, funding source, linked wallets, transaction hashes)
 - OSINT findings (off-chain identity resolution)
@@ -120,5 +132,5 @@ Built independently during a 3-week pre-start period as preparation for a Lead M
 Key reference cases informing detection logic:
 - Iran war bets insider trading case (May 2026) — $2.4M profit, 98% win rate
 - April 2026 UMA governance attack (Israel-Hezbollah ceasefire market)
-- Maduro-linked suspicious trading (2024)
+- Maduro-linked market-integrity review (2024)
 - $520K Polygon exploit (May 2026)

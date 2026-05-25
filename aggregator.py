@@ -147,7 +147,7 @@ def update_wallet_registry(report):
 
 def update_market_history(report):
     """
-    Track suspicious markets across days.
+    Track markets that matched review criteria across days.
     A market flagged 3+ days in a row is far more significant than a one-time flag.
     """
     history = load_json(MARKET_HISTORY, {})

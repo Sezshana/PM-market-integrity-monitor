@@ -64,7 +64,12 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
         risk = market.get("insider_risk","MEDIUM")
         risk_colors = {"HIGH":("#ff5c5c","#ff5c5c22"),"MEDIUM":("#ffb547","#ffb54722"),"LOW":("#5b8dee","#5b8dee22")}
         border_color, risk_bg = risk_colors.get(risk, ("#ffb547","#ffb54722"))
-        risk_badge = badge(f"{risk} INSIDER RISK", "red" if risk=="HIGH" else ("yellow" if risk=="MEDIUM" else "blue"))
+        risk_labels = {
+            "HIGH": "HIGH EVENT-ACCESS CRITERIA",
+            "MEDIUM": "MEDIUM REVIEW CRITERIA",
+            "LOW": "LOW INFO-ASYMMETRY / WASH CHECK",
+        }
+        risk_badge = badge(risk_labels.get(risk, "REVIEW CRITERIA"), "red" if risk=="HIGH" else ("yellow" if risk=="MEDIUM" else "blue"))
         days = market.get("days_until_close", 9999)
         days_str = f"{days} days until close" if days < 9999 else "long-term"
         urgency_color = "#ff5c5c" if days <= 30 else ("#ffb547" if days <= 90 else "#5a6080")
@@ -188,7 +193,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
   <tr><td style="padding:16px 0">
     <table width="100%" cellpadding="4" cellspacing="4"><tr>
       {stat_box(len(high), "High Priority", "red")}
-      {stat_box(len(suspicious_markets), "Susp. Markets", "red")}
+      {stat_box(len(suspicious_markets), "Review Markets", "red")}
       {stat_box(len(onchain_txs), "On-Chain Flags", "blue")}
       {stat_box(len(uma), "UMA Disputes", "yellow")}
       {stat_box(len(bills), "Bills Tracked", "green")}
@@ -200,7 +205,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
   {developing_html}
 
   <!-- SUSPICIOUS MARKETS -->
-  {"".join([f'<tr>{section_header("Suspicious Market Activity — Investigate", len(suspicious_markets))}</tr><tr><td style="padding-bottom:16px">' + suspicious_html + "</td></tr>"]) if suspicious_markets else ""}
+  {"".join([f'<tr>{section_header("Market Review Criteria Matched", len(suspicious_markets))}</tr><tr><td style="padding-bottom:16px">' + suspicious_html + "</td></tr>"]) if suspicious_markets else ""}
 
   <!-- ON-CHAIN -->
   {"".join([f'<tr>{section_header("On-Chain Large Transactions (Polygon)", len(onchain_txs))}</tr><tr><td style="padding-bottom:16px">' + onchain_html + "</td></tr>"]) if onchain_txs else ""}
@@ -221,7 +226,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
   <!-- FOOTER -->
   <tr><td style="padding:24px 0 0;border-top:1px solid #ffffff14;margin-top:20px">
     <div style="font-size:11px;color:#3a4060;text-align:center">
-      Polymarket OSINT Monitor · Runs daily at 7 AM EDT · Private surveillance intelligence
+      Polymarket OSINT Monitor · Runs daily at 7 AM EDT · Analyst review required before escalation
     </div>
   </td></tr>
 

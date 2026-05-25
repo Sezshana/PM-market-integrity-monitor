@@ -12,7 +12,7 @@ insider polymarket
 governance attack
 
 [wallets]
-# Add wallet addresses you are already suspicious of (one per line)
+# Add wallet addresses already requiring review (one per line)
 # Example: 0xabc123...
 # Add wallets here after identifying them in investigations
 

@@ -48,8 +48,8 @@ def fetch_market_trades(market_id, limit=500):
 def detect_repeated_counterparties(trades):
     """
     Signal 1: Same two wallets trading against each other repeatedly.
-    Legitimate traders rarely end up on opposite sides of the same market
-    multiple times. Wash traders do this systematically.
+    Repeated counterparties can be consistent with coordinated self-trading,
+    but should be reviewed with order-book and wallet context.
     """
     pair_counts = defaultdict(int)
     pair_volume = defaultdict(float)
@@ -74,7 +74,7 @@ def detect_repeated_counterparties(trades):
                 "trade_count": count,
                 "volume_usd":  round(pair_volume[pair], 0),
                 "signal":      "REPEATED COUNTERPARTY",
-                "explanation": f"These two wallets traded against each other {count} times. Legitimate traders rarely end up as repeated counterparties on the same market.",
+                "explanation": f"These two wallets traded against each other {count} times on the same market. Repeated counterparty pattern observed; analyst review required.",
                 "polygonscan_a": f"https://polygonscan.com/address/{pair[0]}",
                 "polygonscan_b": f"https://polygonscan.com/address/{pair[1]}",
             })
@@ -84,8 +84,8 @@ def detect_repeated_counterparties(trades):
 def detect_near_zero_net_position(trades):
     """
     Signal 2: Wallet has high gross volume but near-zero net position.
-    A wash trader who buys and sells equal amounts ends up with no
-    actual market exposure — they never had any real conviction.
+    Near-zero exposure after high gross volume is a review signal, not a
+    conclusion about trader intent.
     """
     wallet_positions = defaultdict(lambda: {"bought": 0.0, "sold": 0.0})
 
@@ -117,7 +117,7 @@ def detect_near_zero_net_position(trades):
                 "net_position": round(net, 0),
                 "net_ratio":   round(ratio * 100, 1),
                 "signal":      "NEAR-ZERO NET POSITION",
-                "explanation": f"${gross:,.0f} in gross trading volume but only ${net:,.0f} in net exposure ({ratio*100:.1f}%). Real traders take positions. Wash traders cancel out.",
+                "explanation": f"${gross:,.0f} in gross trading volume but only ${net:,.0f} in net exposure ({ratio*100:.1f}%). Near-zero net exposure observed; analyst review required.",
                 "polygonscan": f"https://polygonscan.com/address/{wallet}",
             })
     return sorted(flagged, key=lambda x: x["gross_volume"], reverse=True)[:5]
@@ -126,7 +126,8 @@ def detect_near_zero_net_position(trades):
 def detect_synchronized_timing(trades):
     """
     Signal 3: Trades on opposite sides happening within seconds of each other.
-    Wash traders often submit buy and sell orders nearly simultaneously.
+    Synchronized opposite-side timing can indicate coordination and should be
+    reviewed with counterparty and order-book context.
     """
     flagged_pairs = []
     sorted_trades = sorted(trades, key=lambda x: x.get("match_time", ""))
@@ -167,7 +168,7 @@ def detect_synchronized_timing(trades):
                             "trade_b_size": round(size_b, 0),
                             "seconds_apart": round(diff, 1),
                             "signal":       "SYNCHRONIZED OPPOSITE TRADES",
-                            "explanation":  f"Same wallet appeared on both sides of opposite trades {diff:.1f} seconds apart. Coordinated simultaneous buy/sell is a classic wash trading pattern.",
+                            "explanation":  f"Same wallet appeared on both sides of opposite trades {diff:.1f} seconds apart. Synchronized opposite-side timing observed; analyst review required.",
                         })
             except:
                 continue
@@ -178,8 +179,8 @@ def detect_synchronized_timing(trades):
 def check_shared_funding_source(wallet_a, wallet_b):
     """
     Signal 4: Two counterparty wallets funded from the same source.
-    If both wallets received their initial USDC from the same wallet,
-    they are very likely controlled by the same person.
+    Shared initial funding is a linkage signal that requires corroboration
+    before drawing a control or ownership conclusion.
     """
     if not POLYGONSCAN_KEY:
         return None
@@ -212,7 +213,7 @@ def check_shared_funding_source(wallet_a, wallet_b):
             "wallet_a":      wallet_a,
             "wallet_b":      wallet_b,
             "signal":        "SHARED FUNDING SOURCE",
-            "explanation":   f"Both wallets received their initial USDC from the same address ({funder_a[:16]}...). This strongly suggests they are controlled by the same person.",
+            "explanation":   f"Both wallets received their initial USDC from the same address ({funder_a[:16]}...). Shared funder observed; analyst review required before inferring common control.",
             "polygonscan":   f"https://polygonscan.com/address/{funder_a}",
         }
     return None
@@ -277,8 +278,8 @@ def analyze_market_for_wash_trading(market_id, market_question, volume_usd):
         "signals":        signals,
         "date_analyzed":  TODAY,
         "verdict":        (
-            "HIGH WASH TRADING PROBABILITY" if score >= 8 else
-            "MODERATE WASH TRADING SIGNALS" if score >= 4 else
+            "MULTIPLE WASH-TRADING REVIEW SIGNALS" if score >= 8 else
+            "MODERATE WASH-TRADING REVIEW SIGNALS" if score >= 4 else
             "LOW-LEVEL SIGNALS — MONITOR"
         ),
     }
@@ -337,8 +338,8 @@ def format_wash_trading_email_section(wash_reports):
 
     for report in wash_reports:
         verdict_color = {
-            "HIGH WASH TRADING PROBABILITY":   "⚠⚠⚠",
-            "MODERATE WASH TRADING SIGNALS":   "⚠⚠",
+            "MULTIPLE WASH-TRADING REVIEW SIGNALS": "⚠⚠⚠",
+            "MODERATE WASH-TRADING REVIEW SIGNALS": "⚠⚠",
             "LOW-LEVEL SIGNALS — MONITOR":     "⚠",
         }.get(report["verdict"], "⚠")
 

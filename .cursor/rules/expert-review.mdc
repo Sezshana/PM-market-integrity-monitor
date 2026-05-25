@@ -1,0 +1,39 @@
+---
+description: "Expert-review protocol for detector, architecture, and release milestones."
+alwaysApply: false
+---
+
+# Expert Review
+
+Use this protocol before major detector expansion, a `src/` restructure,
+case-management persistence, or public release.
+
+## Review Panel
+
+Run focused reviews for:
+
+1. **Security / Red Team**: secrets, data exposure, unsafe generated findings.
+2. **Surveillance Methodology**: evidence-first language, false positives,
+   alternative explanations, escalation criteria.
+3. **Architecture**: client/detector/reporting/storage boundaries and dashboard
+   contracts.
+4. **Testing**: unit coverage, offline tests, schema checks, fixture quality.
+5. **Operations**: GitHub Actions permissions, report versioning, runbooks.
+
+## Finding Format
+
+```text
+Severity: CRITICAL / HIGH / MEDIUM / LOW
+File: path:line
+Issue:
+Evidence:
+Recommended fix:
+Verdict: PROCEED / CONDITIONAL / BLOCK
+```
+
+## Exit Criteria
+
+- No CRITICAL or HIGH findings remain unresolved.
+- Detector outputs have signal cards.
+- Public-demo vs private-operational data handling is documented.
+- Relevant tests and workflow checks pass.

@@ -1,0 +1,47 @@
+---
+description: "Design gate for non-trivial monitor changes. Agents should create reviewable design docs before large detector, workflow, storage, or reporting changes."
+alwaysApply: true
+---
+
+# Worker Gate
+
+This repository is a market-integrity monitoring prototype. Keep changes
+reviewable and evidence-first.
+
+## Required Design Gate
+
+Before implementing a non-trivial change, create design notes under:
+
+```text
+docs/designs/<feature-name>/
+```
+
+Use these files when the change affects detector behavior, external data
+collection, persistence/state, report semantics, GitHub Actions, or dashboard
+outputs:
+
+```text
+01_ARCHITECTURE_MAP.md
+02_DATA_FLOW.md
+03_IMPLEMENTATION_PLAN.md
+04_REVIEW_CHECKLIST.md
+```
+
+After creating design docs, commit them and stop for review unless the user has
+explicitly asked to continue with implementation in the same task.
+
+## Lightweight Exemptions
+
+Design docs are not required for:
+
+- Documentation-only edits
+- Cursor rules, PR templates, or process docs
+- Small config-only changes
+- Test-only changes
+- Tiny covered fixes that do not change detector thresholds or report semantics
+
+## Review Standard
+
+For surveillance-related behavior, use observed criteria and analyst-review
+language. Do not present heuristic output as a conclusion about intent,
+identity, ownership, or wrongdoing.

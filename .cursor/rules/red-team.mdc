@@ -1,0 +1,42 @@
+---
+description: "Security and abuse-case review for OSINT monitor changes."
+alwaysApply: true
+---
+
+# Red Team
+
+Block changes that make private intelligence, credentials, or unsupported
+accusations more likely to leak.
+
+## Blocking Issues
+
+- Hardcoded API keys, SMTP credentials, passwords, or personal secrets.
+- Committed `.env` files or private analyst notes.
+- Generated reports that include private watchlists, non-public identities, or
+  unsanitized case details in public-demo mode.
+- GitHub Actions with write permissions broader than needed.
+- Code that sends email or pushes data to external services without explicit
+  environment configuration.
+- User-controlled URLs fetched without validation.
+- Generated findings that assert wrongdoing, common control, insider access, or
+  sanctions exposure without evidence and review language.
+
+## Warning Issues
+
+- Detector thresholds changed without a signal card or test.
+- Large scripts growing without a plan to split client, detector, reporting,
+  and storage responsibilities.
+- Broad exception handlers that hide data-source failures.
+- State files updated without retention or data-versioning notes.
+
+## Review Output
+
+For each finding, cite:
+
+```text
+Severity:
+File:
+Issue:
+Why it matters:
+Fix:
+```

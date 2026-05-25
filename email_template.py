@@ -61,15 +61,26 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
         </td></tr>'''
 
     def trade_row(market):
-        return f'''<tr><td style="padding:14px;background:#1a1d27;border-left:3px solid #ff5c5c;border-radius:0 8px 8px 0;margin-bottom:8px;display:block">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-                <span style="font-size:22px;font-weight:700;color:#ff5c5c;letter-spacing:-0.5px">${"{:,.0f}".format(market.get("volume_usd",0))}</span>
-                <span style="font-size:13px;color:#ffb547;font-weight:500">{esc(str(market.get("probability_pct",0)))}% probability</span>
+        risk = market.get("insider_risk","MEDIUM")
+        risk_colors = {"HIGH":("#ff5c5c","#ff5c5c22"),"MEDIUM":("#ffb547","#ffb54722"),"LOW":("#5b8dee","#5b8dee22")}
+        border_color, risk_bg = risk_colors.get(risk, ("#ffb547","#ffb54722"))
+        risk_badge = badge(f"{risk} INSIDER RISK", "red" if risk=="HIGH" else ("yellow" if risk=="MEDIUM" else "blue"))
+        days = market.get("days_until_close", 9999)
+        days_str = f"{days} days until close" if days < 9999 else "long-term"
+        urgency_color = "#ff5c5c" if days <= 30 else ("#ffb547" if days <= 90 else "#5a6080")
+        return f'''<tr><td style="padding:14px;background:#1a1d27;border-left:4px solid {border_color};border-radius:0 8px 8px 0;margin-bottom:8px;display:block">
+            <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px">
+                {risk_badge}
+                <span style="font-size:11px;color:{urgency_color};font-weight:600">{esc(days_str)}</span>
             </div>
-            <div style="font-size:13px;font-weight:500;color:#f0f2f8;margin-bottom:6px">{esc(market.get("question",""))}</div>
-            <div style="font-size:12px;color:#5a6080">Outcome: {esc(market.get("outcome",""))} &nbsp;·&nbsp; Closes: {esc(market.get("end_date",""))} &nbsp;·&nbsp; Flagged: {esc(market.get("flagged_date",""))}</div>
-            <div style="margin-top:8px;font-size:12px;color:#ffb547">⚠ {esc(market.get("alert_reason",""))}</div>
-            <a href="{esc(market.get("url",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none;display:inline-block;margin-top:6px">View on Polymarket ↗</a>
+            <div style="font-size:15px;font-weight:600;color:#f0f2f8;margin-bottom:8px;line-height:1.3">{esc(market.get("question",""))}</div>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px">
+                <span style="font-size:22px;font-weight:700;color:{border_color};letter-spacing:-0.5px">${"{:,.0f}".format(market.get("volume_usd",0))}</span>
+                <span style="font-size:13px;color:#ffb547;font-weight:500">{esc(str(market.get("probability_pct",0)))}% probability &nbsp;·&nbsp; {esc(market.get("outcome",""))} outcome</span>
+            </div>
+            <div style="font-size:12px;color:#5a6080;margin-bottom:8px">Closes: {esc(market.get("end_date",""))} &nbsp;·&nbsp; Flagged: {esc(market.get("flagged_date",""))}</div>
+            <div style="margin-top:6px;font-size:12px;color:{border_color};background:{risk_bg};padding:8px;border-radius:6px">{esc(market.get("alert_reason",""))}</div>
+            <a href="{esc(market.get("url",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none;display:inline-block;margin-top:8px">View on Polymarket ↗</a>
         </td></tr>'''
 
     def onchain_row(tx):
@@ -110,6 +121,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
     # Build sections
     suspicious_html = ""
     if suspicious_markets:
+        suspicious_markets = sorted(suspicious_markets, key=lambda x: ({"HIGH":0,"MEDIUM":1,"LOW":2}.get(x.get("insider_risk","MEDIUM"),1), x.get("days_until_close",9999)))
         rows = "\n".join(f'<tr><td style="padding-bottom:8px">' + trade_row(m).replace("<tr>","").replace("</tr>","") + "</td></tr>" for m in suspicious_markets)
         suspicious_html = f'''
         {"".join(f'<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px">{trade_row(m)}</table>' for m in suspicious_markets)}'''

@@ -1,0 +1,34 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Python/runtime artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local virtual environments
+.venv/
+venv/
+env/
+
+# Local editor/OS files
+.DS_Store
+.vscode/
+.idea/
+
+# Private analyst case notes. Keep the shared template versioned.
+cases/*.md
+!cases/case_template.md
+!cases/INDEX.md
+
+# output/ and data/ are intentionally versioned in public-demo mode because
+# GitHub Pages and the daily workflow read them directly. For private
+# operational deployments, stop committing generated reports/state and add:
+# output/
+# data/
+# watchlist.txt

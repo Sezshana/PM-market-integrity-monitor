@@ -154,7 +154,7 @@
   </div>
   <div class="two-col">
     <div class="section">
-      <div class="sec-header"><h2>Suspicious Markets Today</h2><span class="sec-count" id="cnt-markets">0</span></div>
+      <div class="sec-header"><h2>Markets Matching Review Criteria Today</h2><span class="sec-count" id="cnt-markets">0</span></div>
       <div id="today-markets"><div class="loading"><div class="spinner"></div></div></div>
     </div>
     <div class="section">
@@ -171,15 +171,15 @@
 <!-- WALLET INTEL PANEL -->
 <div id="panel-wallets" class="panel">
   <div class="section">
-    <div class="sec-header"><h2>High Risk Wallets — OFAC / Watchlist Matches</h2><span class="sec-count" id="cnt-highrisk">0</span></div>
+    <div class="sec-header"><h2>Wallets Requiring Review — OFAC / Watchlist Matches</h2><span class="sec-count" id="cnt-highrisk">0</span></div>
     <div id="wallets-highrisk"><div class="empty">No OFAC or watchlist matches yet</div></div>
   </div>
   <div class="section">
-    <div class="sec-header"><h2>Recurring Suspicious Wallets — Seen 2+ Times</h2><span class="sec-count" id="cnt-recurring">0</span></div>
+    <div class="sec-header"><h2>Recurring Flagged Wallets — Seen 2+ Times</h2><span class="sec-count" id="cnt-recurring">0</span></div>
     <div id="wallets-recurring"><div class="loading"><div class="spinner"></div></div></div>
   </div>
   <div class="section">
-    <div class="sec-header"><h2>Win Rate Tracker — Suspicious Long-Shot Winners</h2></div>
+    <div class="sec-header"><h2>Win Rate Tracker — Long-Shot Review Queue</h2></div>
     <div id="wallets-winrate"><div class="empty">No win rate alerts yet — data builds over time</div></div>
   </div>
 </div>
@@ -249,9 +249,9 @@ function badge(text, color) {
 }
 
 function riskBadge(risk) {
-  if (risk==='HIGH') return badge('HIGH INSIDER RISK','red');
-  if (risk==='LOW')  return badge('LOW INSIDER RISK','blue');
-  return badge('MEDIUM RISK','yellow');
+  if (risk==='HIGH') return badge('HIGH EVENT-ACCESS CRITERIA','red');
+  if (risk==='LOW')  return badge('LOW INFO-ASYMMETRY / WASH CHECK','blue');
+  return badge('MEDIUM REVIEW CRITERIA','yellow');
 }
 
 // ── WALLET RENDERING ──
@@ -390,7 +390,7 @@ async function loadAll() {
     // Today markets
     document.getElementById('today-markets').innerHTML = markets.length
       ? markets.map(renderTodayMarket).join('')
-      : '<div class="empty">No suspicious markets today</div>';
+      : '<div class="empty">No market review criteria matched today</div>';
 
     // Developing stories
     document.getElementById('today-developing').innerHTML = devs.length
@@ -407,7 +407,7 @@ async function loadAll() {
       ? wash.map(w => `
           <div class="market-row">
             <div class="market-badges">
-              ${w.wash_score>=8 ? badge('HIGH WASH PROBABILITY','red') : w.wash_score>=4 ? badge('MODERATE SIGNALS','yellow') : badge('LOW SIGNALS','blue')}
+              ${w.wash_score>=8 ? badge('MULTIPLE WASH SIGNALS','red') : w.wash_score>=4 ? badge('MODERATE SIGNALS','yellow') : badge('LOW SIGNALS','blue')}
               ${badge('Score: '+w.wash_score,'gray')}
             </div>
             <div class="market-question">${esc(w.question||'')}</div>

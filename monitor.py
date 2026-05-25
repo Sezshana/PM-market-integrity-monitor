@@ -30,7 +30,7 @@ POLYMARKET_CTF  = "0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E"  # Main CTF Excha
 USDC_POLYGON    = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
 ETHERSCAN_POLY  = "https://api.etherscan.io/v2/api"
 
-ALERT_EMAIL   = os.environ.get("ALERT_EMAIL", "shanabautista0819@gmail.com")
+ALERT_EMAIL   = os.environ.get("ALERT_EMAIL", "")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
 CONGRESS_KEY  = os.environ.get("CONGRESS_API_KEY", "")
 DUNE_API_KEY  = os.environ.get("DUNE_API_KEY", "")
@@ -334,8 +334,8 @@ def update_story_threads(news_hits):
 # WATCHLIST
 # ════════════════════════════════════════════════════════════
 
-def load_watchlist():
-    path = Path("watchlist.txt")
+def load_watchlist(path=Path("watchlist.txt")):
+    path = Path(path)
     if not path.exists():
         return {"keywords": [], "wallets": [], "handles": []}
     keywords, wallets, handles = [], [], []
@@ -498,15 +498,15 @@ def fetch_polymarket_suspicious_trades():
                     if not is_near_term and risk_level != "HIGH" and volume < HIGH_VOLUME_THRESHOLD:
                         continue
 
-                    # Build alert reason with insider risk context
+                    # Build alert reason with observed criteria, not conclusions.
                     if risk_level == "HIGH" and is_near_term:
-                        alert_reason = f"HIGH INSIDER RISK — ${volume:,.0f} volume on {prob:.1f}% probability, closes in {days_until_close} days. Someone could plausibly have nonpublic information."
+                        alert_reason = f"Criteria matched: low-probability outcome, ${volume:,.0f} market volume, near-term resolution in {days_until_close} days, and event category with concentrated decision access. Analyst review required."
                     elif risk_level == "HIGH":
-                        alert_reason = f"HIGH INSIDER RISK — ${volume:,.0f} volume on {prob:.1f}% probability. Long-term market but high-risk category."
+                        alert_reason = f"Criteria matched: low-probability outcome, ${volume:,.0f} market volume, and event category with concentrated decision access. Longer resolution horizon lowers urgency; analyst review required."
                     elif risk_level == "LOW":
-                        alert_reason = f"WASH TRADING CHECK — ${volume:,.0f} on a market where insider trading is unlikely (sports/election). Volume this high suggests possible wash trading or coordinated manipulation rather than information advantage."
+                        alert_reason = f"Criteria matched for wash-trading review: low-probability outcome with ${volume:,.0f} volume in a lower information-asymmetry category. Check for repeated counterparties, near-zero net exposure, or coordinated timing."
                     else:
-                        alert_reason = f"${volume:,.0f} volume on {prob:.1f}% probability outcome. Moderate insider risk."
+                        alert_reason = f"Criteria matched: ${volume:,.0f} volume on a {prob:.1f}% probability outcome. Analyst review recommended before drawing conclusions."
 
                     flagged.append({
                         "market_id":       market_id,
@@ -763,12 +763,12 @@ def build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, d
         trade_msg = []
         if suspicious_markets:
             top_market = suspicious_markets[0]
-            trade_msg.append(f"One suspicious market flagged: '{top_market['question']}' with ${top_market['volume_usd']:,.0f} in volume at {top_market['probability_pct']}% probability")
+            trade_msg.append(f"One market matched review criteria: '{top_market['question']}' with ${top_market['volume_usd']:,.0f} in volume at {top_market['probability_pct']}% probability")
         if large_trades:
             trade_msg.append(f"{len(large_trades)} large individual trade(s) detected on low-probability markets")
         parts.append(". ".join(trade_msg) + ".")
     else:
-        parts.append("No suspicious trading activity detected today.")
+        parts.append("No market or trade review criteria matched today.")
 
     # Developing stories
     if developing_stories:
@@ -799,16 +799,15 @@ def build_subject(news, suspicious_markets, large_trades, is_quiet):
 
     if high_risk and near_term:
         top = high_risk[0] if high_risk else near_term[0]
-        return f"PM Monitor {TODAY_PRETTY} — ⚠ HIGH RISK: {top['question'][:55]}..."
+        return f"PM Monitor {TODAY_PRETTY} — Review criteria matched: {top['question'][:55]}..."
     elif high_risk:
         top = high_risk[0]
-        return f"PM Monitor {TODAY_PRETTY} — High insider risk: {top['question'][:50]}..."
+        return f"PM Monitor {TODAY_PRETTY} — Event-access criteria: {top['question'][:50]}..."
     elif near_term:
         top = near_term[0]
         return f"PM Monitor {TODAY_PRETTY} — Near-term flag: ${top['volume_usd']:,.0f} on {top['probability_pct']}% market"
     elif suspicious_markets:
-        top = suspicious_markets[0]
-        return f"PM Monitor {TODAY_PRETTY} — {len(suspicious_markets)} markets flagged + {len(high)} news alerts"
+        return f"PM Monitor {TODAY_PRETTY} — {len(suspicious_markets)} markets matched criteria + {len(high)} news alerts"
     elif high:
         top = high[0]["title"][:60]
         return f"PM Monitor {TODAY_PRETTY} — {top}{'...' if len(top)==60 else ''}"
@@ -908,7 +907,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
     lines += ["AT A GLANCE", "-" * 40,
               f"High priority alerts:     {len(high)}",
               f"Total news stories:       {len(news)}",
-              f"Suspicious markets:       {len(suspicious_markets)}",
+              f"Markets for review:       {len(suspicious_markets)}",
               f"Large individual trades:  {len(large_trades)}",
               f"UMA governance alerts:    {len(uma)}",
               f"New OFAC additions:       {len(ofac)}",
@@ -924,7 +923,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         lines += [
             "QUIET DAY",
             "-" * 40,
-            "No high priority news, suspicious trades, or governance disputes today.",
+            "No high priority news, market/trade review criteria, or governance disputes today.",
             "Congressional bill status and general news below.",
             "",
         ]
@@ -941,9 +940,9 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
             ]
         lines.append("")
 
-    # SUSPICIOUS MARKETS
+    # MARKETS FOR REVIEW
     if suspicious_markets:
-        lines += ["SUSPICIOUS MARKET ACTIVITY — INVESTIGATE", "=" * 60]
+        lines += ["MARKET REVIEW CRITERIA MATCHED", "=" * 60]
         for m in suspicious_markets:
             lines += [
                 f"\nMARKET: {m['question']}",
@@ -954,7 +953,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 f"  Flagged:       {m['flagged_date']}",
                 f"  Alert:         {m['alert_reason']}",
                 f"  URL:           {m['url']}",
-                f"  ACTION:        High volume on low-probability outcome. Run OSINT on largest traders.",
+                f"  ACTION:        Review largest traders and supporting evidence before escalation.",
             ]
         lines.append("")
 
@@ -969,7 +968,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
     # ON-CHAIN RISK-FLAGGED TRADES
     if onchain_txs:
         lines += ["ON-CHAIN RISK-FLAGGED TRADES", "=" * 60]
-        lines.append("Large trades on low-probability markets where wallet context raises concerns.")
+        lines.append("Large trades on low-probability markets where wallet context matched review criteria.")
         for tx in onchain_txs:
             wl_note = f" *** WATCHLIST HIT" if tx.get("watchlist") else ""
             risk_factors = tx.get("risk_factors", [])
@@ -982,10 +981,10 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 f"  Taker age:   {tx.get('taker_age', 'unknown')}",
             ]
             if risk_factors:
-                lines.append(f"  Risk flags:  {' | '.join(risk_factors)}")
+                lines.append(f"  Review criteria: {' | '.join(risk_factors)}")
             lines += [
                 f"  Wallet:      {tx.get('polygonscan', '')}",
-                f"  ACTION:      Investigate wallet history, funding source, and linked wallets.",
+                f"  ACTION:      Review wallet history, funding source, and linked wallets.",
             ]
         lines.append("")
 
@@ -1002,7 +1001,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 f"  Maker:  {t['maker']}{wl_note}",
                 f"  Taker:  {t['taker']}",
                 f"  Asset:  {t['asset_id']}",
-                f"  ACTION: Run wallet OSINT. Trace funding source. Check win rate tracker.",
+                f"  ACTION: Review wallet OSINT, funding source, and win rate tracker.",
             ]
         lines.append("")
 
@@ -1028,7 +1027,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         for a in win_alerts:
             lines += [f"\nWallet: {a['wallet']}",
                       f"  Win rate: {a['win_rate_pct']}% on {a['total_trades']} tracked long-shot trades",
-                      f"  ACTION: Full OSINT investigation recommended."]
+                      f"  ACTION: Analyst review of wallet history recommended."]
         lines.append("")
 
     # HIGH PRIORITY NEWS
@@ -1132,6 +1131,9 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
 
 
 def send_email(body_plain, body_html, subject):
+    if not ALERT_EMAIL:
+        print("No ALERT_EMAIL configured — skipping email")
+        return
     if not SMTP_PASSWORD:
         print("No SMTP password — skipping email")
         return
@@ -1158,7 +1160,7 @@ def send_email(body_plain, body_html, subject):
 def fetch_onchain_large_txs():
     """
     On-chain risk detection — combines trade data with wallet context.
-    Flags: new wallet + large position on low-probability market.
+    Review criteria: new wallet + large position on low-probability market.
     Raw USDC transfers alone are not flagged — context is required.
     """
     if not POLYGONSCAN_KEY:
@@ -1204,9 +1206,9 @@ def fetch_onchain_large_txs():
             except:
                 continue
 
-        print(f"  CLOB: {len(suspicious_trades)} large low-probability trades")
+        print(f"  CLOB: {len(suspicious_trades)} large low-probability trades matched review criteria")
 
-        # Step 2: For each suspicious trade, check wallet age via Polygonscan
+        # Step 2: For each trade matching review criteria, check wallet age via Polygonscan
         checked_wallets = {}
         for trade in suspicious_trades[:10]:
             for wallet in [trade["maker"], trade["taker"]]:
@@ -1228,7 +1230,7 @@ def fetch_onchain_large_txs():
             risk_factors = []
             risk_score   = 0
 
-            # New wallet — high risk signal
+            # New wallet — review signal
             for label, info in [("Maker", maker_info), ("Taker", taker_info)]:
                 age = info.get("age")
                 txs = info.get("tx_count", 999)
@@ -1254,11 +1256,11 @@ def fetch_onchain_large_txs():
                 risk_factors.append(f"Watchlist: {', '.join(wl)}")
                 risk_score += 5
 
-            # Very low probability amplifies risk
+            # Very low probability adds review weight
             if trade["prob"] <= 5:
                 risk_score += 2
 
-            # Only flag if there's actual risk context — not just size
+            # Only flag if there is wallet/review context — not just size.
             if risk_score >= 2 or wl:
                 flagged.append({
                     "maker":        trade["maker"],
@@ -1347,7 +1349,7 @@ def main():
     developing_stories = update_story_threads(news)
     print(f"   Developing stories: {len(developing_stories)}")
 
-    print("3. Polymarket suspicious markets...")
+    print("3. Polymarket market review criteria...")
     suspicious_markets = fetch_polymarket_suspicious_trades()
 
     print("3b. On-chain large transactions (Polygonscan)...")
@@ -1387,7 +1389,7 @@ def main():
 
     high = len([h for h in news if h["priority"]])
     print(f"On-chain txs: {len(onchain_txs)}")
-    print(f"Done. {len(news)} new stories ({high} high priority) | {len(suspicious_markets)} suspicious markets | subject: {subject}")
+    print(f"Done. {len(news)} new stories ({high} high priority) | {len(suspicious_markets)} markets for review | subject: {subject}")
 
 
 if __name__ == "__main__":

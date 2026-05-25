@@ -788,7 +788,6 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         lines.append("")
 
     # ON-CHAIN LARGE TRANSACTIONS
-    onchain = report_data.get("onchain_txs", []) if isinstance(report_data, dict) else []
 
     # ON-CHAIN LARGE TRANSACTIONS
     if onchain_txs:

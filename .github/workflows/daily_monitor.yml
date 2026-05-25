@@ -25,10 +25,14 @@ jobs:
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
           POLYGONSCAN_KEY: ${{ secrets.POLYGONSCAN_KEY }}
         run: python monitor.py
-      - name: Save report
+      - name: Run aggregator
+        env:
+          POLYGONSCAN_KEY: ${{ secrets.POLYGONSCAN_KEY }}
+        run: python aggregator.py
+      - name: Save all outputs
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add output/ data/
-          git diff --staged --quiet || git commit -m "Daily OSINT report"
+          git diff --staged --quiet || git commit -m "Daily OSINT report + intelligence update"
           git push

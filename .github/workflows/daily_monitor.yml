@@ -23,6 +23,8 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
+          POLYGONSCAN_KEY: ${{ secrets.POLYGONSCAN_KEY }}
+          DEMO_MODE: "true"
         run: python monitor.py
       - name: Save report
         run: |

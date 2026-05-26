@@ -1,122 +1,11 @@
 {
   "date": "2026-05-26",
-  "unique_news": 7,
+  "unique_news": 0,
   "suspicious_markets": 5,
   "large_trades": 0,
   "uma_alerts": 0,
   "ofac_new": 0,
-  "alerts": [
-    {
-      "source": "CoinDesk",
-      "title": "Spain joins growing list of countries shutting out Polymarket and Kalshi",
-      "link": "https://www.coindesk.com/policy/2026/05/26/spain-joins-growing-list-of-countries-shutting-out-polymarket-and-kalshi",
-      "published": "Tue, 26 May 2026 12:06:25 +0000",
-      "pub_date": "May 26, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "kalshi"
-      ],
-      "summary": "[See full article at CoinDesk]",
-      "score": 5,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Spain blocks Polymarket, Kalshi for operating without licenses amid widening global crackdown on prediction markets",
-      "link": "https://www.theblock.co/post/402620/spain-blocks-polymarket-kalshi-for-operating-without-licenses-amid-widening-global-crackdown-on-prediction-markets?utm_source=rss&utm_medium=rss",
-      "published": "Tue, 26 May 2026 11:40:06 -0400",
-      "pub_date": "May 26, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Spain blocked Polymarket and Kalshi on May 26, the latest in a growing wave of international crackdowns on prediction markets.",
-      "score": 5,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Spain Blocks Prediction Markets Kalshi, Polymarket for Potential Gambling Law Violations",
-      "link": "https://decrypt.co/369043/spain-blocks-prediction-markets-kalshi-polymarket-potential-violations",
-      "published": "Tue, 26 May 2026 19:14:11 +0000",
-      "pub_date": "May 26, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Spain is the latest country to clamp down on the rising use of prediction market platforms like Polymarket and Kalshi.",
-      "score": 5,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Indonesia Blocks Polymarket After Bets on President\u2019s Early Departure",
-      "link": "https://decrypt.co/369020/indonesia-blocks-polymarket-after-bets-on-presidents-early-departure",
-      "published": "Tue, 26 May 2026 15:33:37 +0000",
-      "pub_date": "May 26, 2026",
-      "matched_keywords": [
-        "polymarket"
-      ],
-      "summary": "The ban came on the heels of markets linked to the early departure of Indonesian President Prabowo Subianto.",
-      "score": 5,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "CoinDesk",
-      "title": "Hyperliquid takes a swing at Polymarket with macro outcome bets",
-      "link": "https://www.coindesk.com/markets/2026/05/26/hyperliquid-takes-aim-at-polymarket-with-launch-of-offchain-event-contracts",
-      "published": "Tue, 26 May 2026 06:44:36 +0000",
-      "pub_date": "May 26, 2026",
-      "matched_keywords": [
-        "polymarket"
-      ],
-      "summary": "[See full article at CoinDesk]",
-      "score": 3,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Liquid launches Co-Invest app, bringing AI-powered live trade execution into ChatGPT and Claude",
-      "link": "https://www.theblock.co/post/402496/liquid-launches-co-invest?utm_source=rss&utm_medium=rss",
-      "published": "Tue, 26 May 2026 09:00:00 -0400",
-      "pub_date": "May 26, 2026",
-      "matched_keywords": [
-        "polymarket"
-      ],
-      "summary": "Co-Invest supports crypto, equities, FX, Polymarket positions and pre-IPO secondaries across over 500 markets, according to Liquid.",
-      "score": 3,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Hyperliquid rolls out validator-governed prediction markets for real-world events",
-      "link": "https://www.theblock.co/post/402511/hyperliquid-validator-prediction-markets?utm_source=rss&utm_medium=rss",
-      "published": "Tue, 26 May 2026 03:11:02 -0400",
-      "pub_date": "May 26, 2026",
-      "matched_keywords": [
-        "prediction market"
-      ],
-      "summary": "The markets will be published through automated newsfeed software and governed by validators, the team said.",
-      "score": 0,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    }
-  ],
+  "alerts": [],
   "suspicious_market_data": [
     {
       "market_id": "2328087",
@@ -130,19 +19,6 @@
       "flagged_date": "2026-05-26",
       "insider_risk": "MEDIUM",
       "alert_reason": "Criteria matched: $995,996 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
-    },
-    {
-      "market_id": "1975536",
-      "question": "Will OpenAI have the best AI model at the end of May 2026?",
-      "outcome": "Yes",
-      "probability_pct": 0.4,
-      "volume_usd": 994230.0,
-      "url": "https://polymarket.com/event/will-openai-have-the-best-ai-model-at-the-end-of-may-2026",
-      "end_date": "2026-05-31",
-      "days_until_close": 5,
-      "flagged_date": "2026-05-26",
-      "insider_risk": "MEDIUM",
-      "alert_reason": "Criteria matched: $994,230 volume on a 0.4% probability outcome. Analyst review recommended before drawing conclusions."
     },
     {
       "market_id": "1999688",
@@ -161,7 +37,7 @@
       "market_id": "1439549",
       "question": "Fed rate cut by September 2026 meeting?",
       "outcome": "Yes",
-      "probability_pct": 13.5,
+      "probability_pct": 13.1,
       "volume_usd": 99734.0,
       "url": "https://polymarket.com/event/fed-rate-cut-by-september-2026-meeting-264-382",
       "end_date": "2026-06-17",
@@ -182,6 +58,19 @@
       "flagged_date": "2026-05-26",
       "insider_risk": "MEDIUM",
       "alert_reason": "Criteria matched: $99,576 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "2313269",
+      "question": "Will the price of Bitcoin be above $70,000 on May 27?",
+      "outcome": "No",
+      "probability_pct": 0.1,
+      "volume_usd": 99438.0,
+      "url": "https://polymarket.com/event/bitcoin-above-70k-on-may-27-2026",
+      "end_date": "2026-05-27",
+      "days_until_close": 1,
+      "flagged_date": "2026-05-26",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,438 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
     }
   ],
   "large_trade_data": [],
@@ -241,48 +130,48 @@
   ],
   "wash_trading_reports": [],
   "developing_stories": [],
-  "narrative": "Today's top story: Spain joins growing list of countries shutting out Polymarket and Kalshi (via CoinDesk, May 26, 2026). There are 6 high priority alerts total today. One market matched review criteria: 'Roland Garros WTA: Elina Svitolina vs Anna Bondar' with $995,996 in volume at 0.1% probability.",
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One market matched review criteria: 'Roland Garros WTA: Elina Svitolina vs Anna Bondar' with $995,996 in volume at 0.1% probability.",
   "source_coverage": {
     "RSS": {
       "status": "OK",
-      "detail": "9 raw, 7 fresh",
-      "updated_at": "2026-05-26T19:31:36Z",
-      "records": 7
+      "detail": "9 raw, 0 fresh",
+      "updated_at": "2026-05-26T20:29:15Z",
+      "records": 0
     },
     "Gamma API": {
       "status": "OK",
       "detail": "5 markets matched",
-      "updated_at": "2026-05-26T19:31:36Z",
+      "updated_at": "2026-05-26T20:29:15Z",
       "records": 5
     },
     "On-chain/Polygonscan": {
       "status": "failed",
       "detail": "CLOB HTTP 401",
-      "updated_at": "2026-05-26T19:31:36Z",
+      "updated_at": "2026-05-26T20:29:15Z",
       "records": 0
     },
     "CLOB API": {
       "status": "failed",
       "detail": "HTTP 401",
-      "updated_at": "2026-05-26T19:31:37Z",
+      "updated_at": "2026-05-26T20:29:16Z",
       "records": 0
     },
     "UMA": {
       "status": "OK",
       "detail": "0 alerts",
-      "updated_at": "2026-05-26T19:31:37Z",
+      "updated_at": "2026-05-26T20:29:16Z",
       "records": 0
     },
     "OFAC": {
       "status": "OK",
       "detail": "0 new entries",
-      "updated_at": "2026-05-26T19:31:43Z",
+      "updated_at": "2026-05-26T20:29:21Z",
       "records": 0
     },
     "Congress": {
       "status": "OK",
       "detail": "7 bill updates",
-      "updated_at": "2026-05-26T19:31:47Z",
+      "updated_at": "2026-05-26T20:29:24Z",
       "records": 7
     }
   }

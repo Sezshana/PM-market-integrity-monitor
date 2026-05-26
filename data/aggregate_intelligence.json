@@ -2,20 +2,53 @@
   "generated": "2026-05-26",
   "days_of_data": 4,
   "total_wallets_tracked": 0,
-  "total_markets_tracked": 5,
+  "total_markets_tracked": 6,
   "recurring_wallets": [],
   "high_risk_wallets": [],
   "persistent_markets": [
     {
       "question": "Fed rate cut by September 2026 meeting?",
-      "flag_count": 2,
+      "flag_count": 3,
       "first_flagged": "2026-05-25",
       "last_flagged": "2026-05-26",
       "insider_risk": "HIGH",
       "max_wash_score": 0,
       "url": "https://polymarket.com/event/fed-rate-cut-by-september-2026-meeting-264-382",
       "latest_volume": 99734.0,
-      "latest_prob": 13.5
+      "latest_prob": 13.1
+    },
+    {
+      "question": "Roland Garros WTA: Elina Svitolina vs Anna Bondar",
+      "flag_count": 2,
+      "first_flagged": "2026-05-26",
+      "last_flagged": "2026-05-26",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/wta-svitoli-bondar-2026-05-24",
+      "latest_volume": 995996.0,
+      "latest_prob": 0.1
+    },
+    {
+      "question": "Will Microsoft be the second-largest company in the world by market cap on May 31?",
+      "flag_count": 2,
+      "first_flagged": "2026-05-26",
+      "last_flagged": "2026-05-26",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/will-microsoft-be-the-second-largest-company-in-the-world-by-market-cap-on-may-31",
+      "latest_volume": 99754.0,
+      "latest_prob": 0.1
+    },
+    {
+      "question": "Will BIG win IEM Cologne Major 2026?",
+      "flag_count": 2,
+      "first_flagged": "2026-05-26",
+      "last_flagged": "2026-05-26",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/will-big-win-iem-cologne-major-2026",
+      "latest_volume": 99576.0,
+      "latest_prob": 0.1
     }
   ],
   "daily_trend": [
@@ -45,7 +78,7 @@
     },
     {
       "date": "2026-05-26",
-      "news": 7,
+      "news": 0,
       "suspicious_markets": 5,
       "large_trades": 0,
       "uma_alerts": 0,
@@ -55,15 +88,15 @@
   "top_sources": [
     {
       "source": "The Block",
-      "count": 9
+      "count": 6
     },
     {
       "source": "Decrypt",
-      "count": 7
+      "count": 5
     },
     {
       "source": "CoinDesk",
-      "count": 6
+      "count": 4
     },
     {
       "source": "DLA Piper Market Edge",
@@ -73,23 +106,23 @@
   "top_keywords": [
     {
       "keyword": "polymarket",
-      "count": 17
+      "count": 11
     },
     {
       "keyword": "prediction market",
-      "count": 14
+      "count": 11
     },
     {
       "keyword": "kalshi",
-      "count": 9
+      "count": 6
     }
   ],
   "win_rate_alerts": [],
   "summary_stats": {
-    "total_alerts_30d": 23,
+    "total_alerts_30d": 16,
     "total_suspicious_30d": 11,
     "wallets_with_ofac": 0,
     "wallets_on_watchlist": 0,
-    "markets_flagged_3plus": 0
+    "markets_flagged_3plus": 1
   }
 }

@@ -3,7 +3,7 @@
     "question": "Fed rate cut by September 2026 meeting?",
     "first_flagged": "2026-05-25",
     "last_flagged": "2026-05-26",
-    "flag_count": 2,
+    "flag_count": 3,
     "flag_dates": [
       "2026-05-25",
       "2026-05-26"
@@ -19,6 +19,11 @@
         "date": "2026-05-26",
         "volume": 99734.0,
         "prob": 13.5
+      },
+      {
+        "date": "2026-05-26",
+        "volume": 99734.0,
+        "prob": 13.1
       }
     ],
     "max_wash_score": 0,
@@ -28,12 +33,17 @@
     "question": "Roland Garros WTA: Elina Svitolina vs Anna Bondar",
     "first_flagged": "2026-05-26",
     "last_flagged": "2026-05-26",
-    "flag_count": 1,
+    "flag_count": 2,
     "flag_dates": [
       "2026-05-26"
     ],
     "insider_risk": "MEDIUM",
     "volume_history": [
+      {
+        "date": "2026-05-26",
+        "volume": 995996.0,
+        "prob": 0.1
+      },
       {
         "date": "2026-05-26",
         "volume": 995996.0,
@@ -66,12 +76,17 @@
     "question": "Will Microsoft be the second-largest company in the world by market cap on May 31?",
     "first_flagged": "2026-05-26",
     "last_flagged": "2026-05-26",
-    "flag_count": 1,
+    "flag_count": 2,
     "flag_dates": [
       "2026-05-26"
     ],
     "insider_risk": "MEDIUM",
     "volume_history": [
+      {
+        "date": "2026-05-26",
+        "volume": 99754.0,
+        "prob": 0.1
+      },
       {
         "date": "2026-05-26",
         "volume": 99754.0,
@@ -85,7 +100,7 @@
     "question": "Will BIG win IEM Cologne Major 2026?",
     "first_flagged": "2026-05-26",
     "last_flagged": "2026-05-26",
-    "flag_count": 1,
+    "flag_count": 2,
     "flag_dates": [
       "2026-05-26"
     ],
@@ -95,9 +110,33 @@
         "date": "2026-05-26",
         "volume": 99576.0,
         "prob": 0.1
+      },
+      {
+        "date": "2026-05-26",
+        "volume": 99576.0,
+        "prob": 0.1
       }
     ],
     "max_wash_score": 0,
     "url": "https://polymarket.com/event/will-big-win-iem-cologne-major-2026"
+  },
+  "2313269": {
+    "question": "Will the price of Bitcoin be above $70,000 on May 27?",
+    "first_flagged": "2026-05-26",
+    "last_flagged": "2026-05-26",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-26"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-05-26",
+        "volume": 99438.0,
+        "prob": 0.1
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/bitcoin-above-70k-on-may-27-2026"
   }
 }

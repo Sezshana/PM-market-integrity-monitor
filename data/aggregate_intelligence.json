@@ -2,13 +2,13 @@
   "generated": "2026-05-27",
   "days_of_data": 5,
   "total_wallets_tracked": 0,
-  "total_markets_tracked": 7,
+  "total_markets_tracked": 8,
   "recurring_wallets": [],
   "high_risk_wallets": [],
   "persistent_markets": [
     {
       "question": "Fed rate cut by September 2026 meeting?",
-      "flag_count": 4,
+      "flag_count": 5,
       "first_flagged": "2026-05-25",
       "last_flagged": "2026-05-27",
       "insider_risk": "HIGH",
@@ -19,7 +19,7 @@
     },
     {
       "question": "Will Microsoft be the second-largest company in the world by market cap on May 31?",
-      "flag_count": 3,
+      "flag_count": 4,
       "first_flagged": "2026-05-26",
       "last_flagged": "2026-05-27",
       "insider_risk": "MEDIUM",
@@ -49,6 +49,17 @@
       "url": "https://polymarket.com/event/will-big-win-iem-cologne-major-2026",
       "latest_volume": 99576.0,
       "latest_prob": 0.1
+    },
+    {
+      "question": "Israeli parliament dissolved by May 31?",
+      "flag_count": 2,
+      "first_flagged": "2026-05-27",
+      "last_flagged": "2026-05-27",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/israeli-parliament-dissolved-by-may-31",
+      "latest_volume": 99485.0,
+      "latest_prob": 1.1
     }
   ],
   "daily_trend": [
@@ -86,8 +97,8 @@
     },
     {
       "date": "2026-05-27",
-      "news": 2,
-      "suspicious_markets": 3,
+      "news": 1,
+      "suspicious_markets": 4,
       "large_trades": 0,
       "uma_alerts": 0,
       "ofac_new": 0
@@ -100,7 +111,7 @@
     },
     {
       "source": "Decrypt",
-      "count": 6
+      "count": 5
     },
     {
       "source": "CoinDesk",
@@ -114,7 +125,7 @@
   "top_keywords": [
     {
       "keyword": "prediction market",
-      "count": 13
+      "count": 12
     },
     {
       "keyword": "polymarket",
@@ -123,12 +134,16 @@
     {
       "keyword": "kalshi",
       "count": 6
+    },
+    {
+      "keyword": "CFTC prediction",
+      "count": 1
     }
   ],
   "win_rate_alerts": [],
   "summary_stats": {
-    "total_alerts_30d": 18,
-    "total_suspicious_30d": 14,
+    "total_alerts_30d": 17,
+    "total_suspicious_30d": 15,
     "wallets_with_ofac": 0,
     "wallets_on_watchlist": 0,
     "markets_flagged_3plus": 2

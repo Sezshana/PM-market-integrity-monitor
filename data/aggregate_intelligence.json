@@ -2,10 +2,21 @@
   "generated": "2026-05-28",
   "days_of_data": 6,
   "total_wallets_tracked": 0,
-  "total_markets_tracked": 10,
+  "total_markets_tracked": 11,
   "recurring_wallets": [],
   "high_risk_wallets": [],
   "persistent_markets": [
+    {
+      "question": "Will Microsoft be the second-largest company in the world by market cap on May 31?",
+      "flag_count": 6,
+      "first_flagged": "2026-05-26",
+      "last_flagged": "2026-05-28",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/will-microsoft-be-the-second-largest-company-in-the-world-by-market-cap-on-may-31",
+      "latest_volume": 99778.0,
+      "latest_prob": 0.1
+    },
     {
       "question": "Fed rate cut by September 2026 meeting?",
       "flag_count": 5,
@@ -18,19 +29,8 @@
       "latest_prob": 12.7
     },
     {
-      "question": "Will Microsoft be the second-largest company in the world by market cap on May 31?",
-      "flag_count": 5,
-      "first_flagged": "2026-05-26",
-      "last_flagged": "2026-05-28",
-      "insider_risk": "MEDIUM",
-      "max_wash_score": 0,
-      "url": "https://polymarket.com/event/will-microsoft-be-the-second-largest-company-in-the-world-by-market-cap-on-may-31",
-      "latest_volume": 99778.0,
-      "latest_prob": 0.1
-    },
-    {
       "question": "Israeli parliament dissolved by May 31?",
-      "flag_count": 3,
+      "flag_count": 4,
       "first_flagged": "2026-05-27",
       "last_flagged": "2026-05-28",
       "insider_risk": "MEDIUM",
@@ -59,6 +59,28 @@
       "max_wash_score": 0,
       "url": "https://polymarket.com/event/will-big-win-iem-cologne-major-2026",
       "latest_volume": 99576.0,
+      "latest_prob": 0.1
+    },
+    {
+      "question": "Kharg Island no longer under Iranian control by May 31?",
+      "flag_count": 2,
+      "first_flagged": "2026-05-28",
+      "last_flagged": "2026-05-28",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/kharg-island-no-longer-under-iranian-control-by-may-31-689",
+      "latest_volume": 9963161.0,
+      "latest_prob": 0.9
+    },
+    {
+      "question": "Will Elon Musk post 1160-1199 tweets in May 2026?",
+      "flag_count": 2,
+      "first_flagged": "2026-05-28",
+      "last_flagged": "2026-05-28",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/elon-musk-of-tweets-may-2026-1160-1199",
+      "latest_volume": 99980.0,
       "latest_prob": 0.1
     }
   ],
@@ -105,8 +127,8 @@
     },
     {
       "date": "2026-05-28",
-      "news": 7,
-      "suspicious_markets": 4,
+      "news": 0,
+      "suspicious_markets": 5,
       "large_trades": 0,
       "uma_alerts": 0,
       "ofac_new": 0
@@ -115,15 +137,15 @@
   "top_sources": [
     {
       "source": "The Block",
-      "count": 9
+      "count": 7
     },
     {
       "source": "Decrypt",
-      "count": 9
+      "count": 5
     },
     {
       "source": "CoinDesk",
-      "count": 5
+      "count": 4
     },
     {
       "source": "DLA Piper Market Edge",
@@ -133,19 +155,15 @@
   "top_keywords": [
     {
       "keyword": "prediction market",
-      "count": 18
+      "count": 12
     },
     {
       "keyword": "polymarket",
-      "count": 13
+      "count": 11
     },
     {
       "keyword": "kalshi",
-      "count": 8
-    },
-    {
-      "keyword": "prediction market insider",
-      "count": 1
+      "count": 6
     },
     {
       "keyword": "CFTC prediction",
@@ -154,8 +172,8 @@
   ],
   "win_rate_alerts": [],
   "summary_stats": {
-    "total_alerts_30d": 24,
-    "total_suspicious_30d": 19,
+    "total_alerts_30d": 17,
+    "total_suspicious_30d": 20,
     "wallets_with_ofac": 0,
     "wallets_on_watchlist": 0,
     "markets_flagged_3plus": 3

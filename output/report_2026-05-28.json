@@ -1,134 +1,37 @@
 {
   "date": "2026-05-28",
-  "unique_news": 7,
-  "suspicious_markets": 4,
+  "unique_news": 0,
+  "suspicious_markets": 5,
   "large_trades": 0,
   "uma_alerts": 0,
   "ofac_new": 0,
-  "alerts": [
-    {
-      "source": "The Block",
-      "title": "US charges Google engineer with using internal search data to pocket $1.2 million on Polymarket",
-      "link": "https://www.theblock.co/post/402806/google-engineer-insider-trading-polymarket?utm_source=rss&utm_medium=rss",
-      "published": "Wed, 27 May 2026 23:38:30 -0400",
-      "pub_date": "May 27, 2026",
-      "matched_keywords": [
-        "polymarket"
-      ],
-      "summary": "Prosecutors charged Spagnuolo with fraud and money laundering, while the CFTC filed a complaint alleging insider trading violations.",
-      "score": 7,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Google Engineer Charged Over $2.75 Million in Alleged Polymarket Insider Trading Bets",
-      "link": "https://decrypt.co/369359/google-employee-charged-alleged-polymarket-insider-trading",
-      "published": "Thu, 28 May 2026 16:27:22 +0000",
-      "pub_date": "May 28, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "prediction market",
-        "prediction market insider"
-      ],
-      "summary": "The Google employee case is the second federal prosecution tied to alleged prediction market insider trading on Polymarket.",
-      "score": 7,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Kalshi Sues to Stop Minnesota From Enforcing America\u2019s First Prediction Market Ban",
-      "link": "https://decrypt.co/369408/kalshi-sues-stop-minnesota-enforcing-prediction-market-ban",
-      "published": "Thu, 28 May 2026 19:07:33 +0000",
-      "pub_date": "May 28, 2026",
-      "matched_keywords": [
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Prediction market giant Kalshi has asked a federal judge to prevent Minnesota from allowing the ban to go into effect in August.",
-      "score": 4,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Kalshi\u2019s turn: Prediction markets platform sues Minnesota over law going into effect in August",
-      "link": "https://www.theblock.co/post/402937/kalshis-prediction-markets-sues-minnesota-law-ban?utm_source=rss&utm_medium=rss",
-      "published": "Thu, 28 May 2026 13:55:31 -0400",
-      "pub_date": "May 28, 2026",
-      "matched_keywords": [
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Following the CFTC's suit, Kalshi has sued the state of Minnesota after Governor Tim Walz signed a law blocking prediction markets.",
-      "score": 2,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "CoinDesk",
-      "title": "Gemini taps SpaceXAI to build a personalized prediction markets feed",
-      "link": "https://www.coindesk.com/tech/2026/05/28/gemini-rolls-out-ai-powered-command-center-for-prediction-markets",
-      "published": "Thu, 28 May 2026 14:00:00 +0000",
-      "pub_date": "May 28, 2026",
-      "matched_keywords": [
-        "prediction market"
-      ],
-      "summary": "[See full article at CoinDesk]",
-      "score": 0,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Bitcoin Traders Increasingly Convinced Price Will Fall Below $70K by End of May",
-      "link": "https://decrypt.co/369328/bitcoin-traders-convinced-price-fall-below-70k-end-may",
-      "published": "Thu, 28 May 2026 15:21:43 +0000",
-      "pub_date": "May 28, 2026",
-      "matched_keywords": [
-        "prediction market"
-      ],
-      "summary": "Prediction market odds are rising for Bitcoin to drop below $70,000 in the next few days following a dip to a six-week low price.",
-      "score": 0,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "Prediction Market Myriad Launches $100K World Cup Competition",
-      "link": "https://decrypt.co/369291/prediction-market-myriad-launches-100k-world-cup-competition",
-      "published": "Thu, 28 May 2026 14:16:37 +0000",
-      "pub_date": "May 28, 2026",
-      "matched_keywords": [
-        "prediction market"
-      ],
-      "summary": "A prize pool of over $100,000 is available for top traders and makers on prediction markets linked to FIFA World Cup matches.",
-      "score": 0,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    }
-  ],
+  "alerts": [],
   "suspicious_market_data": [
     {
       "market_id": "1708109",
       "question": "Kharg Island no longer under Iranian control by May 31?",
       "outcome": "Yes",
       "probability_pct": 0.9,
-      "volume_usd": 9962815.0,
+      "volume_usd": 9963161.0,
       "url": "https://polymarket.com/event/kharg-island-no-longer-under-iranian-control-by-may-31-689",
       "end_date": "2026-05-31",
       "days_until_close": 3,
       "flagged_date": "2026-05-28",
       "insider_risk": "MEDIUM",
-      "alert_reason": "Criteria matched: $9,962,815 volume on a 0.9% probability outcome. Analyst review recommended before drawing conclusions."
+      "alert_reason": "Criteria matched: $9,963,161 volume on a 0.9% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1698905",
+      "question": "Will Elon Musk post 780-799 tweets in May 2026?",
+      "outcome": "Yes",
+      "probability_pct": 5.7,
+      "volume_usd": 99982.0,
+      "url": "https://polymarket.com/event/elon-musk-of-tweets-may-2026-780-799",
+      "end_date": "2026-06-01",
+      "days_until_close": 4,
+      "flagged_date": "2026-05-28",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,982 volume on a 5.7% probability outcome. Analyst review recommended before drawing conclusions."
     },
     {
       "market_id": "1698923",
@@ -227,48 +130,48 @@
   ],
   "wash_trading_reports": [],
   "developing_stories": [],
-  "narrative": "Today's top story: US charges Google engineer with using internal search data to pocket $1.2 million on Polymarket (via The Block, May 27, 2026). There are 3 high priority alerts total today. One market matched review criteria: 'Kharg Island no longer under Iranian control by May 31?' with $9,962,815 in volume at 0.9% probability.",
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One market matched review criteria: 'Kharg Island no longer under Iranian control by May 31?' with $9,963,161 in volume at 0.9% probability.",
   "source_coverage": {
     "RSS": {
       "status": "OK",
-      "detail": "9 raw, 7 fresh",
-      "updated_at": "2026-05-28T19:59:23Z",
-      "records": 7
+      "detail": "12 raw, 0 fresh",
+      "updated_at": "2026-05-28T21:02:42Z",
+      "records": 0
     },
     "Gamma API": {
       "status": "OK",
-      "detail": "4 markets matched",
-      "updated_at": "2026-05-28T19:59:23Z",
-      "records": 4
+      "detail": "5 markets matched",
+      "updated_at": "2026-05-28T21:02:42Z",
+      "records": 5
     },
     "On-chain/Polygonscan": {
       "status": "failed",
       "detail": "CLOB HTTP 401",
-      "updated_at": "2026-05-28T19:59:23Z",
+      "updated_at": "2026-05-28T21:02:43Z",
       "records": 0
     },
     "CLOB API": {
       "status": "failed",
       "detail": "HTTP 401",
-      "updated_at": "2026-05-28T19:59:24Z",
+      "updated_at": "2026-05-28T21:02:43Z",
       "records": 0
     },
     "UMA": {
       "status": "OK",
       "detail": "0 alerts",
-      "updated_at": "2026-05-28T19:59:25Z",
+      "updated_at": "2026-05-28T21:02:44Z",
       "records": 0
     },
     "OFAC": {
       "status": "OK",
       "detail": "0 new entries",
-      "updated_at": "2026-05-28T19:59:29Z",
+      "updated_at": "2026-05-28T21:02:47Z",
       "records": 0
     },
     "Congress": {
       "status": "OK",
       "detail": "7 bill updates",
-      "updated_at": "2026-05-28T19:59:32Z",
+      "updated_at": "2026-05-28T21:02:51Z",
       "records": 7
     }
   }

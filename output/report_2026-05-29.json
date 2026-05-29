@@ -1,106 +1,24 @@
 {
   "date": "2026-05-29",
-  "unique_news": 5,
-  "suspicious_markets": 3,
+  "unique_news": 0,
+  "suspicious_markets": 4,
   "large_trades": 0,
   "uma_alerts": 0,
   "ofac_new": 0,
-  "alerts": [
-    {
-      "source": "Decrypt",
-      "title": "Wintermute Is Providing Liquidity on Kalshi and Polymarket, Linking Two Giants",
-      "link": "https://decrypt.co/369475/wintermute-liquidity-kalshi-polymarket-prediction-markets",
-      "published": "Fri, 29 May 2026 16:20:08 +0000",
-      "pub_date": "May 29, 2026",
-      "matched_keywords": [
-        "polymarket",
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "Wintermute is providing liquidity on the two biggest prediction markets, linking flows for both firms, according to a source familiar with the matter.",
-      "score": 5,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "CoinDesk",
-      "title": "U.S. CFTC opens crypto 'perp' door with first approvals at Kalshi, Coinbase",
-      "link": "https://www.coindesk.com/policy/2026/05/28/u-s-cftc-opens-crypto-perp-door-with-approval-of-first-regulated-firm",
-      "published": "Fri, 29 May 2026 14:00:00 +0000",
-      "pub_date": "May 29, 2026",
-      "matched_keywords": [
-        "kalshi"
-      ],
-      "summary": "[See full article at CoinDesk]",
-      "score": 2,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": [
-        "The Block"
-      ]
-    },
-    {
-      "source": "CoinDesk",
-      "title": "Kalshi follows CFTC in suing Minnesota over law criminalizing prediction markets",
-      "link": "https://www.coindesk.com/policy/2026/05/29/kalshi-follows-cftc-in-suing-minnesota-over-law-criminalizing-prediction-markets",
-      "published": "Fri, 29 May 2026 09:59:39 +0000",
-      "pub_date": "May 29, 2026",
-      "matched_keywords": [
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "[See full article at CoinDesk]",
-      "score": 2,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "Decrypt",
-      "title": "CFTC Approves Bitcoin Perpetual Futures on Prediction Market Kalshi",
-      "link": "https://decrypt.co/369465/cftc-approves-bitcoin-perpetual-futures-kalshi",
-      "published": "Fri, 29 May 2026 15:00:50 +0000",
-      "pub_date": "May 29, 2026",
-      "matched_keywords": [
-        "kalshi",
-        "prediction market"
-      ],
-      "summary": "The CFTC issued an order allowing Kalshi to offer perpetual futures in the U.S., starting with contracts tied to Bitcoin's price.",
-      "score": 2,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    },
-    {
-      "source": "The Block",
-      "title": "Wintermute extends trading infrastructure into prediction markets",
-      "link": "https://www.theblock.co/post/403029/wintermute-extends-trading-infrastructure-into-prediction-markets?utm_source=rss&utm_medium=rss",
-      "published": "Fri, 29 May 2026 10:07:28 -0400",
-      "pub_date": "May 29, 2026",
-      "matched_keywords": [
-        "prediction market"
-      ],
-      "summary": "Wintermute extends trading infrastructure into prediction markets as multibillion-dollar sector draws institutional liquidity providers.",
-      "score": 0,
-      "priority": false,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    }
-  ],
+  "alerts": [],
   "suspicious_market_data": [
     {
       "market_id": "559659",
       "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
       "outcome": "Yes",
       "probability_pct": 1.1,
-      "volume_usd": 9984737.0,
+      "volume_usd": 9984938.0,
       "url": "https://polymarket.com/event/will-gretchen-whitmer-win-the-2028-democratic-presidential-nomination-676",
       "end_date": "2028-11-07",
       "days_until_close": 893,
       "flagged_date": "2026-05-29",
       "insider_risk": "MEDIUM",
-      "alert_reason": "Criteria matched: $9,984,737 volume on a 1.1% probability outcome. Analyst review recommended before drawing conclusions."
+      "alert_reason": "Criteria matched: $9,984,938 volume on a 1.1% probability outcome. Analyst review recommended before drawing conclusions."
     },
     {
       "market_id": "1654347",
@@ -127,6 +45,19 @@
       "flagged_date": "2026-05-29",
       "insider_risk": "MEDIUM",
       "alert_reason": "Criteria matched: $99,815 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1321571",
+      "question": "Will Discord have the highest IPO Market Cap 2026?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99645.0,
+      "url": "https://polymarket.com/event/will-discord-have-the-highest-ipo-market-cap-2026-121",
+      "end_date": "2026-12-31",
+      "days_until_close": 216,
+      "flagged_date": "2026-05-29",
+      "insider_risk": "HIGH",
+      "alert_reason": "Criteria matched: low-probability outcome, $99,645 market volume, and event category with concentrated decision access. Longer resolution horizon lowers urgency; analyst review required."
     }
   ],
   "large_trade_data": [],
@@ -186,48 +117,48 @@
   ],
   "wash_trading_reports": [],
   "developing_stories": [],
-  "narrative": "Today's top story: Wintermute Is Providing Liquidity on Kalshi and Polymarket, Linking Two Giants (via Decrypt, May 29, 2026). One market matched review criteria: 'Will Gretchen Whitmer win the 2028 Democratic presidential nomination?' with $9,984,737 in volume at 1.1% probability.",
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One market matched review criteria: 'Will Gretchen Whitmer win the 2028 Democratic presidential nomination?' with $9,984,938 in volume at 1.1% probability.",
   "source_coverage": {
     "RSS": {
       "status": "OK",
-      "detail": "12 raw, 5 fresh",
-      "updated_at": "2026-05-29T19:56:43Z",
-      "records": 5
+      "detail": "12 raw, 0 fresh",
+      "updated_at": "2026-05-29T21:05:27Z",
+      "records": 0
     },
     "Gamma API": {
       "status": "OK",
-      "detail": "3 markets matched",
-      "updated_at": "2026-05-29T19:56:43Z",
-      "records": 3
+      "detail": "4 markets matched",
+      "updated_at": "2026-05-29T21:05:27Z",
+      "records": 4
     },
     "On-chain/Polygonscan": {
       "status": "failed",
       "detail": "CLOB HTTP 401",
-      "updated_at": "2026-05-29T19:56:43Z",
+      "updated_at": "2026-05-29T21:05:27Z",
       "records": 0
     },
     "CLOB API": {
       "status": "failed",
       "detail": "HTTP 401",
-      "updated_at": "2026-05-29T19:56:44Z",
+      "updated_at": "2026-05-29T21:05:28Z",
       "records": 0
     },
     "UMA": {
       "status": "OK",
       "detail": "0 alerts",
-      "updated_at": "2026-05-29T19:56:45Z",
+      "updated_at": "2026-05-29T21:05:29Z",
       "records": 0
     },
     "OFAC": {
       "status": "OK",
       "detail": "0 new entries",
-      "updated_at": "2026-05-29T19:56:48Z",
+      "updated_at": "2026-05-29T21:05:32Z",
       "records": 0
     },
     "Congress": {
       "status": "OK",
       "detail": "7 bill updates",
-      "updated_at": "2026-05-29T19:56:50Z",
+      "updated_at": "2026-05-29T21:05:34Z",
       "records": 7
     }
   }

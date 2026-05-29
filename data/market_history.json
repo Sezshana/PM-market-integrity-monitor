@@ -86,12 +86,13 @@
   "1999688": {
     "question": "Will Microsoft be the second-largest company in the world by market cap on May 31?",
     "first_flagged": "2026-05-26",
-    "last_flagged": "2026-05-28",
-    "flag_count": 6,
+    "last_flagged": "2026-05-29",
+    "flag_count": 7,
     "flag_dates": [
       "2026-05-26",
       "2026-05-27",
-      "2026-05-28"
+      "2026-05-28",
+      "2026-05-29"
     ],
     "insider_risk": "MEDIUM",
     "volume_history": [
@@ -123,6 +124,11 @@
       {
         "date": "2026-05-28",
         "volume": 99778.0,
+        "prob": 0.1
+      },
+      {
+        "date": "2026-05-29",
+        "volume": 99815.0,
         "prob": 0.1
       }
     ],
@@ -292,5 +298,43 @@
     ],
     "max_wash_score": 0,
     "url": "https://polymarket.com/event/elon-musk-of-tweets-may-2026-780-799"
+  },
+  "559659": {
+    "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
+    "first_flagged": "2026-05-29",
+    "last_flagged": "2026-05-29",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-29"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-05-29",
+        "volume": 9984737.0,
+        "prob": 1.1
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/will-gretchen-whitmer-win-the-2028-democratic-presidential-nomination-676"
+  },
+  "1654347": {
+    "question": "Will the ECB announce a 25 bps decrease at the June 2026 meeting?",
+    "first_flagged": "2026-05-29",
+    "last_flagged": "2026-05-29",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-29"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-05-29",
+        "volume": 99889.0,
+        "prob": 0.1
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/will-the-ecb-announce-a-25-bps-decrease-at-the-june-2026-meeting"
   }
 }

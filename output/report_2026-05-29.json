@@ -1,0 +1,234 @@
+{
+  "date": "2026-05-29",
+  "unique_news": 5,
+  "suspicious_markets": 3,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [
+    {
+      "source": "Decrypt",
+      "title": "Wintermute Is Providing Liquidity on Kalshi and Polymarket, Linking Two Giants",
+      "link": "https://decrypt.co/369475/wintermute-liquidity-kalshi-polymarket-prediction-markets",
+      "published": "Fri, 29 May 2026 16:20:08 +0000",
+      "pub_date": "May 29, 2026",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "Wintermute is providing liquidity on the two biggest prediction markets, linking flows for both firms, according to a source familiar with the matter.",
+      "score": 5,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "CoinDesk",
+      "title": "U.S. CFTC opens crypto 'perp' door with first approvals at Kalshi, Coinbase",
+      "link": "https://www.coindesk.com/policy/2026/05/28/u-s-cftc-opens-crypto-perp-door-with-approval-of-first-regulated-firm",
+      "published": "Fri, 29 May 2026 14:00:00 +0000",
+      "pub_date": "May 29, 2026",
+      "matched_keywords": [
+        "kalshi"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": [
+        "The Block"
+      ]
+    },
+    {
+      "source": "CoinDesk",
+      "title": "Kalshi follows CFTC in suing Minnesota over law criminalizing prediction markets",
+      "link": "https://www.coindesk.com/policy/2026/05/29/kalshi-follows-cftc-in-suing-minnesota-over-law-criminalizing-prediction-markets",
+      "published": "Fri, 29 May 2026 09:59:39 +0000",
+      "pub_date": "May 29, 2026",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "Decrypt",
+      "title": "CFTC Approves Bitcoin Perpetual Futures on Prediction Market Kalshi",
+      "link": "https://decrypt.co/369465/cftc-approves-bitcoin-perpetual-futures-kalshi",
+      "published": "Fri, 29 May 2026 15:00:50 +0000",
+      "pub_date": "May 29, 2026",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "The CFTC issued an order allowing Kalshi to offer perpetual futures in the U.S., starting with contracts tied to Bitcoin's price.",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "The Block",
+      "title": "Wintermute extends trading infrastructure into prediction markets",
+      "link": "https://www.theblock.co/post/403029/wintermute-extends-trading-infrastructure-into-prediction-markets?utm_source=rss&utm_medium=rss",
+      "published": "Fri, 29 May 2026 10:07:28 -0400",
+      "pub_date": "May 29, 2026",
+      "matched_keywords": [
+        "prediction market"
+      ],
+      "summary": "Wintermute extends trading infrastructure into prediction markets as multibillion-dollar sector draws institutional liquidity providers.",
+      "score": 0,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    }
+  ],
+  "suspicious_market_data": [
+    {
+      "market_id": "559659",
+      "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
+      "outcome": "Yes",
+      "probability_pct": 1.1,
+      "volume_usd": 9984737.0,
+      "url": "https://polymarket.com/event/will-gretchen-whitmer-win-the-2028-democratic-presidential-nomination-676",
+      "end_date": "2028-11-07",
+      "days_until_close": 893,
+      "flagged_date": "2026-05-29",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $9,984,737 volume on a 1.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1654347",
+      "question": "Will the ECB announce a 25 bps decrease at the June 2026 meeting?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99889.0,
+      "url": "https://polymarket.com/event/will-the-ecb-announce-a-25-bps-decrease-at-the-june-2026-meeting",
+      "end_date": "2026-06-11",
+      "days_until_close": 13,
+      "flagged_date": "2026-05-29",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,889 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1999688",
+      "question": "Will Microsoft be the second-largest company in the world by market cap on May 31?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99815.0,
+      "url": "https://polymarket.com/event/will-microsoft-be-the-second-largest-company-in-the-world-by-market-cap-on-may-31",
+      "end_date": "2026-05-31",
+      "days_until_close": 2,
+      "flagged_date": "2026-05-29",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,815 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [
+    {
+      "bill": "PREDICT Act",
+      "id": "HR8076",
+      "latest_action": "Referred to the Committee on Oversight and Government Reform, and in addition to the Committees on House Administration, and the Judiciary, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/8076"
+    },
+    {
+      "bill": "End Prediction Market Corruption Act",
+      "id": "S4017",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-05",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4017"
+    },
+    {
+      "bill": "Prediction Markets Security and Integrity Act",
+      "id": "S4060",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-11",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4060"
+    },
+    {
+      "bill": "Public Integrity in Financial Prediction Markets Act",
+      "id": "S4188",
+      "latest_action": "Read twice and referred to the Committee on Homeland Security and Governmental Affairs.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4188"
+    },
+    {
+      "bill": "STOP Corrupt Bets Act",
+      "id": "S4226",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-26",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4226"
+    },
+    {
+      "bill": "BETS OFF Act",
+      "id": "S4115",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-17",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4115"
+    },
+    {
+      "bill": "Event Contract Enforcement Act",
+      "id": "HR7840",
+      "latest_action": "Sponsor introductory remarks on measure. (CR H2588-2589)",
+      "action_date": "2026-03-18",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/7840"
+    }
+  ],
+  "wash_trading_reports": [],
+  "developing_stories": [],
+  "narrative": "Today's top story: Wintermute Is Providing Liquidity on Kalshi and Polymarket, Linking Two Giants (via Decrypt, May 29, 2026). One market matched review criteria: 'Will Gretchen Whitmer win the 2028 Democratic presidential nomination?' with $9,984,737 in volume at 1.1% probability.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "12 raw, 5 fresh",
+      "updated_at": "2026-05-29T19:56:43Z",
+      "records": 5
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "3 markets matched",
+      "updated_at": "2026-05-29T19:56:43Z",
+      "records": 3
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-05-29T19:56:43Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-05-29T19:56:44Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-05-29T19:56:45Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-05-29T19:56:48Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "7 bill updates",
+      "updated_at": "2026-05-29T19:56:50Z",
+      "records": 7
+    }
+  }
+}

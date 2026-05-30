@@ -2,10 +2,10 @@ name: Polymarket OSINT Daily Monitor
 
 on:
   schedule:
-    # Avoid top-of-hour scheduling and add a backup run because GitHub cron
-    # jobs can be delayed or occasionally skipped under load.
-    - cron: '17 11 * * *'
-    - cron: '47 12 * * *'
+    # 7:17 AM Eastern — off the hour to reduce GitHub queue backlog.
+    # GitHub may still delay runs by hours; monitor.py sends at most one email/day.
+    - cron: '17 7 * * *'
+      timezone: America/New_York
   workflow_dispatch:
 
 env:

@@ -64,6 +64,7 @@ OFAC_CACHE    = Path("data/ofac_cache.json")
 OFAC_SEEN     = Path("data/ofac_seen_uids.json")
 WIN_RATE_FILE = Path("data/win_rate_tracker.json")
 STORY_THREADS = Path("data/story_threads.json")
+EMAIL_SENT_FILE = Path("data/digest_email_sent.json")
 
 # ── SOURCE PRIORITY ──────────────────────────────────────────
 SOURCE_PRIORITY = {
@@ -1158,12 +1159,31 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
     return body, body_html, subject
 
 
+def _load_email_sent_date():
+    if not EMAIL_SENT_FILE.exists():
+        return None
+    try:
+        payload = json.loads(EMAIL_SENT_FILE.read_text())
+        return payload.get("date")
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def _mark_email_sent():
+    EMAIL_SENT_FILE.write_text(
+        json.dumps({"date": TODAY, "sent_at": datetime.datetime.utcnow().isoformat() + "Z"}, indent=2)
+    )
+
+
 def send_email(body_plain, body_html, subject):
     if not ALERT_EMAIL:
         print("No ALERT_EMAIL configured — skipping email")
         return
     if not SMTP_PASSWORD:
         print("No SMTP password — skipping email")
+        return
+    if not DEMO_MODE and _load_email_sent_date() == TODAY:
+        print(f"Digest email already sent for {TODAY} — skipping duplicate send")
         return
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
@@ -1176,6 +1196,7 @@ def send_email(body_plain, body_html, subject):
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(ALERT_EMAIL, SMTP_PASSWORD)
             server.sendmail(ALERT_EMAIL, ALERT_EMAIL, msg.as_string())
+        _mark_email_sent()
         print(f"Email sent: {subject}")
     except Exception as e:
         print(f"Email error: {e}")

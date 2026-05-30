@@ -1,0 +1,152 @@
+{
+  "date": "2026-05-30",
+  "unique_news": 0,
+  "suspicious_markets": 3,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [],
+  "suspicious_market_data": [
+    {
+      "market_id": "559659",
+      "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
+      "outcome": "Yes",
+      "probability_pct": 1.1,
+      "volume_usd": 9987598.0,
+      "url": "https://polymarket.com/event/will-gretchen-whitmer-win-the-2028-democratic-presidential-nomination-676",
+      "end_date": "2028-11-07",
+      "days_until_close": 892,
+      "flagged_date": "2026-05-30",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $9,987,598 volume on a 1.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "956980",
+      "question": "Ukraine agrees not to join NATO by June 30? ",
+      "outcome": "Yes",
+      "probability_pct": 3.2,
+      "volume_usd": 998515.0,
+      "url": "https://polymarket.com/event/ukraine-agrees-not-to-join-nato-by-june-30",
+      "end_date": "2026-06-30",
+      "days_until_close": 31,
+      "flagged_date": "2026-05-30",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $998,515 volume on a 3.2% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "2336475",
+      "question": "Will Elon Musk post 260-279 tweets from May 26 to June 2, 2026?",
+      "outcome": "Yes",
+      "probability_pct": 1.1,
+      "volume_usd": 99710.0,
+      "url": "https://polymarket.com/event/elon-musk-of-tweets-may-26-june-2-260-279",
+      "end_date": "2026-06-02",
+      "days_until_close": 3,
+      "flagged_date": "2026-05-30",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,710 volume on a 1.1% probability outcome. Analyst review recommended before drawing conclusions."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [
+    {
+      "bill": "PREDICT Act",
+      "id": "HR8076",
+      "latest_action": "Referred to the Committee on Oversight and Government Reform, and in addition to the Committees on House Administration, and the Judiciary, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/8076"
+    },
+    {
+      "bill": "End Prediction Market Corruption Act",
+      "id": "S4017",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-05",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4017"
+    },
+    {
+      "bill": "Prediction Markets Security and Integrity Act",
+      "id": "S4060",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-11",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4060"
+    },
+    {
+      "bill": "Public Integrity in Financial Prediction Markets Act",
+      "id": "S4188",
+      "latest_action": "Read twice and referred to the Committee on Homeland Security and Governmental Affairs.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4188"
+    },
+    {
+      "bill": "STOP Corrupt Bets Act",
+      "id": "S4226",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-26",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4226"
+    },
+    {
+      "bill": "BETS OFF Act",
+      "id": "S4115",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-17",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4115"
+    },
+    {
+      "bill": "Event Contract Enforcement Act",
+      "id": "HR7840",
+      "latest_action": "Sponsor introductory remarks on measure. (CR H2588-2589)",
+      "action_date": "2026-03-18",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/7840"
+    }
+  ],
+  "wash_trading_reports": [],
+  "developing_stories": [],
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One market matched review criteria: 'Will Gretchen Whitmer win the 2028 Democratic presidential nomination?' with $9,987,598 in volume at 1.1% probability.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "12 raw, 0 fresh",
+      "updated_at": "2026-05-30T14:17:53Z",
+      "records": 0
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "3 markets matched",
+      "updated_at": "2026-05-30T14:17:53Z",
+      "records": 3
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-05-30T14:17:53Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-05-30T14:17:53Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-05-30T14:17:54Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-05-30T14:17:58Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "7 bill updates",
+      "updated_at": "2026-05-30T14:18:03Z",
+      "records": 7
+    }
+  }
+}

@@ -307,10 +307,11 @@
   "559659": {
     "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
     "first_flagged": "2026-05-29",
-    "last_flagged": "2026-05-29",
-    "flag_count": 2,
+    "last_flagged": "2026-05-30",
+    "flag_count": 3,
     "flag_dates": [
-      "2026-05-29"
+      "2026-05-29",
+      "2026-05-30"
     ],
     "insider_risk": "MEDIUM",
     "volume_history": [
@@ -322,6 +323,11 @@
       {
         "date": "2026-05-29",
         "volume": 9984938.0,
+        "prob": 1.1
+      },
+      {
+        "date": "2026-05-30",
+        "volume": 9987598.0,
         "prob": 1.1
       }
     ],
@@ -370,5 +376,43 @@
     ],
     "max_wash_score": 0,
     "url": "https://polymarket.com/event/will-discord-have-the-highest-ipo-market-cap-2026-121"
+  },
+  "956980": {
+    "question": "Ukraine agrees not to join NATO by June 30? ",
+    "first_flagged": "2026-05-30",
+    "last_flagged": "2026-05-30",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-30"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-05-30",
+        "volume": 998515.0,
+        "prob": 3.2
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/ukraine-agrees-not-to-join-nato-by-june-30"
+  },
+  "2336475": {
+    "question": "Will Elon Musk post 260-279 tweets from May 26 to June 2, 2026?",
+    "first_flagged": "2026-05-30",
+    "last_flagged": "2026-05-30",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-30"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-05-30",
+        "volume": 99710.0,
+        "prob": 1.1
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/elon-musk-of-tweets-may-26-june-2-260-279"
   }
 }

@@ -26,6 +26,7 @@ OFAC_CACHE = DATA_DIR / "ofac_cache.json"
 OFAC_SEEN = DATA_DIR / "ofac_seen_uids.json"
 WIN_RATE_FILE = DATA_DIR / "win_rate_tracker.json"
 STORY_THREADS = DATA_DIR / "story_threads.json"
+BILL_STATE_FILE = DATA_DIR / "congress_bill_state.json"
 
 SOURCE_PRIORITY = {
     "CFTC Enforcement Actions": 10,

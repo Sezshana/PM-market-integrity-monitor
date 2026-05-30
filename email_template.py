@@ -4,7 +4,7 @@ Clean, styled digest that renders well in Gmail.
 """
 
 def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
-                     uma, ofac, bills, win_alerts, weekly,
+                     uma, ofac, bill_tracker, win_alerts, weekly,
                      narrative, developing_stories, today_pretty):
 
     high   = [h for h in news if h.get("priority")]
@@ -105,12 +105,21 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
             <a href="{safe_url(tx.get("from_link",""))}" style="color:#00c2aa;font-size:12px;text-decoration:none">Wallet profile ↗</a>
         </td></tr>'''
 
-    def bill_row(b):
+    def bill_change_row(b):
+        label = esc(str(b.get("change_type", "update")).replace("_", " ").title())
+        prev = b.get("previous_action")
+        prev_line = ""
+        if prev:
+            prev_line = (
+                f'<div style="font-size:11px;color:#5a6080;margin-top:4px">'
+                f'Was: {esc(prev)} ({esc(b.get("previous_date",""))})</div>'
+            )
         return f'''<tr><td style="padding:12px 0;border-bottom:1px solid #ffffff0a">
             <table width="100%" cellpadding="0" cellspacing="0"><tr>
                 <td style="vertical-align:top">
                     <a href="{safe_url(b.get("url",""))}" style="font-size:13px;font-weight:500;color:#00c2aa;text-decoration:none">{esc(b.get("bill",""))}</a>
-                    <div style="font-size:11px;color:#5a6080;font-family:monospace;margin-top:2px">{esc(b.get("id",""))}</div>
+                    <div style="font-size:11px;color:#5a6080;font-family:monospace;margin-top:2px">{esc(b.get("id",""))} · {label}</div>
+                    {prev_line}
                 </td>
                 <td style="text-align:right;vertical-align:top;max-width:260px;padding-left:12px">
                     <div style="font-size:12px;color:#8b91a8">{esc(b.get("latest_action",""))}</div>
@@ -144,7 +153,39 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
 
     high_news_html = "".join(news_row(i, True) for i in high)
     normal_news_html = "".join(news_row(i, True) for i in normal)
-    bills_html = "".join(bill_row(b) for b in bills)
+    bill_changes = bill_tracker.changes if hasattr(bill_tracker, "changes") else bill_tracker.get("changes", [])
+    bill_movement_count = (
+        bill_tracker.movement_count
+        if hasattr(bill_tracker, "movement_count")
+        else bill_tracker.get("movement_count", 0)
+    )
+    bill_monitored_count = (
+        bill_tracker.monitored_count
+        if hasattr(bill_tracker, "monitored_count")
+        else bill_tracker.get("monitored_count", 0)
+    )
+    bill_quiet_message = (
+        bill_tracker.quiet_message
+        if hasattr(bill_tracker, "quiet_message")
+        else bill_tracker.get("quiet_message", "")
+    )
+    if bill_movement_count:
+        bills_html = "".join(bill_change_row(b) for b in bill_changes)
+        bills_section = (
+            f'<tr>{section_header("Congressional Updates", bill_movement_count)}</tr>'
+            f'<table width="100%" cellpadding="0" cellspacing="0">{bills_html}</table>'
+        )
+    elif bill_monitored_count:
+        bills_section = (
+            f'<tr>{section_header("Congressional Bills")}</tr>'
+            f'<tr><td style="padding:0 0 16px;font-size:13px;color:#8b91a8;line-height:1.5">{esc(bill_quiet_message)}</td></tr>'
+        )
+    else:
+        bills_section = (
+            f'<tr>{section_header("Congressional Bills")}</tr>'
+            f'<tr><td style="padding:0 0 16px;font-size:13px;color:#8b91a8">'
+            f'Add CONGRESS_API_KEY to GitHub Secrets to enable bill tracking.</td></tr>'
+        )
     uma_html = "".join(f'<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px">{uma_row(a)}</table>' for a in uma)
 
     developing_html = ""
@@ -202,7 +243,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
       {stat_box(len(suspicious_markets), "Review Markets", "red")}
       {stat_box(len(onchain_txs), "On-Chain Flags", "blue")}
       {stat_box(len(uma), "UMA Disputes", "yellow")}
-      {stat_box(len(bills), "Bills Tracked", "green")}
+      {stat_box(bill_movement_count, "Bill Movements", "green")}
       {stat_box(len(news), "News Stories", "gray")}
     </tr></table>
   </td></tr>
@@ -226,8 +267,7 @@ def build_html_email(news, suspicious_markets, large_trades, onchain_txs,
   {"".join([f'<tr>{section_header("General News & Regulatory Updates", len(normal))}</tr>' + normal_news_html]) if normal else ""}
 
   <!-- BILLS -->
-  <tr>{section_header("Congressional Bill Tracker", len(bills))}</tr>
-  <table width="100%" cellpadding="0" cellspacing="0">{bills_html}</table>
+  {bills_section}
 
   <!-- FOOTER -->
   <tr><td style="padding:24px 0 0;border-top:1px solid #ffffff14;margin-top:20px">

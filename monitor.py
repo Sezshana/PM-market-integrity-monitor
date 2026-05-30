@@ -742,38 +742,11 @@ def parse_ofac_crypto_entries(xml_text):
 
 
 # ════════════════════════════════════════════════════════════
-# CONGRESSIONAL BILLS
-# ════════════════════════════════════════════════════════════
-
-def check_congress_bills(bills):
-    updates = []
-    if not CONGRESS_KEY:
-        return updates
-    for bill in bills:
-        try:
-            bt = "hr" if bill["id"].startswith("hr") else "s"
-            bn = bill["id"].replace("hr","").replace("s","")
-            url = f"https://api.congress.gov/v3/bill/{bill['congress']}/{bt}/{bn}"
-            resp = requests.get(url, params={"api_key": CONGRESS_KEY}, timeout=10)
-            if resp.status_code == 200:
-                bd = resp.json().get("bill",{})
-                updates.append({
-                    "bill":          bill["name"],
-                    "id":            bill["id"].upper(),
-                    "latest_action": bd.get("latestAction",{}).get("text","No action found"),
-                    "action_date":   bd.get("latestAction",{}).get("actionDate",""),
-                    "url": f"https://www.congress.gov/bill/{bill['congress']}th-congress/{'house' if bt=='hr' else 'senate'}-bill/{bn}",
-                })
-        except Exception as e:
-            print(f"  Bill error [{bill['name']}]: {e}")
-    return updates
-
-
-# ════════════════════════════════════════════════════════════
 # NARRATIVE SUMMARY
 # ════════════════════════════════════════════════════════════
 
-def build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, developing_stories):
+def build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, developing_stories,
+                            bill_tracker=None):
     """
     Build a 3-5 sentence human-readable summary of the day's intelligence.
     This goes at the very top of the email so you know in 10 seconds what happened today.
@@ -816,6 +789,15 @@ def build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, d
     if ofac:
         parts.append(f"{len(ofac)} new OFAC crypto sanctions added — cross-reference with Polymarket trading history.")
 
+    if bill_tracker and bill_tracker.movement_count:
+        names = [c["bill"] for c in bill_tracker.changes[:2]]
+        suffix = ""
+        if bill_tracker.movement_count > 2:
+            suffix = f" and {bill_tracker.movement_count - 2} more"
+        parts.append(
+            f"{bill_tracker.movement_count} congressional bill(s) moved: {', '.join(names)}{suffix}."
+        )
+
     return " ".join(parts)
 
 
@@ -823,8 +805,14 @@ def build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, d
 # SMART SUBJECT LINE
 # ════════════════════════════════════════════════════════════
 
-def build_subject(news, suspicious_markets, large_trades, is_quiet):
+def build_subject(news, suspicious_markets, large_trades, is_quiet, bill_tracker=None):
     if is_quiet:
+        if bill_tracker and bill_tracker.movement_count:
+            top = bill_tracker.changes[0]
+            return (
+                f"PM Monitor {TODAY_PRETTY} — Bill update: "
+                f"{top['bill'][:45]}{'...' if len(top['bill']) > 45 else ''}"
+            )
         return f"PM Integrity Monitor {TODAY_PRETTY} — Quiet day"
 
     high = [h for h in news if h.get("priority")]
@@ -924,7 +912,7 @@ def generate_weekly_summary(developing_stories):
 # ════════════════════════════════════════════════════════════
 
 def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                bills, win_alerts, weekly, narrative, developing_stories, wash_reports=None):
+                bill_tracker, win_alerts, weekly, narrative, developing_stories, wash_reports=None):
     high   = [h for h in news if h["priority"]]
     normal = [h for h in news if not h["priority"]]
 
@@ -946,7 +934,8 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
               f"UMA governance alerts:    {len(uma)}",
               f"New OFAC additions:       {len(ofac)}",
               f"Win rate alerts:          {len(win_alerts)}",
-              f"Bills tracked:            {len(bills)}",
+              f"Bill movements today:     {bill_tracker.movement_count}",
+              f"Bills monitored:          {bill_tracker.monitored_count}",
               f"Report generated:         {TODAY} | Cleveland EDT = UTC-4",
               f"On-chain monitoring:      {'ACTIVE' if POLYGONSCAN_KEY else 'INACTIVE — add POLYGONSCAN_KEY to GitHub Secrets'}",
               f"Wash trading alerts:      {len(wash_reports or [])} markets analyzed",
@@ -958,7 +947,6 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
             "QUIET DAY",
             "-" * 40,
             "No high priority news, market/trade review criteria, or governance disputes today.",
-            "Congressional bill status and general news below.",
             "",
         ]
 
@@ -1092,16 +1080,23 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         lines.append("")
 
     # BILLS
-    lines += ["CONGRESSIONAL BILL TRACKER", "=" * 60]
-    if bills:
-        for b in bills:
-            lines += [f"\n{b['bill']} ({b['id']})",
-                      f"   Latest: {b['latest_action']}",
-                      f"   Date:   {b.get('action_date','N/A')}",
-                      f"   Link:   {b['url']}"]
+    if bill_tracker.monitored_count == 0 and not bill_tracker.quiet_message:
+        lines += ["CONGRESSIONAL BILLS", "=" * 60,
+                  "Add CONGRESS_API_KEY to GitHub Secrets to enable bill tracking.", ""]
+    elif bill_tracker.movement_count:
+        lines += ["CONGRESSIONAL UPDATES", "=" * 60]
+        for c in bill_tracker.changes:
+            label = c.get("change_type", "update").replace("_", " ").title()
+            lines += [
+                f"\n{c['bill']} ({c['id']}) — {label}",
+                f"   Was:    {c.get('previous_action') or 'n/a'} ({c.get('previous_date') or 'n/a'})",
+                f"   Now:    {c['latest_action']}",
+                f"   Date:   {c.get('action_date', 'N/A')}",
+                f"   Link:   {c['url']}",
+            ]
+        lines.append("")
     else:
-        lines.append("Add CONGRESS_API_KEY to GitHub Secrets to enable bill tracking.")
-    lines.append("")
+        lines += [bill_tracker.quiet_message, ""]
 
     # WEEKLY
     if weekly:
@@ -1116,7 +1111,7 @@ def build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
 # ════════════════════════════════════════════════════════════
 
 def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                bills, win_alerts, weekly, narrative, developing_stories, wash_reports=None):
+                bill_tracker, win_alerts, weekly, narrative, developing_stories, wash_reports=None):
     report = build_daily_report(
         news=news,
         suspicious_markets=suspicious_markets,
@@ -1124,7 +1119,7 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
         onchain_txs=onchain_txs,
         uma=uma,
         ofac=ofac,
-        bills=bills,
+        bill_tracker=bill_tracker.to_dict(),
         narrative=narrative,
         developing_stories=developing_stories,
         wash_reports=wash_reports,
@@ -1139,8 +1134,8 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
                 and len(uma) == 0)
 
     body    = build_email(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                         bills, win_alerts, weekly, narrative, developing_stories, wash_reports=wash_reports)
-    subject = build_subject(news, suspicious_markets, large_trades, is_quiet)
+                         bill_tracker, win_alerts, weekly, narrative, developing_stories, wash_reports=wash_reports)
+    subject = build_subject(news, suspicious_markets, large_trades, is_quiet, bill_tracker=bill_tracker)
 
     with open(f"output/report_{TODAY}.md","w") as f:
         f.write(body)
@@ -1148,7 +1143,7 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
     # Build HTML version
     body_html = build_html_email(
         news, suspicious_markets, large_trades, onchain_txs,
-        uma, ofac, bills, win_alerts, weekly,
+        uma, ofac, bill_tracker, win_alerts, weekly,
         narrative, developing_stories, TODAY_PRETTY
     )
 
@@ -1454,7 +1449,8 @@ def main():
     ofac = fetch_ofac_new()
 
     print("7. Congressional bills...")
-    bills = check_congress_bills(BILLS)
+    bill_tracker = check_congress_bills(BILLS)
+    print(f"   Bill movements today: {bill_tracker.movement_count}")
 
     print("8. Win rate alerts...")
     win_alerts = get_win_rate_alerts()
@@ -1466,11 +1462,14 @@ def main():
     weekly = generate_weekly_summary(developing_stories)
 
     print("11. Building narrative summary...")
-    narrative = build_narrative_summary(news, suspicious_markets, large_trades, uma, ofac, developing_stories)
+    narrative = build_narrative_summary(
+        news, suspicious_markets, large_trades, uma, ofac, developing_stories,
+        bill_tracker=bill_tracker,
+    )
 
     print("12. Saving report and sending email...")
     body, body_html, subject = save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
-                                bills, win_alerts, weekly, narrative, developing_stories, wash_reports=wash_reports)
+                                bill_tracker, win_alerts, weekly, narrative, developing_stories, wash_reports=wash_reports)
     send_email(body, body_html, subject)
 
     high = len([h for h in news if h["priority"]])

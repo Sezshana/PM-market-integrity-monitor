@@ -15,7 +15,7 @@ Runs every morning at 7 AM EDT and delivers a structured intelligence digest cov
 - **Win rate tracker** — maintains a rolling record of wallets betting large on long shots, flags anyone with >75% win rate across multiple markets
 
 ### Regulatory Intelligence
-- **Congressional bill tracker** — tracks 7 pending prediction market bills via Congress.gov API with live status updates
+- **Congressional bill tracker** — monitors 7 prediction market bills via Congress.gov; surfaces **only changes** (new actions or newly added bills), otherwise a one-line quiet status
 - **OFAC cross-reference** — monitors OFAC SDN list daily for new crypto wallet additions, cross-references against Polymarket activity
 - **UMA governance disputes** — filters UMA Protocol forum for Polymarket-specific resolution disputes and bad-faith voting patterns (the April 2026 governance attack vector)
 

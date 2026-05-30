@@ -389,13 +389,14 @@ async function loadAll() {
     const high     = alerts.filter(a=>a.priority);
     const normal   = alerts.filter(a=>!a.priority);
     const markets  = report.suspicious_market_data||[];
-    const bills    = report.bill_updates||[];
+    const billTracker = report.bill_tracker||{};
+    const bills    = billTracker.changes||report.bill_updates||[];
     const wash     = report.wash_trading_reports||[];
     const devs     = report.developing_stories||[];
 
     document.getElementById('tb-today').textContent = high.length;
     document.getElementById('tb-news').textContent  = alerts.length;
-    document.getElementById('tb-bills').textContent = bills.length;
+    document.getElementById('tb-bills').textContent = billTracker.movement_count ?? bills.length;
     document.getElementById('cnt-markets').textContent = markets.length;
     document.getElementById('cnt-wash').textContent    = wash.length;
 
@@ -469,14 +470,17 @@ async function loadAll() {
           <div class="bill-row">
             <div>
               <a href="${safeUrl(b.url||'')}" target="_blank" rel="noopener noreferrer" class="bill-name">${esc(b.bill||'')}</a>
-              <div class="bill-id">${esc(b.id||'')}</div>
+              <div class="bill-id">${esc(b.id||'')} · ${esc((b.change_type||'update').replace(/_/g,' '))}</div>
+              ${b.previous_action ? `<div class="bill-date">Was: ${esc(b.previous_action)} (${esc(b.previous_date||'')})</div>` : ''}
             </div>
             <div>
               <div class="bill-action">${esc(b.latest_action||'')}</div>
               <div class="bill-date">${esc(b.action_date||'')}</div>
             </div>
           </div>`).join('')
-      : '<div class="empty">Add CONGRESS_API_KEY to enable bill tracking</div>';
+      : billTracker.quiet_message
+        ? `<div class="empty">${esc(billTracker.quiet_message)}</div>`
+        : '<div class="empty">Add CONGRESS_API_KEY to enable bill tracking</div>';
   }
 
   // ── AGGREGATE DATA ──

@@ -1,0 +1,64 @@
+{
+  "bills": {
+    "HR8076": {
+      "bill": "PREDICT Act",
+      "latest_action": "Referred to the Committee on Oversight and Government Reform, and in addition to the Committees on House Administration, and the Judiciary, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/8076",
+      "last_changed": "2026-03-25",
+      "last_checked": "2026-05-30"
+    },
+    "S4017": {
+      "bill": "End Prediction Market Corruption Act",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-05",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4017",
+      "last_changed": "2026-03-05",
+      "last_checked": "2026-05-30"
+    },
+    "S4060": {
+      "bill": "Prediction Markets Security and Integrity Act",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-11",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4060",
+      "last_changed": "2026-03-11",
+      "last_checked": "2026-05-30"
+    },
+    "S4188": {
+      "bill": "Public Integrity in Financial Prediction Markets Act",
+      "latest_action": "Read twice and referred to the Committee on Homeland Security and Governmental Affairs.",
+      "action_date": "2026-03-25",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4188",
+      "last_changed": "2026-03-25",
+      "last_checked": "2026-05-30"
+    },
+    "S4226": {
+      "bill": "STOP Corrupt Bets Act",
+      "latest_action": "Read twice and referred to the Committee on Agriculture, Nutrition, and Forestry.",
+      "action_date": "2026-03-26",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4226",
+      "last_changed": "2026-03-26",
+      "last_checked": "2026-05-30"
+    },
+    "S4115": {
+      "bill": "BETS OFF Act",
+      "latest_action": "Read twice and referred to the Committee on the Judiciary.",
+      "action_date": "2026-03-17",
+      "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4115",
+      "last_changed": "2026-03-17",
+      "last_checked": "2026-05-30"
+    },
+    "HR7840": {
+      "bill": "Event Contract Enforcement Act",
+      "latest_action": "Sponsor introductory remarks on measure. (CR H2588-2589)",
+      "action_date": "2026-03-18",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/7840",
+      "last_changed": "2026-03-18",
+      "last_checked": "2026-05-30"
+    }
+  },
+  "meta": {
+    "seeded_at": "2026-05-30",
+    "last_movement_date": "2026-03-26"
+  }
+}

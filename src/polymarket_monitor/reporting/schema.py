@@ -22,6 +22,7 @@ REPORT_TOP_LEVEL_FIELDS = {
     "uma_governance",
     "ofac_additions",
     "bill_updates",
+    "bill_tracker",
     "wash_trading_reports",
     "developing_stories",
     "narrative",
@@ -140,6 +141,7 @@ class DailyReport:
     uma_governance: list[dict[str, Any]]
     ofac_additions: list[dict[str, Any]]
     bill_updates: list[dict[str, Any]]
+    bill_tracker: dict[str, Any]
     wash_trading_reports: list[dict[str, Any]]
     developing_stories: list[dict[str, Any]]
     narrative: str
@@ -168,7 +170,7 @@ def build_daily_report(
     onchain_txs: list[dict[str, Any]],
     uma: list[dict[str, Any]],
     ofac: list[dict[str, Any]],
-    bills: list[dict[str, Any]],
+    bill_tracker: dict[str, Any],
     narrative: str,
     developing_stories: list[dict[str, Any]],
     wash_reports: list[dict[str, Any]] | None = None,
@@ -187,7 +189,8 @@ def build_daily_report(
         onchain_txs=onchain_txs,
         uma_governance=uma,
         ofac_additions=ofac,
-        bill_updates=bills,
+        bill_updates=bill_tracker.get("changes", []),
+        bill_tracker=bill_tracker,
         wash_trading_reports=normalize_wash_reports(wash_reports),
         developing_stories=developing_stories,
         narrative=narrative,

@@ -67,7 +67,12 @@ class ReportSchemaTests(unittest.TestCase):
             onchain_txs=[],
             uma=[],
             ofac=[],
-            bills=[],
+            bill_tracker={
+                "changes": [],
+                "quiet_message": "No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+                "monitored_count": 7,
+                "movement_count": 0,
+            },
             narrative="No criteria matched.",
             developing_stories=[],
             wash_reports=[],

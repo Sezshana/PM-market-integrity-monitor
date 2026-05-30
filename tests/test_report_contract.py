@@ -15,6 +15,8 @@ sys.modules.setdefault("feedparser", types.SimpleNamespace(parse=lambda url: typ
 
 import monitor
 
+from polymarket_monitor.detectors.congress_tracker import BillTrackerResult
+
 
 REPORT_TOP_LEVEL_FIELDS = {
     "date",
@@ -30,6 +32,7 @@ REPORT_TOP_LEVEL_FIELDS = {
     "uma_governance",
     "ofac_additions",
     "bill_updates",
+    "bill_tracker",
     "wash_trading_reports",
     "developing_stories",
     "narrative",
@@ -173,7 +176,10 @@ class ReportSchemaContractTests(unittest.TestCase):
                     onchain_txs=[],
                     uma=[],
                     ofac=[],
-                    bills=[],
+                    bill_tracker=BillTrackerResult(
+                        quiet_message="No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+                        monitored_count=7,
+                    ),
                     win_alerts=[],
                     weekly=None,
                     narrative="Criteria matched sample narrative.",

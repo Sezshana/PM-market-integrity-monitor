@@ -54,6 +54,7 @@ WEEKDAY      = datetime.date.today().weekday()
 # Demo mode: bypasses seen articles cache and shows full report
 # Triggered by setting DEMO_MODE=true in GitHub Actions environment
 DEMO_MODE = os.environ.get("DEMO_MODE", "").lower() == "true"
+FORCE_EMAIL = os.environ.get("FORCE_EMAIL", "").lower() == "true"
 
 for folder in ["output", "cases", "data"]:
     Path(folder).mkdir(exist_ok=True)
@@ -1177,9 +1178,11 @@ def send_email(body_plain, body_html, subject):
     if not SMTP_PASSWORD:
         print("No SMTP password — skipping email")
         return
-    if not DEMO_MODE and _load_email_sent_date() == TODAY:
+    if not DEMO_MODE and not FORCE_EMAIL and _load_email_sent_date() == TODAY:
         print(f"Digest email already sent for {TODAY} — skipping duplicate send")
         return
+    if FORCE_EMAIL:
+        print(f"FORCE_EMAIL set — sending digest for {TODAY} even if already sent")
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"]    = ALERT_EMAIL

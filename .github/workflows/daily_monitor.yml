@@ -7,6 +7,12 @@ on:
     - cron: '17 7 * * *'
       timezone: America/New_York
   workflow_dispatch:
+    inputs:
+      force_email:
+        description: Send email even if today's digest was already sent
+        required: false
+        default: false
+        type: boolean
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -35,6 +41,7 @@ jobs:
       - name: Run monitor
         env:
           PYTHONPATH: src
+          FORCE_EMAIL: ${{ github.event_name == 'workflow_dispatch' && inputs.force_email }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
@@ -66,5 +73,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add output/ data/
+          git reset -- data/digest_email_sent.json 2>/dev/null || true
           git diff --staged --quiet || git commit -m "Daily OSINT report + intelligence update"
           git push

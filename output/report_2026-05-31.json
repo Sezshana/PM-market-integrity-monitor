@@ -1,0 +1,121 @@
+{
+  "date": "2026-05-31",
+  "unique_news": 0,
+  "suspicious_markets": 4,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [],
+  "suspicious_market_data": [
+    {
+      "market_id": "559659",
+      "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
+      "outcome": "Yes",
+      "probability_pct": 1.1,
+      "volume_usd": 9996799.0,
+      "url": "https://polymarket.com/event/will-gretchen-whitmer-win-the-2028-democratic-presidential-nomination-676",
+      "end_date": "2028-11-07",
+      "days_until_close": 891,
+      "flagged_date": "2026-05-31",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $9,996,799 volume on a 1.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "2386945",
+      "question": "LoL: JD Gaming vs Top Esports - Game 2 Winner",
+      "outcome": "JD Gaming",
+      "probability_pct": 0.1,
+      "volume_usd": 998953.0,
+      "url": "https://polymarket.com/event/lol-jdg-tes-2026-05-31-game2",
+      "end_date": "2026-05-31",
+      "days_until_close": 9999,
+      "flagged_date": "2026-05-31",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $998,953 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "2165252",
+      "question": "Red Bull Bragantino vs. SC Internacional: O/U 3.5",
+      "outcome": "Under",
+      "probability_pct": 1.0,
+      "volume_usd": 99587.0,
+      "url": "https://polymarket.com/event/bra-bra-int-2026-05-31-total-3pt5",
+      "end_date": "2026-05-31",
+      "days_until_close": 9999,
+      "flagged_date": "2026-05-31",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,587 volume on a 1.0% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1654346",
+      "question": "Will the ECB announce a 50+ bps decrease at the June 2026 meeting?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99556.0,
+      "url": "https://polymarket.com/event/will-the-ecb-announce-a-50-bps-decrease-at-the-june-2026-meeting",
+      "end_date": "2026-06-11",
+      "days_until_close": 11,
+      "flagged_date": "2026-05-31",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,556 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [],
+  "bill_tracker": {
+    "changes": [],
+    "quiet_message": "No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+    "monitored_count": 7,
+    "movement_count": 0
+  },
+  "wash_trading_reports": [],
+  "developing_stories": [],
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One market matched review criteria: 'Will Gretchen Whitmer win the 2028 Democratic presidential nomination?' with $9,996,799 in volume at 1.1% probability.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "11 raw, 0 fresh",
+      "updated_at": "2026-05-31T15:53:20Z",
+      "records": 0
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "4 markets matched",
+      "updated_at": "2026-05-31T15:53:20Z",
+      "records": 4
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-05-31T15:53:20Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-05-31T15:53:21Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-05-31T15:53:22Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-05-31T15:53:27Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "0 bill movements; 7 monitored",
+      "updated_at": "2026-05-31T15:53:31Z",
+      "records": 0
+    }
+  }
+}

@@ -307,11 +307,12 @@
   "559659": {
     "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
     "first_flagged": "2026-05-29",
-    "last_flagged": "2026-05-30",
-    "flag_count": 4,
+    "last_flagged": "2026-05-31",
+    "flag_count": 5,
     "flag_dates": [
       "2026-05-29",
-      "2026-05-30"
+      "2026-05-30",
+      "2026-05-31"
     ],
     "insider_risk": "MEDIUM",
     "volume_history": [
@@ -333,6 +334,11 @@
       {
         "date": "2026-05-30",
         "volume": 9988772.0,
+        "prob": 1.1
+      },
+      {
+        "date": "2026-05-31",
+        "volume": 9996799.0,
         "prob": 1.1
       }
     ],
@@ -423,10 +429,11 @@
   "1654346": {
     "question": "Will the ECB announce a 50+ bps decrease at the June 2026 meeting?",
     "first_flagged": "2026-05-30",
-    "last_flagged": "2026-05-30",
-    "flag_count": 1,
+    "last_flagged": "2026-05-31",
+    "flag_count": 2,
     "flag_dates": [
-      "2026-05-30"
+      "2026-05-30",
+      "2026-05-31"
     ],
     "insider_risk": "MEDIUM",
     "volume_history": [
@@ -434,9 +441,52 @@
         "date": "2026-05-30",
         "volume": 99237.0,
         "prob": 0.1
+      },
+      {
+        "date": "2026-05-31",
+        "volume": 99556.0,
+        "prob": 0.1
       }
     ],
     "max_wash_score": 0,
     "url": "https://polymarket.com/event/will-the-ecb-announce-a-50-bps-decrease-at-the-june-2026-meeting"
+  },
+  "2386945": {
+    "question": "LoL: JD Gaming vs Top Esports - Game 2 Winner",
+    "first_flagged": "2026-05-31",
+    "last_flagged": "2026-05-31",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-31"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-05-31",
+        "volume": 998953.0,
+        "prob": 0.1
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/lol-jdg-tes-2026-05-31-game2"
+  },
+  "2165252": {
+    "question": "Red Bull Bragantino vs. SC Internacional: O/U 3.5",
+    "first_flagged": "2026-05-31",
+    "last_flagged": "2026-05-31",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-05-31"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-05-31",
+        "volume": 99587.0,
+        "prob": 1.0
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/bra-bra-int-2026-05-31-total-3pt5"
   }
 }

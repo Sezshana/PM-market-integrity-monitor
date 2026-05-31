@@ -30,6 +30,9 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
@@ -72,7 +75,21 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git checkout -B main
           git add output/ data/
           git reset -- data/digest_email_sent.json 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "Daily OSINT report + intelligence update"
-          git push
+          if git diff --staged --quiet; then
+            echo "No output changes to commit."
+            exit 0
+          fi
+          git commit -m "Daily OSINT report + intelligence update"
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin main && git push origin main; then
+              echo "Pushed report updates on attempt ${attempt}."
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed; retrying in 8s..."
+            sleep 8
+          done
+          echo "Failed to push after 5 attempts."
+          exit 1

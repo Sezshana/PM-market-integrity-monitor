@@ -2,8 +2,7 @@ name: Polymarket OSINT Daily Monitor
 
 on:
   schedule:
-    # 7:17 AM Eastern — off the hour to reduce GitHub queue backlog.
-    # GitHub may still delay runs by hours; monitor.py sends at most one email/day.
+    # 7:17 AM Eastern (TZ set on monitor step). GitHub may delay start; email uses Eastern calendar day.
     - cron: '17 7 * * *'
       timezone: America/New_York
   workflow_dispatch:
@@ -43,6 +42,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Run monitor
         env:
+          TZ: America/New_York
           PYTHONPATH: src
           FORCE_EMAIL: ${{ github.event_name == 'workflow_dispatch' && (inputs.force_email != false) }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}

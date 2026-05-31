@@ -308,7 +308,7 @@
     "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
     "first_flagged": "2026-05-29",
     "last_flagged": "2026-05-31",
-    "flag_count": 5,
+    "flag_count": 6,
     "flag_dates": [
       "2026-05-29",
       "2026-05-30",
@@ -339,6 +339,11 @@
       {
         "date": "2026-05-31",
         "volume": 9996799.0,
+        "prob": 1.1
+      },
+      {
+        "date": "2026-05-31",
+        "volume": 9998315.0,
         "prob": 1.1
       }
     ],
@@ -430,7 +435,7 @@
     "question": "Will the ECB announce a 50+ bps decrease at the June 2026 meeting?",
     "first_flagged": "2026-05-30",
     "last_flagged": "2026-05-31",
-    "flag_count": 2,
+    "flag_count": 3,
     "flag_dates": [
       "2026-05-30",
       "2026-05-31"
@@ -445,6 +450,11 @@
       {
         "date": "2026-05-31",
         "volume": 99556.0,
+        "prob": 0.1
+      },
+      {
+        "date": "2026-05-31",
+        "volume": 99589.0,
         "prob": 0.1
       }
     ],

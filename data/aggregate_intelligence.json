@@ -18,6 +18,17 @@
       "latest_prob": 0.1
     },
     {
+      "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
+      "flag_count": 6,
+      "first_flagged": "2026-05-29",
+      "last_flagged": "2026-05-31",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/will-gretchen-whitmer-win-the-2028-democratic-presidential-nomination-676",
+      "latest_volume": 9998315.0,
+      "latest_prob": 1.1
+    },
+    {
       "question": "Fed rate cut by September 2026 meeting?",
       "flag_count": 5,
       "first_flagged": "2026-05-25",
@@ -29,17 +40,6 @@
       "latest_prob": 12.7
     },
     {
-      "question": "Will Gretchen Whitmer win the 2028 Democratic presidential nomination?",
-      "flag_count": 5,
-      "first_flagged": "2026-05-29",
-      "last_flagged": "2026-05-31",
-      "insider_risk": "MEDIUM",
-      "max_wash_score": 0,
-      "url": "https://polymarket.com/event/will-gretchen-whitmer-win-the-2028-democratic-presidential-nomination-676",
-      "latest_volume": 9996799.0,
-      "latest_prob": 1.1
-    },
-    {
       "question": "Israeli parliament dissolved by May 31?",
       "flag_count": 4,
       "first_flagged": "2026-05-27",
@@ -49,6 +49,17 @@
       "url": "https://polymarket.com/event/israeli-parliament-dissolved-by-may-31",
       "latest_volume": 99614.0,
       "latest_prob": 0.9
+    },
+    {
+      "question": "Will the ECB announce a 50+ bps decrease at the June 2026 meeting?",
+      "flag_count": 3,
+      "first_flagged": "2026-05-30",
+      "last_flagged": "2026-05-31",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/will-the-ecb-announce-a-50-bps-decrease-at-the-june-2026-meeting",
+      "latest_volume": 99589.0,
+      "latest_prob": 0.1
     },
     {
       "question": "Roland Garros WTA: Elina Svitolina vs Anna Bondar",
@@ -103,17 +114,6 @@
       "max_wash_score": 0,
       "url": "https://polymarket.com/event/will-the-ecb-announce-a-25-bps-decrease-at-the-june-2026-meeting",
       "latest_volume": 99889.0,
-      "latest_prob": 0.1
-    },
-    {
-      "question": "Will the ECB announce a 50+ bps decrease at the June 2026 meeting?",
-      "flag_count": 2,
-      "first_flagged": "2026-05-30",
-      "last_flagged": "2026-05-31",
-      "insider_risk": "MEDIUM",
-      "max_wash_score": 0,
-      "url": "https://polymarket.com/event/will-the-ecb-announce-a-50-bps-decrease-at-the-june-2026-meeting",
-      "latest_volume": 99556.0,
       "latest_prob": 0.1
     }
   ],
@@ -185,7 +185,7 @@
     {
       "date": "2026-05-31",
       "news": 0,
-      "suspicious_markets": 4,
+      "suspicious_markets": 2,
       "large_trades": 0,
       "uma_alerts": 0,
       "ofac_new": 0
@@ -230,9 +230,9 @@
   "win_rate_alerts": [],
   "summary_stats": {
     "total_alerts_30d": 17,
-    "total_suspicious_30d": 30,
+    "total_suspicious_30d": 28,
     "wallets_with_ofac": 0,
     "wallets_on_watchlist": 0,
-    "markets_flagged_3plus": 4
+    "markets_flagged_3plus": 5
   }
 }

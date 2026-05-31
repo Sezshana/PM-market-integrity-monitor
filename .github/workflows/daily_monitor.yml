@@ -11,7 +11,7 @@ on:
       force_email:
         description: Send email even if today's digest was already sent
         required: false
-        default: false
+        default: true
         type: boolean
 
 env:
@@ -41,7 +41,7 @@ jobs:
       - name: Run monitor
         env:
           PYTHONPATH: src
-          FORCE_EMAIL: ${{ github.event_name == 'workflow_dispatch' && inputs.force_email }}
+          FORCE_EMAIL: ${{ github.event_name == 'workflow_dispatch' && (inputs.force_email != false) }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}

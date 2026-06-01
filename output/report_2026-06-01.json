@@ -1,0 +1,144 @@
+{
+  "date": "2026-06-01",
+  "unique_news": 3,
+  "suspicious_markets": 2,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [
+    {
+      "source": "CoinDesk",
+      "title": "Strategy\u2019s bitcoin sale sparks a $14 million betting chaos on Polymarket",
+      "link": "https://www.coindesk.com/markets/2026/06/01/strategy-s-bitcoin-sale-sparks-a-usd14-million-crypto-betting-chaos-on-a-major-prediction-market",
+      "published": "Mon, 01 Jun 2026 14:49:32 +0000",
+      "pub_date": "Jun 01, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 3,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": [
+        "The Block",
+        "Decrypt"
+      ]
+    },
+    {
+      "source": "Decrypt",
+      "title": "Kalshi Eyes Perpetual Futures for XRP, Solana, Dogecoin\u2014And These Altcoins",
+      "link": "https://decrypt.co/369665/kalshi-eyes-perpetual-futures-xrp-solana-dogecoin-altcoins",
+      "published": "Mon, 01 Jun 2026 19:33:53 +0000",
+      "pub_date": "Jun 01, 2026",
+      "matched_keywords": [
+        "kalshi"
+      ],
+      "summary": "Kalshi moved swiftly to lock down an emerging market for perpetual futures in the U.S., filing to certify a slate of altcoin offerings",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "Decrypt",
+      "title": "Morning Minute: HYPE Soars as CFTC Gives Perps Green Light",
+      "link": "https://decrypt.co/369586/morning-minute-hype-soars-cftc-gives-perps-green-light",
+      "published": "Mon, 01 Jun 2026 14:02:20 +0000",
+      "pub_date": "Jun 01, 2026",
+      "matched_keywords": [
+        "kalshi"
+      ],
+      "summary": "Kalshi got the formal approval, but it's Hyperliquid that caught the most buzz with a massive move over the weekend.",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    }
+  ],
+  "suspicious_market_data": [
+    {
+      "market_id": "2362244",
+      "question": "Will the price of Bitcoin be above $74,000 on June 2?",
+      "outcome": "Yes",
+      "probability_pct": 1.8,
+      "volume_usd": 99266.0,
+      "url": "https://polymarket.com/event/bitcoin-above-74k-on-june-2-2026",
+      "end_date": "2026-06-02",
+      "days_until_close": 1,
+      "flagged_date": "2026-06-01",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,266 volume on a 1.8% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "636921",
+      "question": "Will Israel annex Gaza territory by June 30 2026?",
+      "outcome": "Yes",
+      "probability_pct": 3.0,
+      "volume_usd": 99083.0,
+      "url": "https://polymarket.com/event/will-israel-annex-gaza-territory-by-2026",
+      "end_date": "2026-06-30",
+      "days_until_close": 29,
+      "flagged_date": "2026-06-01",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,083 volume on a 3.0% probability outcome. Analyst review recommended before drawing conclusions."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [],
+  "bill_tracker": {
+    "changes": [],
+    "quiet_message": "No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+    "monitored_count": 7,
+    "movement_count": 0
+  },
+  "wash_trading_reports": [],
+  "developing_stories": [],
+  "narrative": "Today's top story: Strategy\u2019s bitcoin sale sparks a $14 million betting chaos on Polymarket (via CoinDesk, Jun 01, 2026). One market matched review criteria: 'Will the price of Bitcoin be above $74,000 on June 2?' with $99,266 in volume at 1.8% probability.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "8 raw, 3 fresh",
+      "updated_at": "2026-06-01T22:20:16Z",
+      "records": 3
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "2 markets matched",
+      "updated_at": "2026-06-01T22:20:16Z",
+      "records": 2
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-06-01T22:20:16Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-06-01T22:20:16Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-06-01T22:20:17Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-06-01T22:20:21Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "0 bill movements; 7 monitored",
+      "updated_at": "2026-06-01T22:20:26Z",
+      "records": 0
+    }
+  }
+}

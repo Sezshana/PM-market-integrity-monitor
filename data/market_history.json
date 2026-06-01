@@ -498,5 +498,43 @@
     ],
     "max_wash_score": 0,
     "url": "https://polymarket.com/event/bra-bra-int-2026-05-31-total-3pt5"
+  },
+  "2362244": {
+    "question": "Will the price of Bitcoin be above $74,000 on June 2?",
+    "first_flagged": "2026-06-01",
+    "last_flagged": "2026-06-01",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-06-01"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-06-01",
+        "volume": 99266.0,
+        "prob": 1.8
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/bitcoin-above-74k-on-june-2-2026"
+  },
+  "636921": {
+    "question": "Will Israel annex Gaza territory by June 30 2026?",
+    "first_flagged": "2026-06-01",
+    "last_flagged": "2026-06-01",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-06-01"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-06-01",
+        "volume": 99083.0,
+        "prob": 3.0
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/will-israel-annex-gaza-territory-by-2026"
   }
 }

@@ -1,0 +1,182 @@
+{
+  "date": "2026-06-02",
+  "unique_news": 5,
+  "suspicious_markets": 2,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [
+    {
+      "source": "Decrypt",
+      "title": "Morning Minute: Saylor Sells Bitcoin for First Time Since 2022",
+      "link": "https://decrypt.co/369709/morning-minute-saylor-sells-bitcoin-for-first-time-since-2022",
+      "published": "Tue, 02 Jun 2026 12:14:51 +0000",
+      "pub_date": "Jun 02, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "Bitcoin fell below $70K on the back of the sales, and a major Polymarket dispute is brewing over whether Strategy indeed sold in May or not.",
+      "score": 3,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "Decrypt",
+      "title": "Strategy's Bitcoin Sale Timing Throws $50 Million Polymarket Bet Into Dispute",
+      "link": "https://decrypt.co/369664/strategy-bitcoin-sale-throws-50-million-polymarket-bet-dispute",
+      "published": "Mon, 01 Jun 2026 19:58:54 +0000",
+      "pub_date": "Jun 01, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "Polymarket users are waiting for a resolution on whether Strategy's Bitcoin sale took place before the end of May\u2014with over $50 million bet so far.",
+      "score": 3,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "The Block",
+      "title": "Galaxy Digital opens OTC prediction market trading for institutions, kicks off with $10 million Kalshi trade",
+      "link": "https://www.theblock.co/post/403338/galaxy-digital-opens-otc-prediction-market-trading-for-institutions-kicks-off-with-10-million-kalshi-trade?utm_source=rss&utm_medium=rss",
+      "published": "Tue, 02 Jun 2026 09:12:52 -0400",
+      "pub_date": "Jun 02, 2026",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "Galaxy Digital launches institutional OTC prediction markets trading, executing a $10M Clarity Act trade with Arca on Kalshi at launch.",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "CoinDesk",
+      "title": "Galaxy enters institutional prediction markets with $10 million Arca trade",
+      "link": "https://www.coindesk.com/markets/2026/06/02/galaxy-enters-institutional-prediction-markets-with-usd10-million-arca-trade",
+      "published": "Tue, 02 Jun 2026 19:17:12 +0000",
+      "pub_date": "Jun 02, 2026",
+      "matched_keywords": [
+        "prediction market"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 0,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "Decrypt",
+      "title": "Where Does Bitcoin Go From Here? This Is What the Charts Say",
+      "link": "https://decrypt.co/369750/bitcoin-price-next-charts-technical-analysis",
+      "published": "Tue, 02 Jun 2026 19:15:29 +0000",
+      "pub_date": "Jun 02, 2026",
+      "matched_keywords": [
+        "prediction market"
+      ],
+      "summary": "Bitcoin just had its worst day since April. The death cross is in effect, and prediction markets are bearish.",
+      "score": 0,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    }
+  ],
+  "suspicious_market_data": [
+    {
+      "market_id": "636921",
+      "question": "Will Israel annex Gaza territory by June 30 2026?",
+      "outcome": "Yes",
+      "probability_pct": 2.3,
+      "volume_usd": 99865.0,
+      "url": "https://polymarket.com/event/will-israel-annex-gaza-territory-by-2026",
+      "end_date": "2026-06-30",
+      "days_until_close": 28,
+      "flagged_date": "2026-06-02",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,865 volume on a 2.3% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1321567",
+      "question": "Will SHEIN have the highest IPO Market Cap 2026?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99129.0,
+      "url": "https://polymarket.com/event/will-shein-have-the-highest-ipo-market-cap-2026-348",
+      "end_date": "2026-12-31",
+      "days_until_close": 212,
+      "flagged_date": "2026-06-02",
+      "insider_risk": "HIGH",
+      "alert_reason": "Criteria matched: low-probability outcome, $99,129 market volume, and event category with concentrated decision access. Longer resolution horizon lowers urgency; analyst review required."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [],
+  "bill_tracker": {
+    "changes": [],
+    "quiet_message": "No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+    "monitored_count": 7,
+    "movement_count": 0
+  },
+  "wash_trading_reports": [],
+  "developing_stories": [
+    {
+      "representative_title": "Strategy\u2019s bitcoin sale sparks a $14 million betting chaos on Polymarket",
+      "dates_seen": [
+        "2026-06-01",
+        "2026-06-02"
+      ],
+      "last_seen": "2026-06-02",
+      "mention_count": 2
+    }
+  ],
+  "narrative": "Today's top story: Morning Minute: Saylor Sells Bitcoin for First Time Since 2022 (via Decrypt, Jun 02, 2026). There are 2 high priority alerts total today. One market matched review criteria: 'Will Israel annex Gaza territory by June 30 2026?' with $99,865 in volume at 2.3% probability. Developing story to watch: 'Strategy\u2019s bitcoin sale sparks a $14 million betting chaos on Polymarket...' has appeared for 2 consecutive days.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "8 raw, 5 fresh",
+      "updated_at": "2026-06-02T22:04:59Z",
+      "records": 5
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "2 markets matched",
+      "updated_at": "2026-06-02T22:04:59Z",
+      "records": 2
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-06-02T22:04:59Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-06-02T22:04:59Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-06-02T22:05:00Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-06-02T22:05:04Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "0 bill movements; 7 monitored",
+      "updated_at": "2026-06-02T22:05:09Z",
+      "records": 0
+    }
+  }
+}

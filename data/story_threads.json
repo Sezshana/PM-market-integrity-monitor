@@ -342,10 +342,11 @@
   "betting bitcoin chaos million polymarket sale": {
     "representative_title": "Strategy\u2019s bitcoin sale sparks a $14 million betting chaos on Polymarket",
     "dates_seen": [
-      "2026-06-01"
+      "2026-06-01",
+      "2026-06-02"
     ],
-    "last_seen": "2026-06-01",
-    "mention_count": 1
+    "last_seen": "2026-06-02",
+    "mention_count": 2
   },
   "altcoins dogecoinand eyes futures kalshi perpetual": {
     "representative_title": "Kalshi Eyes Perpetual Futures for XRP, Solana, Dogecoin\u2014And These Altcoins",
@@ -361,6 +362,38 @@
       "2026-06-01"
     ],
     "last_seen": "2026-06-01",
+    "mention_count": 1
+  },
+  "2022 bitcoin minute morning saylor sells": {
+    "representative_title": "Morning Minute: Saylor Sells Bitcoin for First Time Since 2022",
+    "dates_seen": [
+      "2026-06-02"
+    ],
+    "last_seen": "2026-06-02",
+    "mention_count": 1
+  },
+  "digital galaxy institutions kalshi kicks market": {
+    "representative_title": "Galaxy Digital opens OTC prediction market trading for institutions, kicks off with $10 million Kalshi trade",
+    "dates_seen": [
+      "2026-06-02"
+    ],
+    "last_seen": "2026-06-02",
+    "mention_count": 1
+  },
+  "arca enters galaxy institutional markets million": {
+    "representative_title": "Galaxy enters institutional prediction markets with $10 million Arca trade",
+    "dates_seen": [
+      "2026-06-02"
+    ],
+    "last_seen": "2026-06-02",
+    "mention_count": 1
+  },
+  "bitcoin charts does here": {
+    "representative_title": "Where Does Bitcoin Go From Here? This Is What the Charts Say",
+    "dates_seen": [
+      "2026-06-02"
+    ],
+    "last_seen": "2026-06-02",
     "mention_count": 1
   }
 }

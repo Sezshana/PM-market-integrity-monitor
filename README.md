@@ -6,7 +6,7 @@ An automated daily surveillance intelligence system for prediction market integr
 
 ## What This Does
 
-Runs every morning at 7 AM EDT and delivers a structured intelligence digest covering:
+Targets **morning delivery** (Eastern) and delivers a structured intelligence digest covering:
 
 ### Market Integrity Detection
 - **Market review criteria** — flags markets with high volume on low-probability outcomes using Polymarket's public Gamma API (a review signal, not a conclusion)
@@ -112,6 +112,19 @@ This repository currently runs in **public demo/dashboard mode**:
 - Treat committed reports as public artifacts and keep them sanitized.
 
 For a private operational deployment, stop committing generated intelligence and add `output/`, `data/`, and `watchlist.txt` to `.gitignore`.
+
+### Morning email delivery
+
+GitHub Actions **does not run scheduled jobs at exact times** — a 7 AM cron often starts in the **afternoon**. This repo handles that in two ways:
+
+1. **Schedule at 8:17 PM Eastern** — delayed runs usually land near the **next morning** (based on observed ~6–12h GitHub queue delay).
+2. **Morning send window** — scheduled runs only send email between **6:00 AM and 11:59 AM Eastern**. If GitHub fires late the same day, the report is still saved but **email is skipped** (no more 6 PM digests).
+
+Once-per-day dedup uses committed `data/email_dispatch_state.json` so multiple runs share the same “already sent today” state.
+
+**Manual run:** Actions → Polymarket OSINT Daily Monitor → Run workflow → check **force_email** only when you want a resend.
+
+**Punctual 7 AM (optional):** Use [cron-job.org](https://cron-job.org) (free) to POST to the GitHub workflow dispatch API at 7:00 AM Eastern with `force_email: false`. Store a fine-grained PAT as repo secret `WORKFLOW_DISPATCH_TOKEN` if you add a dedicated dispatch workflow later.
 
 ### Local Dashboard
 Requires VS Code with Live Server extension.

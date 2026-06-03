@@ -2,15 +2,17 @@ name: Polymarket OSINT Daily Monitor
 
 on:
   schedule:
-    # 7:17 AM Eastern (TZ set on monitor step). GitHub may delay start; email uses Eastern calendar day.
-    - cron: '17 7 * * *'
+    # GitHub Actions often delays 7 AM crons until afternoon. This 8:17 PM Eastern slot
+    # typically runs after delay near the NEXT morning. send_email() also refuses
+    # scheduled sends outside 6:00–11:59 AM Eastern if a cron fires late.
+    - cron: '17 20 * * *'
       timezone: America/New_York
   workflow_dispatch:
     inputs:
       force_email:
         description: Send email even if today's digest was already sent
         required: false
-        default: true
+        default: false
         type: boolean
 
 env:
@@ -44,7 +46,8 @@ jobs:
         env:
           TZ: America/New_York
           PYTHONPATH: src
-          FORCE_EMAIL: ${{ github.event_name == 'workflow_dispatch' && (inputs.force_email != false) }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          FORCE_EMAIL: ${{ github.event_name == 'workflow_dispatch' && (inputs.force_email == true) }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
@@ -78,6 +81,7 @@ jobs:
           git checkout -B main
           git add output/ data/
           git reset -- data/digest_email_sent.json 2>/dev/null || true
+          # email_dispatch_state.json is committed so all runners share once-per-day dedup
           if git diff --staged --quiet; then
             echo "No output changes to commit."
             exit 0

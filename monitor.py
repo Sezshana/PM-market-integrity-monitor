@@ -55,6 +55,9 @@ WEEKDAY      = datetime.date.today().weekday()
 # Triggered by setting DEMO_MODE=true in GitHub Actions environment
 DEMO_MODE = os.environ.get("DEMO_MODE", "").lower() == "true"
 FORCE_EMAIL = os.environ.get("FORCE_EMAIL", "").lower() == "true"
+GITHUB_EVENT = os.environ.get("GITHUB_EVENT_NAME", "")
+MORNING_EMAIL_START_HOUR = int(os.environ.get("MORNING_EMAIL_START_HOUR", "6"))
+MORNING_EMAIL_END_HOUR = int(os.environ.get("MORNING_EMAIL_END_HOUR", "12"))
 
 for folder in ["output", "cases", "data"]:
     Path(folder).mkdir(exist_ok=True)
@@ -66,6 +69,7 @@ OFAC_SEEN     = Path("data/ofac_seen_uids.json")
 WIN_RATE_FILE = Path("data/win_rate_tracker.json")
 STORY_THREADS = Path("data/story_threads.json")
 EMAIL_SENT_FILE = Path("data/digest_email_sent.json")
+EMAIL_DISPATCH_STATE = Path("data/email_dispatch_state.json")
 
 # ── SOURCE PRIORITY ──────────────────────────────────────────
 SOURCE_PRIORITY = {
@@ -1155,20 +1159,37 @@ def save_report(news, suspicious_markets, large_trades, onchain_txs, uma, ofac,
     return body, body_html, subject
 
 
-def _load_email_sent_date():
-    if not EMAIL_SENT_FILE.exists():
+def _load_email_dispatch_date():
+    """Last Eastern calendar day we successfully sent the digest (committed in repo for CI)."""
+    if not EMAIL_DISPATCH_STATE.exists():
         return None
     try:
-        payload = json.loads(EMAIL_SENT_FILE.read_text())
-        return payload.get("date")
+        payload = json.loads(EMAIL_DISPATCH_STATE.read_text())
+        return payload.get("eastern_date")
     except (json.JSONDecodeError, OSError):
         return None
 
 
-def _mark_email_sent():
-    EMAIL_SENT_FILE.write_text(
-        json.dumps({"date": TODAY, "sent_at": datetime.datetime.utcnow().isoformat() + "Z"}, indent=2)
+def _mark_email_sent(subject):
+    now_local = datetime.datetime.now().astimezone().isoformat()
+    EMAIL_DISPATCH_STATE.write_text(
+        json.dumps(
+            {"eastern_date": TODAY, "sent_at": now_local, "subject": subject},
+            indent=2,
+        )
     )
+    # Runner-local marker (not committed) for same-job idempotency
+    EMAIL_SENT_FILE.write_text(
+        json.dumps({"date": TODAY, "sent_at": now_local}, indent=2)
+    )
+
+
+def _scheduled_outside_morning_window():
+    """GitHub often runs morning crons in the afternoon — do not email then."""
+    if GITHUB_EVENT != "schedule":
+        return False
+    hour = datetime.datetime.now().hour
+    return hour < MORNING_EMAIL_START_HOUR or hour >= MORNING_EMAIL_END_HOUR
 
 
 def send_email(body_plain, body_html, subject):
@@ -1178,8 +1199,16 @@ def send_email(body_plain, body_html, subject):
     if not SMTP_PASSWORD:
         print("No SMTP password — skipping email")
         return
-    if not DEMO_MODE and not FORCE_EMAIL and _load_email_sent_date() == TODAY:
-        print(f"Digest email already sent for {TODAY} — skipping duplicate send")
+    if _scheduled_outside_morning_window() and not FORCE_EMAIL:
+        hour = datetime.datetime.now().hour
+        print(
+            f"Skipping email — scheduled run at {hour}:00 local (outside "
+            f"{MORNING_EMAIL_START_HOUR}:00–{MORNING_EMAIL_END_HOUR - 1}:59 morning window). "
+            "Report still saved; use workflow_dispatch with force_email to send manually."
+        )
+        return
+    if not DEMO_MODE and not FORCE_EMAIL and _load_email_dispatch_date() == TODAY:
+        print(f"Digest email already sent for {TODAY} (Eastern) — skipping duplicate send")
         return
     if FORCE_EMAIL:
         print(f"FORCE_EMAIL set — sending digest for {TODAY} even if already sent")
@@ -1194,7 +1223,7 @@ def send_email(body_plain, body_html, subject):
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(ALERT_EMAIL, SMTP_PASSWORD)
             server.sendmail(ALERT_EMAIL, ALERT_EMAIL, msg.as_string())
-        _mark_email_sent()
+        _mark_email_sent(subject)
         print(f"Email sent: {subject}")
     except Exception as e:
         print(f"Email error: {e}")

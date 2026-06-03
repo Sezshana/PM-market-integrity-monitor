@@ -1184,12 +1184,26 @@ def _mark_email_sent(subject):
     )
 
 
-def _scheduled_outside_morning_window():
-    """GitHub often runs morning crons in the afternoon — do not email then."""
-    if GITHUB_EVENT != "schedule":
+def _should_skip_scheduled_email_outside_morning():
+    """Prefer morning delivery; still send if today's digest has not gone out yet."""
+    if GITHUB_EVENT != "schedule" or FORCE_EMAIL:
         return False
     hour = datetime.datetime.now().hour
-    return hour < MORNING_EMAIL_START_HOUR or hour >= MORNING_EMAIL_END_HOUR
+    in_morning = MORNING_EMAIL_START_HOUR <= hour < MORNING_EMAIL_END_HOUR
+    if in_morning:
+        return False
+    if _load_email_dispatch_date() == TODAY:
+        print(
+            f"Skipping email — scheduled run at {hour}:00 local (outside "
+            f"{MORNING_EMAIL_START_HOUR}:00–{MORNING_EMAIL_END_HOUR - 1}:59 morning window) "
+            f"and digest already sent for {TODAY}."
+        )
+        return True
+    print(
+        f"Scheduled run at {hour}:00 local is outside the morning window but no digest "
+        f"was sent for {TODAY} yet — sending anyway (GitHub schedule delay recovery)."
+    )
+    return False
 
 
 def send_email(body_plain, body_html, subject):
@@ -1199,13 +1213,7 @@ def send_email(body_plain, body_html, subject):
     if not SMTP_PASSWORD:
         print("No SMTP password — skipping email")
         return
-    if _scheduled_outside_morning_window() and not FORCE_EMAIL:
-        hour = datetime.datetime.now().hour
-        print(
-            f"Skipping email — scheduled run at {hour}:00 local (outside "
-            f"{MORNING_EMAIL_START_HOUR}:00–{MORNING_EMAIL_END_HOUR - 1}:59 morning window). "
-            "Report still saved; use workflow_dispatch with force_email to send manually."
-        )
+    if _should_skip_scheduled_email_outside_morning():
         return
     if not DEMO_MODE and not FORCE_EMAIL and _load_email_dispatch_date() == TODAY:
         print(f"Digest email already sent for {TODAY} (Eastern) — skipping duplicate send")

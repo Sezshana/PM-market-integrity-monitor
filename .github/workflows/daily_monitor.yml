@@ -2,10 +2,8 @@ name: Polymarket OSINT Daily Monitor
 
 on:
   schedule:
-    # GitHub Actions often delays 7 AM crons until afternoon. This 8:17 PM Eastern slot
-    # typically runs after delay near the NEXT morning. send_email() also refuses
-    # scheduled sends outside 6:00–11:59 AM Eastern if a cron fires late.
-    - cron: '17 20 * * *'
+    # GitHub often delays morning crons; send_email() still delivers if nothing went out today.
+    - cron: '0 7 * * *'
       timezone: America/New_York
   workflow_dispatch:
     inputs:

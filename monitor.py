@@ -1227,14 +1227,19 @@ def send_email(body_plain, body_html, subject):
     # Plain text fallback first, HTML preferred
     msg.attach(MIMEText(body_plain, "plain"))
     msg.attach(MIMEText(body_html,  "html"))
+    recipient = os.environ.get("DIGEST_RECIPIENT", ALERT_EMAIL).strip() or ALERT_EMAIL
+    msg["To"] = recipient
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=60) as server:
             server.login(ALERT_EMAIL, SMTP_PASSWORD)
-            server.sendmail(ALERT_EMAIL, ALERT_EMAIL, msg.as_string())
+            refused = server.sendmail(ALERT_EMAIL, [recipient], msg.as_string())
+        if refused:
+            print(f"Email refused by server for {recipient}: {refused}")
+            return
         _mark_email_sent(subject)
-        print(f"Email sent: {subject}")
+        print(f"Email sent to {recipient}: {subject}")
     except Exception as e:
-        print(f"Email error: {e}")
+        print(f"Email error sending to {recipient}: {e}")
 
 
 # ════════════════════════════════════════════════════════════

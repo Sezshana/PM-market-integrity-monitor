@@ -605,5 +605,24 @@
     ],
     "max_wash_score": 0,
     "url": "https://polymarket.com/event/bitcoin-above-72k-on-june-5-2026"
+  },
+  "2361252": {
+    "question": "Will MrBeast's next video get between 50 and 60 million views on week 1?",
+    "first_flagged": "2026-06-04",
+    "last_flagged": "2026-06-04",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-06-04"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-06-04",
+        "volume": 99874.0,
+        "prob": 0.3
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/will-mrbeasts-next-video-get-between-50-and-60-million-views-on-week-1-266"
   }
 }

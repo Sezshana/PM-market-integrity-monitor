@@ -2,7 +2,7 @@
   "generated": "2026-06-04",
   "days_of_data": 13,
   "total_wallets_tracked": 0,
-  "total_markets_tracked": 24,
+  "total_markets_tracked": 25,
   "recurring_wallets": [],
   "high_risk_wallets": [],
   "persistent_markets": [
@@ -216,8 +216,8 @@
     },
     {
       "date": "2026-06-04",
-      "news": 0,
-      "suspicious_markets": 0,
+      "news": 1,
+      "suspicious_markets": 1,
       "large_trades": 0,
       "uma_alerts": 0,
       "ofac_new": 0
@@ -226,7 +226,7 @@
   "top_sources": [
     {
       "source": "Decrypt",
-      "count": 11
+      "count": 12
     },
     {
       "source": "The Block",
@@ -244,15 +244,15 @@
   "top_keywords": [
     {
       "keyword": "prediction market",
-      "count": 16
+      "count": 17
     },
     {
       "keyword": "polymarket",
-      "count": 14
+      "count": 15
     },
     {
       "keyword": "kalshi",
-      "count": 10
+      "count": 11
     },
     {
       "keyword": "CFTC prediction",
@@ -261,8 +261,8 @@
   ],
   "win_rate_alerts": [],
   "summary_stats": {
-    "total_alerts_30d": 27,
-    "total_suspicious_30d": 34,
+    "total_alerts_30d": 28,
+    "total_suspicious_30d": 35,
     "wallets_with_ofac": 0,
     "wallets_on_watchlist": 0,
     "markets_flagged_3plus": 5

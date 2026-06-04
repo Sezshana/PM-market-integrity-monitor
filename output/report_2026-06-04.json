@@ -1,12 +1,44 @@
 {
   "date": "2026-06-04",
-  "unique_news": 0,
-  "suspicious_markets": 0,
+  "unique_news": 1,
+  "suspicious_markets": 1,
   "large_trades": 0,
   "uma_alerts": 0,
   "ofac_new": 0,
-  "alerts": [],
-  "suspicious_market_data": [],
+  "alerts": [
+    {
+      "source": "Decrypt",
+      "title": "Republican Lawmaker Plans to Add Prediction Markets to Congressional Stock Ban Bill",
+      "link": "https://decrypt.co/370086/republican-lawmaker-add-prediction-markets-ongressional-stock-ban-bill",
+      "published": "Thu, 04 Jun 2026 20:43:19 +0000",
+      "pub_date": "Jun 04, 2026",
+      "matched_keywords": [
+        "polymarket",
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "Rep. Bryan Steil said he'll add language to the House congressional stock ban bill to cover prediction markets like Polymarket and Kalshi.",
+      "score": 9,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    }
+  ],
+  "suspicious_market_data": [
+    {
+      "market_id": "2361252",
+      "question": "Will MrBeast's next video get between 50 and 60 million views on week 1?",
+      "outcome": "Yes",
+      "probability_pct": 0.3,
+      "volume_usd": 99874.0,
+      "url": "https://polymarket.com/event/will-mrbeasts-next-video-get-between-50-and-60-million-views-on-week-1-266",
+      "end_date": "2026-06-30",
+      "days_until_close": 26,
+      "flagged_date": "2026-06-04",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,874 volume on a 0.3% probability outcome. Analyst review recommended before drawing conclusions."
+    }
+  ],
   "large_trade_data": [],
   "onchain_txs": [],
   "uma_governance": [],
@@ -30,48 +62,48 @@
       "mention_count": 2
     }
   ],
-  "narrative": "No new news articles today \u2014 all recent stories have already been sent. No market or trade review criteria matched today. Developing story to watch: 'DOJ, CFTC probe George Santos over Kalshi trades tied to State of the Union appe...' has appeared for 2 consecutive days.",
+  "narrative": "Today's top story: Republican Lawmaker Plans to Add Prediction Markets to Congressional Stock Ban Bill (via Decrypt, Jun 04, 2026). One market matched review criteria: 'Will MrBeast's next video get between 50 and 60 million views on week 1?' with $99,874 in volume at 0.3% probability. Developing story to watch: 'DOJ, CFTC probe George Santos over Kalshi trades tied to State of the Union appe...' has appeared for 2 consecutive days.",
   "source_coverage": {
     "RSS": {
       "status": "OK",
-      "detail": "6 raw, 0 fresh",
-      "updated_at": "2026-06-04T18:38:48Z",
-      "records": 0
+      "detail": "11 raw, 1 fresh",
+      "updated_at": "2026-06-04T21:07:34Z",
+      "records": 1
     },
     "Gamma API": {
       "status": "OK",
-      "detail": "0 markets matched",
-      "updated_at": "2026-06-04T18:38:48Z",
-      "records": 0
+      "detail": "1 markets matched",
+      "updated_at": "2026-06-04T21:07:35Z",
+      "records": 1
     },
     "On-chain/Polygonscan": {
       "status": "failed",
       "detail": "CLOB HTTP 401",
-      "updated_at": "2026-06-04T18:38:49Z",
+      "updated_at": "2026-06-04T21:07:35Z",
       "records": 0
     },
     "CLOB API": {
       "status": "failed",
       "detail": "HTTP 401",
-      "updated_at": "2026-06-04T18:38:49Z",
+      "updated_at": "2026-06-04T21:07:35Z",
       "records": 0
     },
     "UMA": {
       "status": "OK",
       "detail": "0 alerts",
-      "updated_at": "2026-06-04T18:38:49Z",
+      "updated_at": "2026-06-04T21:07:36Z",
       "records": 0
     },
     "OFAC": {
       "status": "OK",
       "detail": "0 new entries",
-      "updated_at": "2026-06-04T18:38:54Z",
+      "updated_at": "2026-06-04T21:07:40Z",
       "records": 0
     },
     "Congress": {
       "status": "OK",
       "detail": "0 bill movements; 7 monitored",
-      "updated_at": "2026-06-04T18:38:58Z",
+      "updated_at": "2026-06-04T21:07:44Z",
       "records": 0
     }
   }

@@ -1,0 +1,154 @@
+{
+  "date": "2026-06-04",
+  "unique_news": 4,
+  "suspicious_markets": 1,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [
+    {
+      "source": "CoinDesk",
+      "title": "Polymarket says No for May, Yes for June after Strategy's recent bitcoin sale",
+      "link": "https://www.coindesk.com/markets/2026/06/04/polymarket-says-no-for-may-yes-for-june-after-strategy-s-recent-bitcoin-sale",
+      "published": "Thu, 04 Jun 2026 07:50:11 +0000",
+      "pub_date": "Jun 04, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 3,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "The Block",
+      "title": "Polymarket\u2019s UMA vote upholds \u2018No\u2019 outcome on Strategy bitcoin sale market despite backlash",
+      "link": "https://www.theblock.co/post/403600/polymarket-upholds-no-outcome-strategy-bitcoin-sale-market?utm_source=rss&utm_medium=rss",
+      "published": "Thu, 04 Jun 2026 00:21:17 -0400",
+      "pub_date": "Jun 04, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "The dispute centers on Strategy's disclosure that it sold 32 BTC for roughly $2.5 million between May 26 and May 31.",
+      "score": 3,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "CoinDesk",
+      "title": "Moomoo expands into prediction markets through Kalshi partnership",
+      "link": "https://www.coindesk.com/business/2026/06/04/moomoo-expands-into-prediction-markets-through-kalshi-partnership",
+      "published": "Thu, 04 Jun 2026 12:00:00 +0000",
+      "pub_date": "Jun 04, 2026",
+      "matched_keywords": [
+        "kalshi",
+        "prediction market"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    },
+    {
+      "source": "Decrypt",
+      "title": "George Santos Referred to DOJ, CFTC Over State of the Union Kalshi Trades: Report",
+      "link": "https://decrypt.co/369838/george-santos-referred-to-doj-cftc-over-state-of-the-union-kalshi-trades-report",
+      "published": "Wed, 03 Jun 2026 11:49:41 +0000",
+      "pub_date": "Jun 03, 2026",
+      "matched_keywords": [
+        "kalshi"
+      ],
+      "summary": "The pardoned ex-congressman allegedly bet against his own State of the Union appearance while publicly hyping it.",
+      "score": 2,
+      "priority": false,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    }
+  ],
+  "suspicious_market_data": [
+    {
+      "market_id": "2386816",
+      "question": "Will the price of Bitcoin be above $72,000 on June 5?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99609.0,
+      "url": "https://polymarket.com/event/bitcoin-above-72k-on-june-5-2026",
+      "end_date": "2026-06-05",
+      "days_until_close": 1,
+      "flagged_date": "2026-06-04",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,609 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [],
+  "bill_tracker": {
+    "changes": [],
+    "quiet_message": "No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+    "monitored_count": 7,
+    "movement_count": 0
+  },
+  "wash_trading_reports": [],
+  "developing_stories": [
+    {
+      "representative_title": "DOJ, CFTC probe George Santos over Kalshi trades tied to State of the Union appearance: report",
+      "dates_seen": [
+        "2026-06-03",
+        "2026-06-04"
+      ],
+      "last_seen": "2026-06-04",
+      "mention_count": 2
+    }
+  ],
+  "narrative": "Today's top story: Polymarket says No for May, Yes for June after Strategy's recent bitcoin sale (via CoinDesk, Jun 04, 2026). There are 2 high priority alerts total today. One market matched review criteria: 'Will the price of Bitcoin be above $72,000 on June 5?' with $99,609 in volume at 0.1% probability. Developing story to watch: 'DOJ, CFTC probe George Santos over Kalshi trades tied to State of the Union appe...' has appeared for 2 consecutive days.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "11 raw, 4 fresh",
+      "updated_at": "2026-06-04T14:16:42Z",
+      "records": 4
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "1 markets matched",
+      "updated_at": "2026-06-04T14:16:42Z",
+      "records": 1
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-06-04T14:16:42Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-06-04T14:16:42Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-06-04T14:16:43Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-06-04T14:16:48Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "0 bill movements; 7 monitored",
+      "updated_at": "2026-06-04T14:16:51Z",
+      "records": 0
+    }
+  }
+}

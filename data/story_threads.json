@@ -399,10 +399,11 @@
   "appearance cftc doj george kalshi probe": {
     "representative_title": "DOJ, CFTC probe George Santos over Kalshi trades tied to State of the Union appearance: report",
     "dates_seen": [
-      "2026-06-03"
+      "2026-06-03",
+      "2026-06-04"
     ],
-    "last_seen": "2026-06-03",
-    "mention_count": 1
+    "last_seen": "2026-06-04",
+    "mention_count": 2
   },
   "analysis another bottom ethereum finding tank": {
     "representative_title": "Why Ethereum Could Tank Another 25% Before Finding a Bottom: Analysis",
@@ -410,6 +411,30 @@
       "2026-06-03"
     ],
     "last_seen": "2026-06-03",
+    "mention_count": 1
+  },
+  "bitcoin june may polymarket recent sale": {
+    "representative_title": "Polymarket says No for May, Yes for June after Strategy's recent bitcoin sale",
+    "dates_seen": [
+      "2026-06-04"
+    ],
+    "last_seen": "2026-06-04",
+    "mention_count": 1
+  },
+  "backlash bitcoin despite market outcome polymarkets": {
+    "representative_title": "Polymarket\u2019s UMA vote upholds \u2018No\u2019 outcome on Strategy bitcoin sale market despite backlash",
+    "dates_seen": [
+      "2026-06-04"
+    ],
+    "last_seen": "2026-06-04",
+    "mention_count": 1
+  },
+  "expands kalshi markets moomoo partnership prediction": {
+    "representative_title": "Moomoo expands into prediction markets through Kalshi partnership",
+    "dates_seen": [
+      "2026-06-04"
+    ],
+    "last_seen": "2026-06-04",
     "mention_count": 1
   }
 }

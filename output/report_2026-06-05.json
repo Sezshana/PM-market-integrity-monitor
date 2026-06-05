@@ -1,53 +1,50 @@
 {
   "date": "2026-06-05",
-  "unique_news": 1,
+  "unique_news": 0,
   "suspicious_markets": 5,
   "large_trades": 0,
   "uma_alerts": 0,
   "ofac_new": 0,
-  "alerts": [
-    {
-      "source": "The Block",
-      "title": "South Korean police investigate local Polymarket users on illegal gambling charges: report",
-      "link": "https://www.theblock.co/post/403777/south-korean-police-investigates-local-polymarket-users?utm_source=rss&utm_medium=rss",
-      "published": "Fri, 05 Jun 2026 04:59:09 -0400",
-      "pub_date": "Jun 05, 2026",
-      "matched_keywords": [
-        "polymarket"
-      ],
-      "summary": "South Korean Polymarket users could be subject to a fine of up to 10 million Korean won, which is worth around $6,495.",
-      "score": 6,
-      "priority": true,
-      "watchlist_hit": [],
-      "also_covered_by": []
-    }
-  ],
+  "alerts": [],
   "suspicious_market_data": [
     {
       "market_id": "1171858",
       "question": "NATO x Russia military clash by June 30, 2026?",
       "outcome": "Yes",
-      "probability_pct": 2.9,
-      "volume_usd": 995500.0,
+      "probability_pct": 3.0,
+      "volume_usd": 995502.0,
       "url": "https://polymarket.com/event/nato-x-russia-military-clash-by-june-30-2026",
       "end_date": "2026-06-30",
       "days_until_close": 25,
       "flagged_date": "2026-06-05",
       "insider_risk": "MEDIUM",
-      "alert_reason": "Criteria matched: $995,500 volume on a 2.9% probability outcome. Analyst review recommended before drawing conclusions."
+      "alert_reason": "Criteria matched: $995,502 volume on a 3.0% probability outcome. Analyst review recommended before drawing conclusions."
     },
     {
-      "market_id": "2126459",
-      "question": "Will Crude Oil reach a new all-time high by June 30?",
+      "market_id": "1087899",
+      "question": "Will Daniil Medvedev be the 2026 Men\u2019s Wimbledon winner?",
       "outcome": "Yes",
-      "probability_pct": 3.1,
-      "volume_usd": 99937.0,
-      "url": "https://polymarket.com/event/will-crude-oil-reach-a-new-all-time-high-by-june-30",
-      "end_date": "2026-06-30",
-      "days_until_close": 25,
+      "probability_pct": 3.3,
+      "volume_usd": 99724.0,
+      "url": "https://polymarket.com/event/will-daniil-medvedev-be-the-2026-mens-wimbledon-winner",
+      "end_date": "2026-07-12",
+      "days_until_close": 37,
       "flagged_date": "2026-06-05",
       "insider_risk": "MEDIUM",
-      "alert_reason": "Criteria matched: $99,937 volume on a 3.1% probability outcome. Analyst review recommended before drawing conclusions."
+      "alert_reason": "Criteria matched: $99,724 volume on a 3.3% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "2440045",
+      "question": "LoL: Team Heretics Academy vs UCAM Esports Club (BO5) - LES Playoffs",
+      "outcome": "UCAM Esports Club",
+      "probability_pct": 0.1,
+      "volume_usd": 99624.0,
+      "url": "https://polymarket.com/event/lol-hrts-ucam1-2026-06-05",
+      "end_date": "2026-06-05",
+      "days_until_close": 9999,
+      "flagged_date": "2026-06-05",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,624 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
     },
     {
       "market_id": "2415776",
@@ -67,26 +64,13 @@
       "question": "Will SHEIN have the highest IPO Market Cap 2026?",
       "outcome": "Yes",
       "probability_pct": 0.1,
-      "volume_usd": 99129.0,
+      "volume_usd": 99130.0,
       "url": "https://polymarket.com/event/will-shein-have-the-highest-ipo-market-cap-2026-348",
       "end_date": "2026-12-31",
       "days_until_close": 209,
       "flagged_date": "2026-06-05",
       "insider_risk": "HIGH",
-      "alert_reason": "Criteria matched: low-probability outcome, $99,129 market volume, and event category with concentrated decision access. Longer resolution horizon lowers urgency; analyst review required."
-    },
-    {
-      "market_id": "1087899",
-      "question": "Will Daniil Medvedev be the 2026 Men\u2019s Wimbledon winner?",
-      "outcome": "Yes",
-      "probability_pct": 2.9,
-      "volume_usd": 99075.0,
-      "url": "https://polymarket.com/event/will-daniil-medvedev-be-the-2026-mens-wimbledon-winner",
-      "end_date": "2026-07-12",
-      "days_until_close": 37,
-      "flagged_date": "2026-06-05",
-      "insider_risk": "MEDIUM",
-      "alert_reason": "Criteria matched: $99,075 volume on a 2.9% probability outcome. Analyst review recommended before drawing conclusions."
+      "alert_reason": "Criteria matched: low-probability outcome, $99,130 market volume, and event category with concentrated decision access. Longer resolution horizon lowers urgency; analyst review required."
     }
   ],
   "large_trade_data": [],
@@ -102,48 +86,48 @@
   },
   "wash_trading_reports": [],
   "developing_stories": [],
-  "narrative": "Today's top story: South Korean police investigate local Polymarket users on illegal gambling charges: report (via The Block, Jun 05, 2026). One market matched review criteria: 'NATO x Russia military clash by June 30, 2026?' with $995,500 in volume at 2.9% probability.",
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One market matched review criteria: 'NATO x Russia military clash by June 30, 2026?' with $995,502 in volume at 3.0% probability.",
   "source_coverage": {
     "RSS": {
       "status": "OK",
-      "detail": "4 raw, 1 fresh",
-      "updated_at": "2026-06-05T17:33:59Z",
-      "records": 1
+      "detail": "3 raw, 0 fresh",
+      "updated_at": "2026-06-05T20:56:42Z",
+      "records": 0
     },
     "Gamma API": {
       "status": "OK",
       "detail": "5 markets matched",
-      "updated_at": "2026-06-05T17:33:59Z",
+      "updated_at": "2026-06-05T20:56:42Z",
       "records": 5
     },
     "On-chain/Polygonscan": {
       "status": "failed",
       "detail": "CLOB HTTP 401",
-      "updated_at": "2026-06-05T17:33:59Z",
+      "updated_at": "2026-06-05T20:56:42Z",
       "records": 0
     },
     "CLOB API": {
       "status": "failed",
       "detail": "HTTP 401",
-      "updated_at": "2026-06-05T17:34:00Z",
+      "updated_at": "2026-06-05T20:56:44Z",
       "records": 0
     },
     "UMA": {
       "status": "OK",
       "detail": "0 alerts",
-      "updated_at": "2026-06-05T17:34:00Z",
+      "updated_at": "2026-06-05T20:56:44Z",
       "records": 0
     },
     "OFAC": {
       "status": "OK",
       "detail": "0 new entries",
-      "updated_at": "2026-06-05T17:34:05Z",
+      "updated_at": "2026-06-05T20:56:48Z",
       "records": 0
     },
     "Congress": {
       "status": "OK",
       "detail": "0 bill movements; 7 monitored",
-      "updated_at": "2026-06-05T17:34:09Z",
+      "updated_at": "2026-06-05T20:56:51Z",
       "records": 0
     }
   }

@@ -640,7 +640,7 @@
     "question": "NATO x Russia military clash by June 30, 2026?",
     "first_flagged": "2026-06-05",
     "last_flagged": "2026-06-06",
-    "flag_count": 3,
+    "flag_count": 4,
     "flag_dates": [
       "2026-06-05",
       "2026-06-06"
@@ -660,6 +660,11 @@
       {
         "date": "2026-06-06",
         "volume": 995742.0,
+        "prob": 2.5
+      },
+      {
+        "date": "2026-06-06",
+        "volume": 995744.0,
         "prob": 2.5
       }
     ],

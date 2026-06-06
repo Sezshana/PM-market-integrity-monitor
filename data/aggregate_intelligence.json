@@ -62,6 +62,17 @@
       "latest_prob": 0.1
     },
     {
+      "question": "NATO x Russia military clash by June 30, 2026?",
+      "flag_count": 4,
+      "first_flagged": "2026-06-05",
+      "last_flagged": "2026-06-06",
+      "insider_risk": "MEDIUM",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/nato-x-russia-military-clash-by-june-30-2026",
+      "latest_volume": 995744.0,
+      "latest_prob": 2.5
+    },
+    {
       "question": "Will the ECB announce a 50+ bps decrease at the June 2026 meeting?",
       "flag_count": 3,
       "first_flagged": "2026-05-30",
@@ -71,17 +82,6 @@
       "url": "https://polymarket.com/event/will-the-ecb-announce-a-50-bps-decrease-at-the-june-2026-meeting",
       "latest_volume": 99589.0,
       "latest_prob": 0.1
-    },
-    {
-      "question": "NATO x Russia military clash by June 30, 2026?",
-      "flag_count": 3,
-      "first_flagged": "2026-06-05",
-      "last_flagged": "2026-06-06",
-      "insider_risk": "MEDIUM",
-      "max_wash_score": 0,
-      "url": "https://polymarket.com/event/nato-x-russia-military-clash-by-june-30-2026",
-      "latest_volume": 995742.0,
-      "latest_prob": 2.5
     },
     {
       "question": "Roland Garros WTA: Elina Svitolina vs Anna Bondar",
@@ -232,8 +232,8 @@
     },
     {
       "date": "2026-06-06",
-      "news": 1,
-      "suspicious_markets": 2,
+      "news": 0,
+      "suspicious_markets": 1,
       "large_trades": 0,
       "uma_alerts": 0,
       "ofac_new": 0
@@ -250,7 +250,7 @@
     },
     {
       "source": "CoinDesk",
-      "count": 7
+      "count": 6
     },
     {
       "source": "DLA Piper Market Edge",
@@ -264,7 +264,7 @@
     },
     {
       "keyword": "polymarket",
-      "count": 16
+      "count": 15
     },
     {
       "keyword": "kalshi",
@@ -277,8 +277,8 @@
   ],
   "win_rate_alerts": [],
   "summary_stats": {
-    "total_alerts_30d": 29,
-    "total_suspicious_30d": 42,
+    "total_alerts_30d": 28,
+    "total_suspicious_30d": 41,
     "wallets_with_ofac": 0,
     "wallets_on_watchlist": 0,
     "markets_flagged_3plus": 7

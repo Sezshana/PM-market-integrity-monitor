@@ -1,0 +1,111 @@
+{
+  "date": "2026-06-06",
+  "unique_news": 1,
+  "suspicious_markets": 2,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [
+    {
+      "source": "CoinDesk",
+      "title": "A massive hiring wave reveals trading firms are no longer viewing Polymarket as a niche betting tool",
+      "link": "https://www.coindesk.com/business/2026/06/06/a-massive-hiring-wave-reveals-trading-firms-are-no-longer-viewing-polymarket-as-a-niche-betting-tool",
+      "published": "Sat, 06 Jun 2026 13:00:00 +0000",
+      "pub_date": "Jun 06, 2026",
+      "matched_keywords": [
+        "polymarket"
+      ],
+      "summary": "[See full article at CoinDesk]",
+      "score": 3,
+      "priority": true,
+      "watchlist_hit": [],
+      "also_covered_by": []
+    }
+  ],
+  "suspicious_market_data": [
+    {
+      "market_id": "1171858",
+      "question": "NATO x Russia military clash by June 30, 2026?",
+      "outcome": "Yes",
+      "probability_pct": 2.5,
+      "volume_usd": 995742.0,
+      "url": "https://polymarket.com/event/nato-x-russia-military-clash-by-june-30-2026",
+      "end_date": "2026-06-30",
+      "days_until_close": 24,
+      "flagged_date": "2026-06-06",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $995,742 volume on a 2.5% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "2442919",
+      "question": "Counter-Strike: ARCRED vs ASTRAL (BO3) - NODWIN Clutch Series Group Stage",
+      "outcome": "ASTRAL",
+      "probability_pct": 0.1,
+      "volume_usd": 99679.0,
+      "url": "https://polymarket.com/event/cs2-arc4-ast-2026-06-06",
+      "end_date": "2026-06-06",
+      "days_until_close": 9999,
+      "flagged_date": "2026-06-06",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,679 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [],
+  "bill_tracker": {
+    "changes": [],
+    "quiet_message": "No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+    "monitored_count": 7,
+    "movement_count": 0
+  },
+  "wash_trading_reports": [],
+  "developing_stories": [],
+  "narrative": "Today's top story: A massive hiring wave reveals trading firms are no longer viewing Polymarket as a niche betting tool (via CoinDesk, Jun 06, 2026). One market matched review criteria: 'NATO x Russia military clash by June 30, 2026?' with $995,742 in volume at 2.5% probability.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "4 raw, 1 fresh",
+      "updated_at": "2026-06-06T15:53:55Z",
+      "records": 1
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "2 markets matched",
+      "updated_at": "2026-06-06T15:53:55Z",
+      "records": 2
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-06-06T15:53:55Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-06-06T15:53:56Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-06-06T15:53:57Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-06-06T15:54:00Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "0 bill movements; 7 monitored",
+      "updated_at": "2026-06-06T15:54:01Z",
+      "records": 0
+    }
+  }
+}

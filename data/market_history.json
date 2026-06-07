@@ -547,7 +547,7 @@
     "question": "Will SHEIN have the highest IPO Market Cap 2026?",
     "first_flagged": "2026-06-02",
     "last_flagged": "2026-06-07",
-    "flag_count": 5,
+    "flag_count": 6,
     "flag_dates": [
       "2026-06-02",
       "2026-06-03",
@@ -574,6 +574,11 @@
       {
         "date": "2026-06-05",
         "volume": 99130.0,
+        "prob": 0.1
+      },
+      {
+        "date": "2026-06-07",
+        "volume": 99137.0,
         "prob": 0.1
       },
       {
@@ -646,7 +651,7 @@
     "question": "NATO x Russia military clash by June 30, 2026?",
     "first_flagged": "2026-06-05",
     "last_flagged": "2026-06-07",
-    "flag_count": 5,
+    "flag_count": 6,
     "flag_dates": [
       "2026-06-05",
       "2026-06-06",
@@ -678,6 +683,11 @@
         "date": "2026-06-07",
         "volume": 996288.0,
         "prob": 2.5
+      },
+      {
+        "date": "2026-06-07",
+        "volume": 996705.0,
+        "prob": 1.9
       }
     ],
     "max_wash_score": 0,

@@ -29,19 +29,8 @@
       "latest_prob": 1.1
     },
     {
-      "question": "Fed rate cut by September 2026 meeting?",
-      "flag_count": 5,
-      "first_flagged": "2026-05-25",
-      "last_flagged": "2026-05-27",
-      "insider_risk": "HIGH",
-      "max_wash_score": 0,
-      "url": "https://polymarket.com/event/fed-rate-cut-by-september-2026-meeting-264-382",
-      "latest_volume": 99965.0,
-      "latest_prob": 12.7
-    },
-    {
       "question": "Will SHEIN have the highest IPO Market Cap 2026?",
-      "flag_count": 5,
+      "flag_count": 6,
       "first_flagged": "2026-06-02",
       "last_flagged": "2026-06-07",
       "insider_risk": "HIGH",
@@ -52,14 +41,25 @@
     },
     {
       "question": "NATO x Russia military clash by June 30, 2026?",
-      "flag_count": 5,
+      "flag_count": 6,
       "first_flagged": "2026-06-05",
       "last_flagged": "2026-06-07",
       "insider_risk": "MEDIUM",
       "max_wash_score": 0,
       "url": "https://polymarket.com/event/nato-x-russia-military-clash-by-june-30-2026",
-      "latest_volume": 996288.0,
-      "latest_prob": 2.5
+      "latest_volume": 996705.0,
+      "latest_prob": 1.9
+    },
+    {
+      "question": "Fed rate cut by September 2026 meeting?",
+      "flag_count": 5,
+      "first_flagged": "2026-05-25",
+      "last_flagged": "2026-05-27",
+      "insider_risk": "HIGH",
+      "max_wash_score": 0,
+      "url": "https://polymarket.com/event/fed-rate-cut-by-september-2026-meeting-264-382",
+      "latest_volume": 99965.0,
+      "latest_prob": 12.7
     },
     {
       "question": "Israeli parliament dissolved by May 31?",
@@ -241,7 +241,7 @@
     {
       "date": "2026-06-07",
       "news": 0,
-      "suspicious_markets": 4,
+      "suspicious_markets": 2,
       "large_trades": 0,
       "uma_alerts": 0,
       "ofac_new": 0
@@ -286,7 +286,7 @@
   "win_rate_alerts": [],
   "summary_stats": {
     "total_alerts_30d": 28,
-    "total_suspicious_30d": 45,
+    "total_suspicious_30d": 43,
     "wallets_with_ofac": 0,
     "wallets_on_watchlist": 0,
     "markets_flagged_3plus": 7

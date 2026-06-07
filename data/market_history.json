@@ -546,12 +546,13 @@
   "1321567": {
     "question": "Will SHEIN have the highest IPO Market Cap 2026?",
     "first_flagged": "2026-06-02",
-    "last_flagged": "2026-06-05",
-    "flag_count": 4,
+    "last_flagged": "2026-06-07",
+    "flag_count": 5,
     "flag_dates": [
       "2026-06-02",
       "2026-06-03",
-      "2026-06-05"
+      "2026-06-05",
+      "2026-06-07"
     ],
     "insider_risk": "HIGH",
     "volume_history": [
@@ -573,6 +574,11 @@
       {
         "date": "2026-06-05",
         "volume": 99130.0,
+        "prob": 0.1
+      },
+      {
+        "date": "2026-06-07",
+        "volume": 99137.0,
         "prob": 0.1
       }
     ],
@@ -639,11 +645,12 @@
   "1171858": {
     "question": "NATO x Russia military clash by June 30, 2026?",
     "first_flagged": "2026-06-05",
-    "last_flagged": "2026-06-06",
-    "flag_count": 4,
+    "last_flagged": "2026-06-07",
+    "flag_count": 5,
     "flag_dates": [
       "2026-06-05",
-      "2026-06-06"
+      "2026-06-06",
+      "2026-06-07"
     ],
     "insider_risk": "MEDIUM",
     "volume_history": [
@@ -665,6 +672,11 @@
       {
         "date": "2026-06-06",
         "volume": 995744.0,
+        "prob": 2.5
+      },
+      {
+        "date": "2026-06-07",
+        "volume": 996288.0,
         "prob": 2.5
       }
     ],
@@ -775,5 +787,43 @@
     ],
     "max_wash_score": 0,
     "url": "https://polymarket.com/event/cs2-arc4-ast-2026-06-06"
+  },
+  "2457106": {
+    "question": "Counter-Strike: Monte vs Legacy (BO1) - IEM Cologne Major Stage 2",
+    "first_flagged": "2026-06-07",
+    "last_flagged": "2026-06-07",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-06-07"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-06-07",
+        "volume": 997503.0,
+        "prob": 0.1
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/cs2-mnte-lgc-2026-06-07"
+  },
+  "2224532": {
+    "question": "Liechtenstein vs. Cyprus: O/U 2.5",
+    "first_flagged": "2026-06-07",
+    "last_flagged": "2026-06-07",
+    "flag_count": 1,
+    "flag_dates": [
+      "2026-06-07"
+    ],
+    "insider_risk": "MEDIUM",
+    "volume_history": [
+      {
+        "date": "2026-06-07",
+        "volume": 99180.0,
+        "prob": 0.1
+      }
+    ],
+    "max_wash_score": 0,
+    "url": "https://polymarket.com/event/fif-lie-cyp-2026-06-07-total-2pt5"
   }
 }

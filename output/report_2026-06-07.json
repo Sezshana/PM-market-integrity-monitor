@@ -1,0 +1,121 @@
+{
+  "date": "2026-06-07",
+  "unique_news": 0,
+  "suspicious_markets": 4,
+  "large_trades": 0,
+  "uma_alerts": 0,
+  "ofac_new": 0,
+  "alerts": [],
+  "suspicious_market_data": [
+    {
+      "market_id": "2457106",
+      "question": "Counter-Strike: Monte vs Legacy (BO1) - IEM Cologne Major Stage 2",
+      "outcome": "Legacy",
+      "probability_pct": 0.1,
+      "volume_usd": 997503.0,
+      "url": "https://polymarket.com/event/cs2-mnte-lgc-2026-06-07",
+      "end_date": "2026-06-07",
+      "days_until_close": 9999,
+      "flagged_date": "2026-06-07",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $997,503 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1171858",
+      "question": "NATO x Russia military clash by June 30, 2026?",
+      "outcome": "Yes",
+      "probability_pct": 2.5,
+      "volume_usd": 996288.0,
+      "url": "https://polymarket.com/event/nato-x-russia-military-clash-by-june-30-2026",
+      "end_date": "2026-06-30",
+      "days_until_close": 23,
+      "flagged_date": "2026-06-07",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $996,288 volume on a 2.5% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "2224532",
+      "question": "Liechtenstein vs. Cyprus: O/U 2.5",
+      "outcome": "Over",
+      "probability_pct": 0.1,
+      "volume_usd": 99180.0,
+      "url": "https://polymarket.com/event/fif-lie-cyp-2026-06-07-total-2pt5",
+      "end_date": "2026-06-07",
+      "days_until_close": 9999,
+      "flagged_date": "2026-06-07",
+      "insider_risk": "MEDIUM",
+      "alert_reason": "Criteria matched: $99,180 volume on a 0.1% probability outcome. Analyst review recommended before drawing conclusions."
+    },
+    {
+      "market_id": "1321567",
+      "question": "Will SHEIN have the highest IPO Market Cap 2026?",
+      "outcome": "Yes",
+      "probability_pct": 0.1,
+      "volume_usd": 99137.0,
+      "url": "https://polymarket.com/event/will-shein-have-the-highest-ipo-market-cap-2026-348",
+      "end_date": "2026-12-31",
+      "days_until_close": 207,
+      "flagged_date": "2026-06-07",
+      "insider_risk": "HIGH",
+      "alert_reason": "Criteria matched: low-probability outcome, $99,137 market volume, and event category with concentrated decision access. Longer resolution horizon lowers urgency; analyst review required."
+    }
+  ],
+  "large_trade_data": [],
+  "onchain_txs": [],
+  "uma_governance": [],
+  "ofac_additions": [],
+  "bill_updates": [],
+  "bill_tracker": {
+    "changes": [],
+    "quiet_message": "No congressional bill movement since 2026-03-26. (7 bills monitored.)",
+    "monitored_count": 7,
+    "movement_count": 0
+  },
+  "wash_trading_reports": [],
+  "developing_stories": [],
+  "narrative": "No new news articles today \u2014 all recent stories have already been sent. One market matched review criteria: 'Counter-Strike: Monte vs Legacy (BO1) - IEM Cologne Major Stage 2' with $997,503 in volume at 0.1% probability.",
+  "source_coverage": {
+    "RSS": {
+      "status": "OK",
+      "detail": "4 raw, 0 fresh",
+      "updated_at": "2026-06-07T15:54:29Z",
+      "records": 0
+    },
+    "Gamma API": {
+      "status": "OK",
+      "detail": "4 markets matched",
+      "updated_at": "2026-06-07T15:54:29Z",
+      "records": 4
+    },
+    "On-chain/Polygonscan": {
+      "status": "failed",
+      "detail": "CLOB HTTP 401",
+      "updated_at": "2026-06-07T15:54:30Z",
+      "records": 0
+    },
+    "CLOB API": {
+      "status": "failed",
+      "detail": "HTTP 401",
+      "updated_at": "2026-06-07T15:54:30Z",
+      "records": 0
+    },
+    "UMA": {
+      "status": "OK",
+      "detail": "0 alerts",
+      "updated_at": "2026-06-07T15:54:31Z",
+      "records": 0
+    },
+    "OFAC": {
+      "status": "OK",
+      "detail": "0 new entries",
+      "updated_at": "2026-06-07T15:54:35Z",
+      "records": 0
+    },
+    "Congress": {
+      "status": "OK",
+      "detail": "0 bill movements; 7 monitored",
+      "updated_at": "2026-06-07T15:54:37Z",
+      "records": 0
+    }
+  }
+}

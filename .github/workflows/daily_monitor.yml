@@ -2,10 +2,8 @@ name: Polymarket OSINT Daily Monitor
 
 on:
   schedule:
-    # GitHub often delays the 7 AM slot until evening; 10:30 AM is a same-day backup.
+    # Single daily slot (Eastern). monitor.py sends on delayed GitHub runs if no digest yet today.
     - cron: '0 7 * * *'
-      timezone: America/New_York
-    - cron: '30 10 * * *'
       timezone: America/New_York
   workflow_dispatch:
     inputs:
@@ -19,7 +17,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
-  group: daily-monitor
+  group: daily-monitor-${{ github.repository }}
   cancel-in-progress: false
 
 permissions:
@@ -54,6 +52,9 @@ jobs:
           DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
           POLYGONSCAN_KEY: ${{ secrets.POLYGONSCAN_KEY }}
         run: python monitor.py
+      - name: Publish email dedup state
+        if: always()
+        run: bash scripts/publish_email_dedup_state.sh
       - name: Run aggregator
         env:
           POLYGONSCAN_KEY: ${{ secrets.POLYGONSCAN_KEY }}
@@ -64,24 +65,24 @@ jobs:
           ALERT_EMAIL_CONFIGURED: ${{ secrets.ALERT_EMAIL != '' }}
           SMTP_PASSWORD_CONFIGURED: ${{ secrets.SMTP_PASSWORD != '' }}
         run: |
-          today="$(date -u +%F)"
+          today="$(TZ=America/New_York date +%F)"
           echo "event=${{ github.event_name }}"
           echo "ref=${{ github.ref }}"
           echo "sha=${{ github.sha }}"
           echo "alert_email_configured=${ALERT_EMAIL_CONFIGURED}"
           echo "smtp_password_configured=${SMTP_PASSWORD_CONFIGURED}"
+          echo "email_dispatch_state=$(cat data/email_dispatch_state.json 2>/dev/null || echo missing)"
           echo "report_json_exists=$([ -f "output/report_${today}.json" ] && echo true || echo false)"
           echo "report_markdown_exists=$([ -f "output/report_${today}.md" ] && echo true || echo false)"
-          echo "aggregate_intelligence_exists=$([ -f "data/aggregate_intelligence.json" ] && echo true || echo false)"
           git status --short output data || true
       - name: Save all outputs
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git checkout -B main
+          git pull --rebase origin main || true
           git add output/ data/
           git reset -- data/digest_email_sent.json 2>/dev/null || true
-          # email_dispatch_state.json is committed so all runners share once-per-day dedup
           if git diff --staged --quiet; then
             echo "No output changes to commit."
             exit 0

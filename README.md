@@ -117,10 +117,10 @@ For a private operational deployment, stop committing generated intelligence and
 
 GitHub Actions **does not run scheduled jobs at exact times** — a 7 AM Eastern cron often starts in the **afternoon**. This repo handles that as follows:
 
-1. **Schedule at 7:00 AM Eastern** — primary daily run.
-2. **Morning preference, not a hard block** — scheduled runs between **6:00 AM and 11:59 AM Eastern** always attempt email (subject to once-per-day dedup). If GitHub fires **later the same day** and **no digest was sent yet**, email still goes out so you are not left with zero delivery. A **second** late run the same day is skipped once `data/email_dispatch_state.json` shows today’s send.
+1. **Schedule at 7:00 AM Eastern** — single daily run (no backup cron; avoids duplicate sends).
+2. **Morning preference, not a hard block** — scheduled runs between **6:00 AM and 11:59 AM Eastern** always attempt email (subject to once-per-day dedup). If GitHub fires **later the same day** and **no digest was sent yet**, email still goes out so you are not left with zero delivery.
 
-Once-per-day dedup uses committed `data/email_dispatch_state.json` so multiple runs share the same “already sent today” state.
+Once-per-day dedup uses committed `data/email_dispatch_state.json`, **pushed immediately after send** so any overlapping workflow run sees today's dispatch before sending again.
 
 **Manual run:** Actions → Polymarket OSINT Daily Monitor → Run workflow → check **force_email** only when you want a resend.
 
